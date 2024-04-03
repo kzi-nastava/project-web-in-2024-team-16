@@ -1,20 +1,24 @@
 package com.webshop.model;
 
+
+import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.io.Serializable;
 
+@Entity
 public class Ponuda implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatsko generisanje ključa
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private double cena;
 
-    private Kupac kupacKojiDajePonudu;
+   /* private Kupac kupacKojiDajePonudu;
 
     public double getCena() {
         return cena;
@@ -38,5 +42,5 @@ public class Ponuda implements Serializable {
                 "cena=" + cena +
                 ", kupacKojiDajePonudu=" + kupacKojiDajePonudu +
                 '}';
-    }
+    }*/
 }

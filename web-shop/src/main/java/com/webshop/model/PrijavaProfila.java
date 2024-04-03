@@ -1,5 +1,8 @@
 package com.webshop.model;
 
+
+import jakarta.persistence.Entity;
+
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -9,18 +12,20 @@ import java.util.Date;
 
 
 enum  Status{Podneta, Odbijena, Prihvacena}
+@Entity
 public class PrijavaProfila implements Serializable {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY) // Automatsko generisanje ključa
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long id;
     private String razlogPrijave;
 
     private Date datumPodnosenjaPrijave;
 
-    private  Korisnik podnosiocPrijave;
+ //   private  Korisnik podnosiocPrijave;
 
-    private Korisnik prijavljeniKorisnik;
+   // private Korisnik prijavljeniKorisnik;
 
     private Status statusPrijave;
 
@@ -48,7 +53,7 @@ public class PrijavaProfila implements Serializable {
         this.datumPodnosenjaPrijave = datumPodnosenjaPrijave;
     }
 
-    public Korisnik getPodnosiocPrijave() {
+  /*  public Korisnik getPodnosiocPrijave() {
         return podnosiocPrijave;
     }
 
@@ -84,5 +89,5 @@ public class PrijavaProfila implements Serializable {
                 ", statusPrijave=" + statusPrijave +
                 '}';
 
-    }
+    }*/
 }

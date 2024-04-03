@@ -12,7 +12,13 @@ import java.util.List;
 public class Kupac extends Korisnik{
 
     private List<Proizvod> kupljeni_proizvodi = new ArrayList<>();
-    private Recenzija recenzije;
+    //private Recenzija recenzije;
+
+    //Tip ce biti tip klase proizvod
+    //private List<Proizvod> kupljeni_proizvodi = new ArrayList<>();
+    //Tip ce biti tip klase recenzija
+    //private Recenzija recenzije;
+
     private Double prosecna_ocena;
 
 }
