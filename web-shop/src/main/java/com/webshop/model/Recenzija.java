@@ -1,13 +1,16 @@
 package com.webshop.model;
 
+import jakarta.persistence.*;
+
 import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.Date;
 
+@Entity
 public class Recenzija implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Automatsko generisanje ključa
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private double ocena; //dodati ogranicenje da ocena bude od 1 do 5
@@ -16,7 +19,8 @@ public class Recenzija implements Serializable {
 
     private Date datumRecenzije;
 
-    private Korisnik  korisnikKojiJeDaoRecenziju;
+
+    //private Korisnik  korisnikKojiJeDaoRecenziju;
 
     public double getOcena() {
         return ocena;
@@ -48,7 +52,7 @@ public class Recenzija implements Serializable {
         this.datumRecenzije = datumRecenzije;
     }
 
-    public Korisnik getKorisnikKojiJeDaoRecenziju() {
+  /*  public Korisnik getKorisnikKojiJeDaoRecenziju() {
         return korisnikKojiJeDaoRecenziju;
     }
 
@@ -64,5 +68,5 @@ public class Recenzija implements Serializable {
                 ", datumRecenzije=" + datumRecenzije +
                 ", korisnikKojiJeDaoRecenziju=" + korisnikKojiJeDaoRecenziju +
                 '}';
-    }
+    }*/
 }
