@@ -23,8 +23,8 @@ public class Recenzija implements Serializable {
 
     private Date datumRecenzije;
 
-
-    //private Korisnik  korisnikKojiJeDaoRecenziju;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Korisnik  korisnikKojiJeDaoRecenziju;
 
     public double getOcena() {
         return ocena;

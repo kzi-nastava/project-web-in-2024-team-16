@@ -1,11 +1,7 @@
 package com.webshop.model;
 
 
-import jakarta.persistence.Entity;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
 
@@ -17,8 +13,8 @@ public class Ponuda implements Serializable {
     private Long id;
 
     private double cena;
-
-   /* private Kupac kupacKojiDajePonudu;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Kupac kupacKojiDajePonudu;
 
     public double getCena() {
         return cena;
@@ -42,5 +38,5 @@ public class Ponuda implements Serializable {
                 "cena=" + cena +
                 ", kupacKojiDajePonudu=" + kupacKojiDajePonudu +
                 '}';
-    }*/
+    }
 }

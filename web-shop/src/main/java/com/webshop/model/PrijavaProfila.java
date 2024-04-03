@@ -1,17 +1,15 @@
 package com.webshop.model;
 
 
-import jakarta.persistence.Entity;
-
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 
 
-enum  Status{Podneta, Odbijena, Prihvacena}
+enum  Status{PODNETA, ODBIJENA, PRIHVACENA}
 @Entity
 public class PrijavaProfila implements Serializable {
 
@@ -22,10 +20,10 @@ public class PrijavaProfila implements Serializable {
     private String razlogPrijave;
 
     private Date datumPodnosenjaPrijave;
-
- //   private  Korisnik podnosiocPrijave;
-
-   // private Korisnik prijavljeniKorisnik;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Korisnik podnosiocPrijave;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Korisnik prijavljeniKorisnik;
 
     private Status statusPrijave;
 

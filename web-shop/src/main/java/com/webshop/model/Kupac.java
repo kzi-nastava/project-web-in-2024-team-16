@@ -1,24 +1,22 @@
 package com.webshop.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Kupac extends Korisnik{
+    @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private ArrayList<Proizvod> kupljeniProizvodi = new ArrayList<>();
 
-    private List<Proizvod> kupljeni_proizvodi = new ArrayList<>();
-    //private Recenzija recenzije;
+    //@OneToMany(mappedBy = "", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //private Set<Recenzija> recenzijeKupci = new HashSet<>();
 
-    //Tip ce biti tip klase proizvod
-    //private List<Proizvod> kupljeni_proizvodi = new ArrayList<>();
-    //Tip ce biti tip klase recenzija
-    //private Recenzija recenzije;
-
-    private Double prosecna_ocena;
+    @OneToMany(mappedBy = "kupacKojiDajePonudu",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Ponuda> ponuda = new HashSet<>();
+    private Double prosecnaOcena;
 
 }

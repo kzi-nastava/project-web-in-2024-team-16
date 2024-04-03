@@ -11,19 +11,23 @@ public class Proizvod implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String naziv;
     private String opis;
     private String slika;
     private String kategorija;
     private Double cena;
     private TipProdaje tip;
-    private Date datum_objavljivanja;
+    private Date datumObjavljivanja;
 
     //private Ponuda ponude;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Prodavac prodavac;
 
-    //private Prodavac prodavac;
-    private Boolean recenzija_kupac;
-    private Boolean recenzija_prodavac;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Kupac kupac;
+    private Boolean recenzijaKupac;
+    private Boolean recenzijaProdavac;
     private Boolean prodat;
 
 }
