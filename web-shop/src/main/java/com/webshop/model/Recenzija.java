@@ -2,6 +2,10 @@ package com.webshop.model;
 
 import jakarta.persistence.*;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.Date;
