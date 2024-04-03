@@ -30,7 +30,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     /*
         Traži sve zaposlene po imenu, ignorišu se mala i velika slova.
      */
-    @Query("select Company from Company left join fetch Company.departments where");
 
     /*
         Traži sve zaposlene po nazivu departmana.

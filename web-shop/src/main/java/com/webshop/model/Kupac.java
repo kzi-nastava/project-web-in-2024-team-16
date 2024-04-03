@@ -11,10 +11,8 @@ import java.util.List;
 @Entity
 public class Kupac extends Korisnik{
 
-    //Tip ce biti tip klase proizvod
-    private List<String> kupljeni_proizvodi = new ArrayList<>();
-    //Tip ce biti tip klase recenzija
-    private Double recenzije;
+    private List<Proizvod> kupljeni_proizvodi = new ArrayList<>();
+    private Recenzija recenzije;
     private Double prosecna_ocena;
 
 }
