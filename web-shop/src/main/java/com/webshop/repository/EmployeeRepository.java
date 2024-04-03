@@ -2,6 +2,7 @@ package com.webshop.repository;
 
 import com.webshop.model.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     /*
         Traži sve zaposlene po imenu, ignorišu se mala i velika slova.
      */
-    List<Employee> findByFirstNameIgnoreCase(String firstName);
+    @Query("select Company from Company left join fetch Company.departments where");
 
     /*
         Traži sve zaposlene po nazivu departmana.
