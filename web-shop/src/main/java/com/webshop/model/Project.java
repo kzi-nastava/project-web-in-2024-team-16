@@ -45,12 +45,21 @@ public class Project implements Serializable {
         this.deadline = deadline;
     }
 
+    public Set<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
+    }
+
     @Override
     public String toString() {
         return "Project{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", deadline=" + deadline +
+                ", employees=" + employees +
                 '}';
     }
 }

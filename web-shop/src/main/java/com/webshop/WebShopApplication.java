@@ -49,4 +49,5 @@ public class WebShopApplication implements CommandLineRunner {
 		SpringApplication.run(WebShopApplication.class, args);
 	}
 
+
 }

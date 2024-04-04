@@ -17,14 +17,25 @@ public class Recenzija implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private double ocena; //dodati ogranicenje da ocena bude od 1 do 5
+    @Column
+    private double ocena;
 
+    @Column
     private String komentar;
 
+    @Column
     private Date datumRecenzije;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Korisnik  korisnikKojiJeDaoRecenziju;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public double getOcena() {
         return ocena;
@@ -52,11 +63,11 @@ public class Recenzija implements Serializable {
         return datumRecenzije;
     }
 
-    public void setDatumRecenzije(Date datumRecenzije) { //Vidi da li trebas da proveravas
+    public void setDatumRecenzije(Date datumRecenzije) {
         this.datumRecenzije = datumRecenzije;
     }
 
-  /*  public Korisnik getKorisnikKojiJeDaoRecenziju() {
+    public Korisnik getKorisnikKojiJeDaoRecenziju() {
         return korisnikKojiJeDaoRecenziju;
     }
 
@@ -67,10 +78,11 @@ public class Recenzija implements Serializable {
     @Override
     public String toString() {
         return "Recenzija{" +
-                "ocena=" + ocena +
+                "id=" + id +
+                ", ocena=" + ocena +
                 ", komentar='" + komentar + '\'' +
                 ", datumRecenzije=" + datumRecenzije +
                 ", korisnikKojiJeDaoRecenziju=" + korisnikKojiJeDaoRecenziju +
                 '}';
-    }*/
+    }
 }

@@ -10,20 +10,20 @@ import java.io.Serializable;
 public class Kategorija implements Serializable {
 
     @Id
-    private String naziv;
+    private String nazivKategorije;
 
-    public String getNaziv() {
-        return naziv;
+    public String getNazivKategorije() {
+        return nazivKategorije;
     }
 
-    public void setNaziv(String naziv) {
-        this.naziv = naziv;
+    public void setNazivKategorije(String nazivKategorije) {
+        this.nazivKategorije = nazivKategorije;
     }
 
     @Override
     public String toString() {
         return "Kategorija{" +
-                "naziv='" + naziv + '\'' +
+                "naziv='" + nazivKategorije + '\'' +
                 '}';
     }
 }
