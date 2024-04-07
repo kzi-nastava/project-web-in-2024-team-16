@@ -1,11 +1,15 @@
 package com.webshop.model;
 
+import com.jayway.jsonpath.internal.function.text.Length;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
+
 
 enum Uloga{KUPAC, PRODAVAC, ADMINISTRATOR};
 
@@ -24,16 +28,19 @@ public class Korisnik implements Serializable {
     @Column
     private String prezime;
 
-    @Column(unique = true)
+    @Column(nullable = false, unique = true)
     private String korisnickoIme;
 
-    @Column(unique = true)
+    @Column(nullable = false,unique = true)
+    //@Email(message = "Invalid mail")
     private String mejl;
 
     @Column
+   // @Length(max=40, message = "Neispravan broj telefona!")
     private String telefon;
 
-    @Column
+    @Column(nullable = false)
+    //@Pattern(regexp = "^(?=.?[A-Z])(?=.?[a-z])(?=.?[0-9])(?=.?[#?!@$%^&*-]).{8,}$")
     private String lozinka;
 
     @Column
@@ -46,7 +53,7 @@ public class Korisnik implements Serializable {
     private String opisKorisnika;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private Uloga uloga;
 
     @Column

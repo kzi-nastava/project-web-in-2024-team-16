@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 enum TipProdaje{FIKSNA, AUKCIJA};
 @Entity
@@ -13,7 +15,7 @@ public class Proizvod implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String naziv;
 
     @Column
@@ -44,7 +46,9 @@ public class Proizvod implements Serializable {
     @Column
     private Boolean prodat;
 
-    //private Ponuda ponude;
+    @OneToMany(mappedBy = "proizvod", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Set<Ponuda> ponude =new HashSet<>();
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Prodavac prodavac;
 

@@ -33,7 +33,7 @@ INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, d
     VALUES (1,'Aleksandar', 'Aleksić', 'aleksa92', 'aleksandar@gmail.com', '060123456', 'lozinka123', '1992-05-20', 'slika1.jpg', 'ljubazan', 'KUPAC', false);
 
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (2,'Mila', 'Milic', 'mila12', 'mila@gmail.com', '0664444', 'mila123', '2003-05-20', 'slika2.jpg', 'iskusan', 'PRODAVAC', false);
+    VALUES (2,'Mila', 'Milic', 'mila12', 'mila@gmail.com', '0664444', 'mi', '2003-05-20', 'slika2.jpg', 'iskusan', 'PRODAVAC', false);
 
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id)
     VALUES (4, 'zadovoljan', '2019-02-10', 1);
@@ -45,8 +45,8 @@ INSERT INTO Kupac(id, prosecna_ocena) VALUES (1, 5.5);
 
 INSERT INTO Prodavac(id, prosecna_ocena) VALUES(2, 4);
 
-INSERT INTO Proizvod (naziv, opis, slika_proizvoda, kategorija, cena, tip, datum_objavljivanja, recenzija_kupac, recenzija_prodavac,
-     prodat, kupac_id, prodavac_id)VALUES ('telefon', 'samsung', 'samsung.jpg', 'telefoni', 30000, 'FIKSNA', '2019-02-10',
+INSERT INTO Proizvod (id, naziv, opis, slika_proizvoda, kategorija, cena, tip, datum_objavljivanja, recenzija_kupac, recenzija_prodavac,
+     prodat, kupac_id, prodavac_id)VALUES (1,'telefon', 'samsung', 'samsung.jpg', 'telefoni', 30000, 'FIKSNA', '2019-02-10',
      true, false, true, 1, 2);
 
-INSERT INTO Ponuda (cena, kupac_koji_daje_ponudu_id)VALUES (30000, 1);
+INSERT INTO Ponuda (cena, kupac_koji_daje_ponudu_id, proizvod_id)VALUES (30000, 1,1);

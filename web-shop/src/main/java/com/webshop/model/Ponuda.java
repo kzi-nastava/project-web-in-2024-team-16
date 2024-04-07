@@ -17,6 +17,9 @@ public class Ponuda implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Kupac kupacKojiDajePonudu;
 
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Proizvod proizvod;
+
     public Long getId() {
         return id;
     }

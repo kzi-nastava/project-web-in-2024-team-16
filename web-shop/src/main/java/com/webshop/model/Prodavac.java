@@ -11,16 +11,16 @@ import java.util.Set;
 public class Prodavac extends Korisnik{
 
     @OneToMany(mappedBy = "prodavac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ArrayList<Proizvod> proizvodiNaProdaju = new ArrayList<>();
+    private Set<Proizvod> proizvodiNaProdaju = new HashSet<>();
 
     @Column
     private Double prosecnaOcena;
 
-    public ArrayList<Proizvod> getProizvodiNaProdaju() {
+    public Set<Proizvod> getProizvodiNaProdaju() {
         return proizvodiNaProdaju;
     }
 
-    public void setProizvodiNaProdaju(ArrayList<Proizvod> proizvodiNaProdaju) {
+    public void setProizvodiNaProdaju(Set<Proizvod> proizvodiNaProdaju) {
         this.proizvodiNaProdaju = proizvodiNaProdaju;
     }
 
