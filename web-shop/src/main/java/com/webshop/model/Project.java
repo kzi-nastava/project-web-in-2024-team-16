@@ -1,4 +1,4 @@
-package com.webshop.model;
+/*package com.webshop.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -63,3 +63,4 @@ public class Project implements Serializable {
                 '}';
     }
 }
+*/

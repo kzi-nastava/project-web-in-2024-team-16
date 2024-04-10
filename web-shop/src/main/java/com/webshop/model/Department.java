@@ -1,4 +1,4 @@
-package com.webshop.model;
+/*package com.webshop.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -66,7 +66,7 @@ public class Department implements Serializable {
 
                     Primer: Post na društvenim mrežama ima kolekciju komentara koji se nalaze na njemu.
                              Kada se obriše komentar sa posta, treba ga obrisati i iz sistema.
-     */
+
 
     @OneToMany(mappedBy = "department", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Employee> employees = new HashSet<>();
@@ -116,4 +116,4 @@ public class Department implements Serializable {
                 ", company=" + company +
                 '}';
     }
-}
+}*/

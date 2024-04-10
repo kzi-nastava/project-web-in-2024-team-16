@@ -1,7 +1,7 @@
 package com.webshop;
 
-import com.webshop.model.Employee;
-import com.webshop.repository.EmployeeRepository;
+//import com.webshop.model.Employee;
+//import com.webshop.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -18,13 +18,13 @@ public class WebShopApplication implements CommandLineRunner {
 	/* Da bismo testirali repozitorijum, direktno smo pozvali u glavnoj klasi metode,
 	   inace bi pozivi bili u npr. nekom od servisa.
 	 */
-	@Autowired
-	private EmployeeRepository employeeRepository;
+//	@Autowired
+//	private EmployeeRepository employeeRepository;
 
 	@Override
 	public void run(String... args) {
 
-		// kreiramo novi objekat klase Employee
+	/*	// kreiramo novi objekat klase Employee
 		Employee employee = new Employee();
 		employee.setFirstName("Jovanka");
 		employee.setLastName("Jovkić");
@@ -41,7 +41,7 @@ public class WebShopApplication implements CommandLineRunner {
 
 		for (Employee e : employees){
 			System.out.println(e);
-		}
+		}*/
 	}
 
 

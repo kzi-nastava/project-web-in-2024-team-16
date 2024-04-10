@@ -1,4 +1,4 @@
-package com.webshop.model;
+/*package com.webshop.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -11,7 +11,7 @@ import java.util.Set;
 
   Ukoliko želimo da se tabela u bazi drugačije zove, možemo eksplicitno da zadamo naziv tabele dodavanjem anotacije:
   @Table("naziv_tabele_u_bazi") kojom se specificira tačan naziv tabele u bazi,
- */
+
 @Entity
 public class Employee implements Serializable {
     /*
@@ -20,7 +20,7 @@ public class Employee implements Serializable {
 
       Možemo da izaberemo strategiju generisanja ključeva.
       - IDENTITY - inkrementalno generisanje ključeva prilikom čuvanja novog objekta u bazi.
-     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,7 +33,7 @@ public class Employee implements Serializable {
        Kolona može da ima naziv koji se razlikuje od naziva atributa: @Column(name = "novo_ime_kolone")
 
        Kolona first_name će se kreirati u tabeli employee.
-     */
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -45,7 +45,7 @@ public class Employee implements Serializable {
 
     /*
         Druga strana bidirekcione veze 1:n
-     */
+
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Department department;
 
@@ -55,7 +55,7 @@ public class Employee implements Serializable {
 
         Anotacija @JoinTable pravi odvojenu tabelu koja će čuvati veze izmedju projekata i radnika.
         Sa name = "working" postavljamo naziv te tabele.
-    */
+
     @ManyToMany
     @JoinTable(name = "working",
             joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "id"),
@@ -112,4 +112,4 @@ public class Employee implements Serializable {
                 ", department=" + department +
                 '}';
     }
-}
+}*/

@@ -1,4 +1,4 @@
-package com.webshop.model;
+/*package com.webshop.model;
 
 import jakarta.persistence.*;
 import java.io.Serializable;
@@ -19,7 +19,7 @@ public class Company implements Serializable {
 
     /*
         pogledati komentare iznad atributa employees u klasi Department
-     */
+
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Department> departments = new HashSet<>();
 
@@ -64,4 +64,4 @@ public class Company implements Serializable {
                 ", address='" + address + '\'' +
                 '}';
     }
-}
+}*/
