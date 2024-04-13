@@ -3,6 +3,7 @@ package com.webshop.model;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,8 +25,17 @@ public class Proizvod implements Serializable {
     @Column
     private String slikaProizvoda;
 
-    @Column
-    private String kategorija;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "proizvod_kategorija",
+            joinColumns = {
+                    @JoinColumn(name = "proizvod_id", referencedColumnName = "id")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "kategorija_id", referencedColumnName = "nazivKategorije")
+            }
+    )
+    private ArrayList<Kategorija> kategorija = new ArrayList<>();
 
     @Column
     private Double cena;
@@ -87,11 +97,11 @@ public class Proizvod implements Serializable {
         this.slikaProizvoda = slikaProzivoda;
     }
 
-    public String getKategorija() {
+    public ArrayList<Kategorija> getKategorija() {
         return kategorija;
     }
 
-    public void setKategorija(String kategorija) {
+    public void setKategorija(ArrayList<Kategorija> kategorija) {
         this.kategorija = kategorija;
     }
 
