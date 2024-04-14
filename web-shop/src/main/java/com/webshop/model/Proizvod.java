@@ -32,7 +32,7 @@ public class Proizvod implements Serializable {
                     @JoinColumn(name = "proizvod_id", referencedColumnName = "id")
             },
             inverseJoinColumns = {
-                    @JoinColumn(name = "kategorija_id", referencedColumnName = "nazivKategorije")
+                    @JoinColumn(name = "kategorija_id", referencedColumnName = "id")
             }
     )
     private ArrayList<Kategorija> kategorija = new ArrayList<>();
