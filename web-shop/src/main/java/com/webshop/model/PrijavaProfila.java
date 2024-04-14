@@ -10,22 +10,30 @@ import java.util.Date;
 
 
 enum  Status{PODNETA, ODBIJENA, PRIHVACENA}
+
 @Entity
+@Table(name="prijava_profila")
 public class PrijavaProfila implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long id;
+
+    @Column
     private String razlogPrijave;
 
+    @Column
     private Date datumPodnosenjaPrijave;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Status statusPrijave;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Korisnik podnosiocPrijave;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Korisnik prijavljeniKorisnik;
-
-    private Status statusPrijave;
 
     public Long getId() {
         return id;
@@ -51,7 +59,7 @@ public class PrijavaProfila implements Serializable {
         this.datumPodnosenjaPrijave = datumPodnosenjaPrijave;
     }
 
-  /*  public Korisnik getPodnosiocPrijave() {
+    public Korisnik getPodnosiocPrijave() {
         return podnosiocPrijave;
     }
 
@@ -73,7 +81,6 @@ public class PrijavaProfila implements Serializable {
 
     public void setStatusPrijave(Status statusPrijave) {
         this.statusPrijave = statusPrijave;
-
     }
 
     @Override
@@ -86,6 +93,5 @@ public class PrijavaProfila implements Serializable {
                 ", prijavljeniKorisnik=" + prijavljeniKorisnik +
                 ", statusPrijave=" + statusPrijave +
                 '}';
-
-    }*/
+    }
 }

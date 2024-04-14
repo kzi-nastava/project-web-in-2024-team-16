@@ -13,8 +13,21 @@ public class Ponuda implements Serializable {
     private Long id;
 
     private double cena;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Kupac kupacKojiDajePonudu;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id", insertable = false, updatable = false)
+    private Proizvod proizvod;
+
+//    public Long getId() {
+//        return id;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
 
     public double getCena() {
         return cena;
@@ -34,8 +47,7 @@ public class Ponuda implements Serializable {
 
     @Override
     public String toString() {
-        return "Ponuda{" +
-                "cena=" + cena +
+        return "Ponuda{cena=" + cena +
                 ", kupacKojiDajePonudu=" + kupacKojiDajePonudu +
                 '}';
     }
