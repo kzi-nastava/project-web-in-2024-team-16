@@ -11,7 +11,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
 
-enum Uloga{KUPAC, PRODAVAC, ADMINISTRATOR};
+ //enum Uloga{KUPAC, PRODAVAC, ADMINISTRATOR};
 
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Korisnik")
@@ -28,10 +28,11 @@ public class Korisnik implements Serializable {
     @Column
     private String prezime;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String korisnickoIme;
 
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false)
+    //,unique = true
     //@Email(message = "Invalid mail")
     private String mejl;
 
@@ -63,10 +64,18 @@ public class Korisnik implements Serializable {
     private Set<Recenzija> recenzije = new HashSet<>();
 
     @OneToMany(mappedBy = "podnosiocPrijave", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ArrayList<PrijavaProfila> prijava = new ArrayList<>();
+    private Set<PrijavaProfila> prijava = new HashSet<>();
 
     @OneToMany(mappedBy = "prijavljeniKorisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ArrayList<PrijavaProfila> prijavljen = new ArrayList<>();
+    private Set<PrijavaProfila> prijavljen = new HashSet<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getIme() {
         return ime;
@@ -136,7 +145,7 @@ public class Korisnik implements Serializable {
         return opisKorisnika;
     }
 
-    public void setOpisKorisnika(String opis) {
+    public void setOpisKorisnika(String opisKorisnika) {
         this.opisKorisnika = opisKorisnika;
     }
 
@@ -164,19 +173,19 @@ public class Korisnik implements Serializable {
         this.recenzije = recenzije;
     }
 
-    public ArrayList<PrijavaProfila> getPrijava() {
+    public Set<PrijavaProfila> getPrijava() {
         return prijava;
     }
 
-    public void setPrijava(ArrayList<PrijavaProfila> prijava) {
+    public void setPrijava(Set<PrijavaProfila> prijava) {
         this.prijava = prijava;
     }
 
-    public ArrayList<PrijavaProfila> getPrijavljen() {
+    public Set<PrijavaProfila> getPrijavljen() {
         return prijavljen;
     }
 
-    public void setPrijavljen(ArrayList<PrijavaProfila> prijavljen) {
+    public void setPrijavljen(Set<PrijavaProfila> prijavljen) {
         this.prijavljen = prijavljen;
     }
 
