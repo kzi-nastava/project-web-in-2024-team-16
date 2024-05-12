@@ -1,11 +1,13 @@
 package com.webshop.controller;
 
+import com.webshop.DTO.PrijavaKorisnikaDTO;
 import com.webshop.DTO.RegistracijaKorisnikaDTO;
 import com.webshop.error.EmailAlreadyExistsException;
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.UserAlreadyExistsException;
 import com.webshop.model.Korisnik;
 import com.webshop.service.KorisnikService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,4 +31,30 @@ public class KorisnikController {
         Korisnik registrovaniKorisnik = korisnikService.registracijaKorisnika(korisnik);
         return new ResponseEntity<>(registrovaniKorisnik, HttpStatus.CREATED);
     }
+    //valid automatski proverava da li sve sto je proslednjeno je u skladu sa nasim DTO, ako ne valja generise greske vraca 400
+
+    @PostMapping("/login")
+    public ResponseEntity<String> prijava(@RequestBody PrijavaKorisnikaDTO prijavaDto, HttpSession session){
+        // proverimo da li su podaci validni
+        if(prijavaDto.getKorisnickoIme().isEmpty() || prijavaDto.getLozinka().isEmpty())
+            return new ResponseEntity("Neispravni podaci, molim Vas pokušajte ponovo", HttpStatus.BAD_REQUEST);
+
+        Korisnik loginovaniKorisnik = korisnikService.prijava(prijavaDto.getKorisnickoIme(), prijavaDto.getLozinka());
+        if (loginovaniKorisnik == null)
+            return new ResponseEntity<>("Korisnik ne postoji!", HttpStatus.NOT_FOUND);
+
+        session.setAttribute("korisnik", loginovaniKorisnik);
+        return ResponseEntity.ok("Prijava uspešna!");
+    }
+    @PostMapping("/logout")
+    public ResponseEntity Odjava(HttpSession session){
+       Korisnik loggedEmployee = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedEmployee == null)
+            return new ResponseEntity("Došlo je do greške prilikom odjave", HttpStatus.FORBIDDEN);
+
+        session.invalidate();
+        return new ResponseEntity("Odjava uspešna!", HttpStatus.OK);
+    }
+
 }
