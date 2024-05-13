@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-enum TipProdaje{FIKSNA, AUKCIJA};
+
 @Entity
 public class Proizvod implements Serializable {
 
@@ -35,8 +35,14 @@ public class Proizvod implements Serializable {
                     @JoinColumn(name = "kategorija_id", referencedColumnName = "id")
             }
     )
-    private ArrayList<Kategorija> kategorija = new ArrayList<>();
+    private Set<Kategorija> kategorija = new HashSet<>();
 
+ /*   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Kategorija  kategorija;*/
+
+
+
+    //private ArrayList<Kategorija> kategorija = new ArrayList<>();
     @Column
     private Double cena;
 
@@ -93,15 +99,15 @@ public class Proizvod implements Serializable {
         return slikaProizvoda;
     }
 
-    public void setSlikaProizvoda(String slikaProzivoda) {
-        this.slikaProizvoda = slikaProzivoda;
+    public void setSlikaProizvoda(String slikaProizvoda) {
+        this.slikaProizvoda = slikaProizvoda;
     }
 
-    public ArrayList<Kategorija> getKategorija() {
+    public Set<Kategorija> getKategorija() {
         return kategorija;
     }
 
-    public void setKategorija(ArrayList<Kategorija> kategorija) {
+    public void setKategorija(Set<Kategorija> kategorija) {
         this.kategorija = kategorija;
     }
 
@@ -129,22 +135,6 @@ public class Proizvod implements Serializable {
         this.datumObjavljivanja = datumObjavljivanja;
     }
 
-    public Prodavac getProdavac() {
-        return prodavac;
-    }
-
-    public void setProdavac(Prodavac prodavac) {
-        this.prodavac = prodavac;
-    }
-
-    public Kupac getKupac() {
-        return kupac;
-    }
-
-    public void setKupac(Kupac kupac) {
-        this.kupac = kupac;
-    }
-
     public Boolean getRecenzijaKupac() {
         return recenzijaKupac;
     }
@@ -167,6 +157,30 @@ public class Proizvod implements Serializable {
 
     public void setProdat(Boolean prodat) {
         this.prodat = prodat;
+    }
+
+    public Set<Ponuda> getPonude() {
+        return ponude;
+    }
+
+    public void setPonude(Set<Ponuda> ponude) {
+        this.ponude = ponude;
+    }
+
+    public Prodavac getProdavac() {
+        return prodavac;
+    }
+
+    public void setProdavac(Prodavac prodavac) {
+        this.prodavac = prodavac;
+    }
+
+    public Kupac getKupac() {
+        return kupac;
+    }
+
+    public void setKupac(Kupac kupac) {
+        this.kupac = kupac;
     }
 
     @Override

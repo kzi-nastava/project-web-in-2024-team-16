@@ -1,10 +1,15 @@
 package com.webshop.model;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
+import java.util.HashSet;
+import java.util.Set;
+@Getter
+@Setter
 @Entity
 public class Kategorija implements Serializable {
 
@@ -15,8 +20,12 @@ public class Kategorija implements Serializable {
     @Column
     private String nazivKategorije;
 
-    @ManyToMany(mappedBy = "kategorija", fetch = FetchType.LAZY)
-    private ArrayList<Proizvod> proizvodi = new ArrayList<>();
+   @ManyToMany(mappedBy = "kategorija", fetch = FetchType.LAZY)
+    private Set<Proizvod> proizvodi = new HashSet<>();
+ //  @OneToMany(mappedBy = "kategorija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+   //private Set<Proizvod> proizvodi = new HashSet<>();
+   //   @ManyToMany(mappedBy = "kategorija", fetch = FetchType.LAZY)
+    //private ArrayList<Proizvod> proizvodi = new ArrayList<>();
 
     public String getNazivKategorije() {
         return nazivKategorije;
