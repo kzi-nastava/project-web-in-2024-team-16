@@ -1,6 +1,8 @@
 package com.webshop.error;
 
-public class PasswordMismatchException extends Throwable {
+import org.apache.coyote.BadRequestException;
+
+public class PasswordMismatchException extends BadRequestException {
     public PasswordMismatchException(String message)  {
         super(message);
     }

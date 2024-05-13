@@ -18,5 +18,7 @@ public class ProizvodDTO {
     private String slikaProizvoda;
     private Kategorija kategorija;
     private Double cena;
-    private TipProdaje tip;
+    private TipProdaje tipProdaje;
+
+
 }

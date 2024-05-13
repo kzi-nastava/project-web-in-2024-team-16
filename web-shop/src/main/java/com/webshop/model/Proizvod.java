@@ -36,8 +36,8 @@ public class Proizvod implements Serializable {
             }
     )
     private Set<Kategorija> kategorija = new HashSet<>();
-
- /*   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+/*
+   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Kategorija  kategorija;*/
 
 
@@ -48,7 +48,7 @@ public class Proizvod implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private TipProdaje tip;
+    private TipProdaje tipProdaje;
 
     @Column
     private Date datumObjavljivanja;
@@ -111,6 +111,15 @@ public class Proizvod implements Serializable {
         this.kategorija = kategorija;
     }
 
+
+  /*  public Kategorija getKategorija() {
+        return kategorija;
+    }
+
+    public void setKategorija(Kategorija kategorija) {
+        this.kategorija = kategorija;
+    }
+*/
     public Double getCena() {
         return cena;
     }
@@ -120,11 +129,11 @@ public class Proizvod implements Serializable {
     }
 
     public TipProdaje getTip() {
-        return tip;
+        return tipProdaje;
     }
 
     public void setTip(TipProdaje tip) {
-        this.tip = tip;
+        this.tipProdaje = tip;
     }
 
     public Date getDatumObjavljivanja() {
@@ -192,7 +201,7 @@ public class Proizvod implements Serializable {
                 ", slika='" + slikaProizvoda + '\'' +
                 ", kategorija='" + kategorija + '\'' +
                 ", cena=" + cena +
-                ", tip=" + tip +
+                ", tip=" + tipProdaje +
                 ", datumObjavljivanja=" + datumObjavljivanja +
                 ", prodavac=" + prodavac +
                 ", kupac=" + kupac +

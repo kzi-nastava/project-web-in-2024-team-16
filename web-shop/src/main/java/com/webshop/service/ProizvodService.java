@@ -1,7 +1,10 @@
 package com.webshop.service;
 
 import com.webshop.DTO.ProizvodDTO;
+import com.webshop.error.PasswordMismatchException;
+import com.webshop.error.ProductNotFoundException;
 import com.webshop.model.Proizvod;
+import com.webshop.model.TipProdaje;
 import com.webshop.repository.ProizvodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +36,7 @@ public class ProizvodService {
             ProizvodDTO proizvodDTO=new ProizvodDTO();
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setCena(proizvod.getCena());
-            proizvodDTO.setTip(proizvod.getTip());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setId(proizvod.getId());
@@ -51,6 +54,10 @@ public class ProizvodService {
  public List<ProizvodDTO> findAll() {
      List<Proizvod> proizvodi = proizvodRepository.findAll();
      List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
+     List<Proizvod> slanje = new ArrayList<>();
+
+
+
      for (Proizvod proizvod : proizvodi) {
          ProizvodDTO proizvodDTO = new ProizvodDTO();
          proizvodDTO.setId(proizvod.getId());
@@ -64,7 +71,122 @@ public class ProizvodService {
  }
 
 
-   /* public static Proizvod findById(Long id) throws UserNotFoundException {
+
+    public List<ProizvodDTO> findByNazivAndOpis(String name, String description) throws ProductNotFoundException {
+        List<Proizvod> proizvodi = proizvodRepository.findByNazivAndOpis(name, description);
+        List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
+        for(Proizvod proizvod: proizvodi){
+            ProizvodDTO proizvodDTO = new ProizvodDTO();
+            proizvodDTO.setId(proizvod.getId());
+            proizvodDTO.setNaziv(proizvod.getNaziv());
+            proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodiDTO.add(proizvodDTO);
+        }
+        if (proizvodiDTO.isEmpty()) {
+          throw new ProductNotFoundException("Trazeni proizvod ne postoji!");
+        }
+        return proizvodiDTO;
+
+
+    }
+
+    public List<ProizvodDTO> findByNaziv(String name) throws ProductNotFoundException, PasswordMismatchException {
+        List<Proizvod> proizvodi = proizvodRepository.findByNaziv(name);
+        List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
+        for(Proizvod proizvod: proizvodi){
+            ProizvodDTO proizvodDTO = new ProizvodDTO();
+            proizvodDTO.setId(proizvod.getId());
+            proizvodDTO.setNaziv(proizvod.getNaziv());
+            proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodiDTO.add(proizvodDTO);
+        }
+        if (proizvodiDTO.isEmpty()) {
+            throw new ProductNotFoundException("Trazeni proizvod ne postoji!");
+        }
+        return proizvodiDTO;
+
+    }
+
+    public List<ProizvodDTO> findByOpis(String description) throws ProductNotFoundException {
+        List<Proizvod> proizvodi = proizvodRepository.findByOpis( description);
+        List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
+
+        for(Proizvod proizvod: proizvodi){
+            ProizvodDTO proizvodDTO = new ProizvodDTO();//ako ovo ne odradim vraacace mi npr dve serpe umesto tiganj i serpu, moram
+            //uvek novi upisati
+            proizvodDTO.setId(proizvod.getId());
+            proizvodDTO.setNaziv(proizvod.getNaziv());
+            proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodiDTO.add(proizvodDTO);
+        }
+        if (proizvodiDTO.isEmpty()) {
+            throw new ProductNotFoundException("Trazeni proizvod ne postoji!");
+        }
+        return proizvodiDTO;
+
+    }
+
+    public List<ProizvodDTO> findByKategorija(String category) throws ProductNotFoundException {
+        List<Proizvod> proizvodi = proizvodRepository.findByKategorijaNazivKategorije(category);
+        List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
+
+        for(Proizvod proizvod: proizvodi){
+            ProizvodDTO proizvodDTO = new ProizvodDTO();//ako ovo ne odradim vraacace mi npr dve serpe umesto tiganj i serpu, moram
+            //uvek novi upisati
+            proizvodDTO.setId(proizvod.getId());
+            proizvodDTO.setNaziv(proizvod.getNaziv());
+            proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodiDTO.add(proizvodDTO);
+        }
+        if (proizvodiDTO.isEmpty()) {
+            throw new ProductNotFoundException("Trazeni proizvod ne postoji!");
+        }
+        return proizvodiDTO;
+    }
+
+    public List<ProizvodDTO> findByTipProdaje(TipProdaje type) throws ProductNotFoundException {
+        List<Proizvod> proizvodi = proizvodRepository.findByTipProdaje(type);
+        List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
+
+        for(Proizvod proizvod: proizvodi){
+            ProizvodDTO proizvodDTO = new ProizvodDTO();//ako ovo ne odradim vraacace mi npr dve serpe umesto tiganj i serpu, moram
+            //uvek novi upisati
+            proizvodDTO.setId(proizvod.getId());
+            proizvodDTO.setNaziv(proizvod.getNaziv());
+            proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodiDTO.add(proizvodDTO);
+        }
+        if (proizvodiDTO.isEmpty()) {
+            throw new ProductNotFoundException("Trazeni proizvod ne postoji!");
+        }
+        return proizvodiDTO;
+    }
+
+    public List<ProizvodDTO> findByCena(Double priceFrom, Double priceTo) throws ProductNotFoundException {
+        List<Proizvod> proizvodi = proizvodRepository.findByCenaGreaterThanEqualAndCenaLessThanEqual(priceFrom, priceTo);
+        List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
+
+        for(Proizvod proizvod: proizvodi){
+            ProizvodDTO proizvodDTO = new ProizvodDTO();
+            proizvodDTO.setId(proizvod.getId());
+            proizvodDTO.setNaziv(proizvod.getNaziv());
+            proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodiDTO.add(proizvodDTO);
+        }
+        if (proizvodiDTO.isEmpty()) {
+            throw new ProductNotFoundException("Trazeni proizvod ne postoji!");
+        }
+        return proizvodiDTO;
+    }
+
+/*
+    public static Proizvod findById(Long id) throws UserNotFoundException {
         Optional<Proizvod> optionalProizvod = proizvodRepository.findById(id);
         if (optionalProizvod.isPresent()) {
             return optionalProizvod.get();
