@@ -3,6 +3,7 @@ package com.webshop.service;
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.ProductNotFoundException;
+import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
 import com.webshop.repository.ProizvodRepository;
@@ -185,9 +186,38 @@ public class ProizvodService {
         return proizvodiDTO;
     }
 
+    public void updateProduct(Proizvod proizvod, Proizvod updatedProduct) {
+
+
+        proizvod.setCena(updatedProduct.getCena());
+       // proizvod.setId(updatedProduct.getId());
+        proizvod.setNaziv(updatedProduct.getNaziv());
+        proizvod.setDatumObjavljivanja(updatedProduct.getDatumObjavljivanja());
+        proizvod.setKategorija(updatedProduct.getKategorija());
+       // proizvod.setKupac(updatedProduct.getKupac());
+        proizvod.setPonude(updatedProduct.getPonude());
+     //   proizvod.setProdat(updatedProduct.getProdat());
+        proizvod.setOpis(updatedProduct.getOpis());
+       // proizvod.setProdavac(updatedProduct.getProdavac());
+     //   proizvod.setRecenzijaKupac(updatedProduct.getRecenzijaKupac());
+        proizvod.setSlikaProizvoda(updatedProduct.getSlikaProizvoda());
+        proizvod.setTip(updatedProduct.getTip());
+        proizvodRepository.save(proizvod);
+
+    }
+
+    public Optional<Proizvod> findById(Long id) throws UserNotFoundException {
+        Optional<Proizvod> proizvod = proizvodRepository.findById(id);
+        if (proizvod.isPresent()) {
+            return proizvod;
+        } else {
+            throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
+        }
+    }
+
 /*
     public static Proizvod findById(Long id) throws UserNotFoundException {
-        Optional<Proizvod> optionalProizvod = proizvodRepository.findById(id);
+        Optional<Proizvod> optionalProizvod = ProizvodRepository.findById(id);
         if (optionalProizvod.isPresent()) {
             return optionalProizvod.get();
         } else {
