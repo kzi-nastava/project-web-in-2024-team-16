@@ -22,6 +22,7 @@ public class Kategorija implements Serializable {
 
    @ManyToMany(mappedBy = "kategorija", fetch = FetchType.LAZY)
     private Set<Proizvod> proizvodi = new HashSet<>();
+  
    //@OneToMany(mappedBy = "kategorija", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
    //private Set<Proizvod> proizvodi = new HashSet<>();
    //   @ManyToMany(mappedBy = "kategorija", fetch = FetchType.LAZY)

@@ -40,8 +40,6 @@ public class Proizvod implements Serializable {
    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Kategorija  kategorija;*/
 
-
-
     //private ArrayList<Kategorija> kategorija = new ArrayList<>();
     @Column
     private Double cena;
