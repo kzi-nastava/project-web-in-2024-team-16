@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -90,58 +91,34 @@ public class KorisnikService {
 
     }
 
-    public Korisnik azuriranje(KupacDTO kupac) throws EmailAlreadyExistsException, UserAlreadyExistsException, PasswordMismatchException, UserNotFoundException {
-
-        Korisnik k = korisnikRepository.getByKorisnickoIme(kupac.getKorisnickoIme());
-
-        if (k == null) {
-            throw new UserNotFoundException("Korisnik sa ovim korisničkim imenom ne postoji!");
+    public Optional<Korisnik> findById(Long id) throws UserNotFoundException {
+        Optional<Korisnik> korisnik = korisnikRepository.findById(id);
+        if (korisnik.isPresent()) {
+            return korisnik;
+        } else {
+            throw new UserNotFoundException("Korisnik sa ID-jem " + id + " nije pronađen.");
         }
+    }
 
-        k.setIme(kupac.getIme());
-        k.setPrezime(kupac.getPrezime());
-        k.setTelefon(kupac.getTelefon());
-        k.setUloga(kupac.getUloga());
-        k.setDatumRodjenja(kupac.getDatumRodjenja());
+    public void updateSeller(Korisnik korisnik, KupacDTO updatedSeller) throws PasswordMismatchException {
 
-        k.setDatumRodjenja(kupac.getDatumRodjenja()); //novo
-        k.setOpisKorisnika(kupac.getOpisKorisnika()); //novo
-        k.setSlika(kupac.getSlika());                 //novo
+            korisnik.setIme(updatedSeller.getIme());
+            korisnik.setPrezime(updatedSeller.getPrezime());
+            korisnik.setTelefon(updatedSeller.getTelefon());
+            korisnik.setUloga(updatedSeller.getUloga());
+            korisnik.setDatumRodjenja(updatedSeller.getDatumRodjenja());
+            korisnik.setSlika(updatedSeller.getSlika());
+            korisnik.setOpisKorisnika(updatedSeller.getOpisKorisnika());
 
-        if(k.getLozinka().equals(kupac.getLozinka())){
-           k.setMejl(kupac.getMejl());
-           k.setKorisnickoIme(kupac.getKorisnickoIme());
+        if(korisnik.getLozinka().equals(updatedSeller.getStaraLozinka())){
+           korisnik.setMejl(updatedSeller.getMejl());
+           korisnik.setKorisnickoIme(updatedSeller.getKorisnickoIme());
+           korisnik.setLozinka(updatedSeller.getNovaLozinka());
         }
         else{
             throw new PasswordMismatchException("Morate uneti ispravnu lozniku!");
         }
 
-        if(korisnikRepository.existsByMejlAndIdNot(k.getMejl(), k.getId())){
-            throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
-        }
-
-        if(korisnikRepository.existsByKorisnickoImeAndIdNot(k.getKorisnickoIme(), k.getId())){
-            throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
-        }
-
-//        if (!k.getMejl().equals(kupac.getMejl())) {
-//            if (korisnikRepository.existsByMejl(kupac.getMejl())) {
-//                throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
-//            }
-//        }
-//
-//        if (!k.getKorisnickoIme().equals(kupac.getKorisnickoIme())) {
-//            if (korisnikRepository.existsByKorisnickoIme(kupac.getKorisnickoIme())) {
-//                throw new UserAlreadyExistsException("Korisnik sa ovim korisničkim imenom već postoji!");
-//            }
-//        }
-
-//        if (!kupac.getLozinka().equals(kupac.getPonovljenaLozinka())) {
-//            throw new PasswordMismatchException("Lozinke se ne poklapaju!");
-//        }
-
-        k = korisnikRepository.save(k);
-        return k;
-
+        korisnikRepository.save(korisnik);
     }
 }

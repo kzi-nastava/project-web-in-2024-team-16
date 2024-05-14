@@ -35,7 +35,11 @@ public class KupacDTO {
 
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
             message = "Lozinka mora sadržati barem 8 znakova, barem jedan broj i barem jedan specijalan znak!")
-    private String lozinka;
+    private String staraLozinka;
+
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$",
+            message = "Lozinka mora sadržati barem 8 znakova, barem jedan broj i barem jedan specijalan znak!")
+    private String novaLozinka;
 
     private Date datumRodjenja;
 

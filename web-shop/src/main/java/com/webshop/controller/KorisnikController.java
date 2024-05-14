@@ -3,11 +3,9 @@ package com.webshop.controller;
 import com.webshop.DTO.KupacDTO;
 import com.webshop.DTO.PrijavaKorisnikaDTO;
 import com.webshop.DTO.RegistracijaKorisnikaDTO;
-import com.webshop.error.EmailAlreadyExistsException;
-import com.webshop.error.PasswordMismatchException;
-import com.webshop.error.UserAlreadyExistsException;
-import com.webshop.error.UserNotFoundException;
+import com.webshop.error.*;
 import com.webshop.model.Korisnik;
+import com.webshop.model.Kupac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;
@@ -15,12 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.naming.NoPermissionException;
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -60,24 +57,33 @@ public class KorisnikController {
         return new ResponseEntity("Odjava uspešna!", HttpStatus.OK);
     }
 
-    @PostMapping("/update")
-    public ResponseEntity<Korisnik> azuriranjeKupca(@Valid @RequestBody KupacDTO kupac, HttpSession session) throws PasswordMismatchException, EmailAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException {
-        Korisnik korisnik = korisnikService.azuriranje(kupac);
+    @PutMapping("/updateSeller/{id}")
+    public ResponseEntity<?> updateSeller(@PathVariable Long id, @RequestBody KupacDTO updatedSeller, HttpSession session) throws PasswordMismatchException, EmailAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException, NoSellerException {
 
-        if(korisnik.getUloga() != Uloga.KUPAC){
-            return new ResponseEntity("Samo clanovi sa ulogom KUPAC mogu da menjaju profil!", HttpStatus.FORBIDDEN);
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            // return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
         }
 
-        Korisnik loggedEmployee = (Korisnik) session.getAttribute("korisnik");
+        Optional<Korisnik> existingUser = korisnikService.findById(id);
 
-        if (loggedEmployee == null)
-            return new ResponseEntity("Korisnik mora biti ulogovan!", HttpStatus.FORBIDDEN);
+        if (existingUser.isEmpty()) {
+            // return ResponseEntity.notFound().build();
+            throw new UserNotFoundException("Korisnik sa ID-jem " + id + " nije pronađen.");
+        }
 
-//        Korisnik loginovaniKorisnik = korisnikService.prijava(kupac.getKorisnickoIme(), kupac.getLozinka());
-//        if (loginovaniKorisnik.getMejl() != null)
-//            return new ResponseEntity("Korisnik sa istim mejlom vec postoji!", HttpStatus.NOT_FOUND);
+        if (!existingUser.get().getKorisnickoIme().equals(korisnik.getKorisnickoIme())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
 
-        return new ResponseEntity<>(korisnik, HttpStatus.OK);
+        if(existingUser.get().getUloga() != Uloga.KUPAC){
+            throw new NoSellerException("Samo KUPAC moze da menja podatke!");
+        }
+
+        korisnikService.updateSeller(existingUser.get(), updatedSeller);
+        return ResponseEntity.ok().build();
+
     }
-
 }
