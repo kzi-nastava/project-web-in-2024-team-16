@@ -37,8 +37,6 @@ public class KupacDTO {
             message = "Lozinka mora sadržati barem 8 znakova, barem jedan broj i barem jedan specijalan znak!")
     private String lozinka;
 
-    private String ponovljenaLozinka;
-
     private Date datumRodjenja;
 
     private Uloga uloga;

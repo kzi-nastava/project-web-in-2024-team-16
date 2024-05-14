@@ -98,28 +98,47 @@ public class KorisnikService {
             throw new UserNotFoundException("Korisnik sa ovim korisničkim imenom ne postoji!");
         }
 
+        k.setIme(kupac.getIme());
+        k.setPrezime(kupac.getPrezime());
+        k.setTelefon(kupac.getTelefon());
+        k.setUloga(kupac.getUloga());
+        k.setDatumRodjenja(kupac.getDatumRodjenja());
+
         k.setDatumRodjenja(kupac.getDatumRodjenja()); //novo
         k.setOpisKorisnika(kupac.getOpisKorisnika()); //novo
         k.setSlika(kupac.getSlika());                 //novo
 
-        k.setMejl(kupac.getMejl());
-        k.setKorisnickoIme(kupac.getKorisnickoIme());
-
-        if (!k.getMejl().equals(kupac.getMejl())) {
-            if (korisnikRepository.existsByMejl(kupac.getMejl())) {
-                throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
-            }
+        if(k.getLozinka().equals(kupac.getLozinka())){
+           k.setMejl(kupac.getMejl());
+           k.setKorisnickoIme(kupac.getKorisnickoIme());
+        }
+        else{
+            throw new PasswordMismatchException("Morate uneti ispravnu lozniku!");
         }
 
-        if (!k.getKorisnickoIme().equals(kupac.getKorisnickoIme())) {
-            if (korisnikRepository.existsByKorisnickoIme(kupac.getKorisnickoIme())) {
-                throw new UserAlreadyExistsException("Korisnik sa ovim korisničkim imenom već postoji!");
-            }
+        if(korisnikRepository.existsByMejlAndIdNot(k.getMejl(), k.getId())){
+            throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
         }
 
-        if (!kupac.getLozinka().equals(kupac.getPonovljenaLozinka())) {
-            throw new PasswordMismatchException("Lozinke se ne poklapaju!");
+        if(korisnikRepository.existsByKorisnickoImeAndIdNot(k.getKorisnickoIme(), k.getId())){
+            throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
         }
+
+//        if (!k.getMejl().equals(kupac.getMejl())) {
+//            if (korisnikRepository.existsByMejl(kupac.getMejl())) {
+//                throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
+//            }
+//        }
+//
+//        if (!k.getKorisnickoIme().equals(kupac.getKorisnickoIme())) {
+//            if (korisnikRepository.existsByKorisnickoIme(kupac.getKorisnickoIme())) {
+//                throw new UserAlreadyExistsException("Korisnik sa ovim korisničkim imenom već postoji!");
+//            }
+//        }
+
+//        if (!kupac.getLozinka().equals(kupac.getPonovljenaLozinka())) {
+//            throw new PasswordMismatchException("Lozinke se ne poklapaju!");
+//        }
 
         k = korisnikRepository.save(k);
         return k;

@@ -73,6 +73,10 @@ public class KorisnikController {
         if (loggedEmployee == null)
             return new ResponseEntity("Korisnik mora biti ulogovan!", HttpStatus.FORBIDDEN);
 
+//        Korisnik loginovaniKorisnik = korisnikService.prijava(kupac.getKorisnickoIme(), kupac.getLozinka());
+//        if (loginovaniKorisnik.getMejl() != null)
+//            return new ResponseEntity("Korisnik sa istim mejlom vec postoji!", HttpStatus.NOT_FOUND);
+
         return new ResponseEntity<>(korisnik, HttpStatus.OK);
     }
 
