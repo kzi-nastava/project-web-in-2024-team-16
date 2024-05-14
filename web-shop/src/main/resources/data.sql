@@ -69,17 +69,17 @@ INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (100000,
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (2200, 5, 5000);
 
 
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (1, 'telefoni');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (2, 'laptopovi');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3, 'alat');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4, 'automobili');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5, 'kuhinja');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (1000, 'telefoni');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (2000, 'laptopovi');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3000, 'alat');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4000, 'automobili');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5000, 'kuhinja');
 
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (5, 1);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (7, 1);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (4, 2);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (3, 3);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (2, 4);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (1, 5);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (5, 1000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (7, 1000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (4, 2000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (3, 3000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (2, 4000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (1, 5000);
 
 

@@ -142,28 +142,16 @@ public class ProizvodController {
 
         return ResponseEntity.ok().build();
     }
-    /*
-    @PostMapping("/newProduct")
-    public ResponseEntity<?> dodajProizvod(@RequestBody ProizvodDTO proizvodDTO) {
-        // Provera postojanja kategorije
-        Optional<Kategorija> existingCategory = kategorijaRepository.findByNaziv(proizvodDTO.getNazivKategorije());
-        if (existingCategory.isPresent()) {
-            // Kategorija već postoji
-            // Dodajte logiku ovde ako želite
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija već postoji.");
-        } else {
-            // Dodajte novu kategoriju
-            Kategorija novaKategorija = new Kategorija();
-            novaKategorija.setNaziv(proizvodDTO.getNazivKategorije());
-            kategorijaRepository.save(novaKategorija);
-
-            // Dodajte ostatak logike za dodavanje proizvoda
-            // ...
-
-            return ResponseEntity.ok().build();
+    /*public ResponseEntity<String> SetProductForSell(@RequestBody ProizvodDTO proizvodDTO) {
+        // Provera da li je kategorija validna
+        if (!kategorijaService.postojiKategorija(proizvod.getKategorija())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija ne postoji.");
         }
-    }
 
-*/
+        // Dodavanje proizvoda u sistem
+        proizvodService.dodajProizvod(proizvod);
+
+        return ResponseEntity.ok().body("Proizvod uspešno postavljen na prodaju.");
+    }*/
 
 }
