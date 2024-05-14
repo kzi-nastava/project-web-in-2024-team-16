@@ -56,9 +56,7 @@ public class ProizvodService {
      List<Proizvod> proizvodi = proizvodRepository.findAll();
      List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
      List<Proizvod> slanje = new ArrayList<>();
-
-
-
+   
      for (Proizvod proizvod : proizvodi) {
          ProizvodDTO proizvodDTO = new ProizvodDTO();
          proizvodDTO.setId(proizvod.getId());
@@ -70,8 +68,6 @@ public class ProizvodService {
      }
      return proizvodiDTO;
  }
-
-
 
     public List<ProizvodDTO> findByNazivAndOpis(String name, String description) throws ProductNotFoundException {
         List<Proizvod> proizvodi = proizvodRepository.findByNazivAndOpis(name, description);
@@ -214,15 +210,4 @@ public class ProizvodService {
             throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
         }
     }
-
-/*
-    public static Proizvod findById(Long id) throws UserNotFoundException {
-        Optional<Proizvod> optionalProizvod = ProizvodRepository.findById(id);
-        if (optionalProizvod.isPresent()) {
-            return optionalProizvod.get();
-        } else {
-            throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
-        }
-
-    }*/
 }

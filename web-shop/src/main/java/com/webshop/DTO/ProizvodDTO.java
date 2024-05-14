@@ -19,6 +19,4 @@ public class ProizvodDTO {
     private Kategorija kategorija;
     private Double cena;
     private TipProdaje tipProdaje;
-
-
 }
