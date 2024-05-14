@@ -17,16 +17,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
     @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<String> handleEmailAlreadyExistsException(PasswordMismatchException ex) {
+    public ResponseEntity<String> handlePasswordMismatchException(PasswordMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(ProductCanNotBeeChanged.class)
+    public ResponseEntity<String> handleProductCanNotBeeChanged(ProductCanNotBeeChanged ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+    @ExceptionHandler(CategoryExistsException.class)
+    public ResponseEntity<String> handleCategoryExistsException(CategoryExistsException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
     @ExceptionHandler(NoSellerException.class)
     public ResponseEntity<String> handleNoSellerException(NoSellerException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
-
 }
