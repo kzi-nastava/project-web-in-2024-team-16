@@ -38,7 +38,6 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(NoSellerException.class)
     public ResponseEntity<String> handleNoSellerException(NoSellerException ex) {
-
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
