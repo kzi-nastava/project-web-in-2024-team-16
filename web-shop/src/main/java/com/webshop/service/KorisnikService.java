@@ -1,9 +1,11 @@
 package com.webshop.service;
 
+import com.webshop.DTO.KupacDTO;
 import com.webshop.DTO.RegistracijaKorisnikaDTO;
 import com.webshop.error.EmailAlreadyExistsException;
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.UserAlreadyExistsException;
+import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Korisnik;
 import com.webshop.model.PrijavaProfila;
 import com.webshop.model.Recenzija;
@@ -88,4 +90,39 @@ public class KorisnikService {
 
     }
 
+    public Korisnik azuriranje(KupacDTO kupac) throws EmailAlreadyExistsException, UserAlreadyExistsException, PasswordMismatchException, UserNotFoundException {
+
+        Korisnik k = korisnikRepository.getByKorisnickoIme(kupac.getKorisnickoIme());
+
+        if (k == null) {
+            throw new UserNotFoundException("Korisnik sa ovim korisničkim imenom ne postoji!");
+        }
+
+        k.setDatumRodjenja(kupac.getDatumRodjenja()); //novo
+        k.setOpisKorisnika(kupac.getOpisKorisnika()); //novo
+        k.setSlika(kupac.getSlika());                 //novo
+
+        k.setMejl(kupac.getMejl());
+        k.setKorisnickoIme(kupac.getKorisnickoIme());
+
+        if (!k.getMejl().equals(kupac.getMejl())) {
+            if (korisnikRepository.existsByMejl(kupac.getMejl())) {
+                throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji!");
+            }
+        }
+
+        if (!k.getKorisnickoIme().equals(kupac.getKorisnickoIme())) {
+            if (korisnikRepository.existsByKorisnickoIme(kupac.getKorisnickoIme())) {
+                throw new UserAlreadyExistsException("Korisnik sa ovim korisničkim imenom već postoji!");
+            }
+        }
+
+        if (!kupac.getLozinka().equals(kupac.getPonovljenaLozinka())) {
+            throw new PasswordMismatchException("Lozinke se ne poklapaju!");
+        }
+
+        k = korisnikRepository.save(k);
+        return k;
+
+    }
 }

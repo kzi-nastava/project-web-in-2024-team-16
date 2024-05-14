@@ -1,11 +1,14 @@
 package com.webshop.controller;
 
+import com.webshop.DTO.KupacDTO;
 import com.webshop.DTO.PrijavaKorisnikaDTO;
 import com.webshop.DTO.RegistracijaKorisnikaDTO;
 import com.webshop.error.EmailAlreadyExistsException;
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.UserAlreadyExistsException;
+import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Korisnik;
+import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +58,22 @@ public class KorisnikController {
 
         session.invalidate();
         return new ResponseEntity("Odjava uspešna!", HttpStatus.OK);
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<Korisnik> azuriranjeKupca(@Valid @RequestBody KupacDTO kupac, HttpSession session) throws PasswordMismatchException, EmailAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException {
+        Korisnik korisnik = korisnikService.azuriranje(kupac);
+
+        if(korisnik.getUloga() != Uloga.KUPAC){
+            return new ResponseEntity("Samo clanovi sa ulogom KUPAC mogu da menjaju profil!", HttpStatus.FORBIDDEN);
+        }
+
+        Korisnik loggedEmployee = (Korisnik) session.getAttribute("korisnik");
+
+        if (loggedEmployee == null)
+            return new ResponseEntity("Korisnik mora biti ulogovan!", HttpStatus.FORBIDDEN);
+
+        return new ResponseEntity<>(korisnik, HttpStatus.OK);
     }
 
 }
