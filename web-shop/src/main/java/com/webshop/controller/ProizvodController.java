@@ -112,7 +112,7 @@ public class ProizvodController {
 
         if(korisnik==null){
            // return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-            throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
+            throw new UserNotFoundException("Greska!");
         }
 
         Optional<Proizvod> existingProduct = proizvodService.findById(id);
@@ -142,7 +142,28 @@ public class ProizvodController {
 
         return ResponseEntity.ok().build();
     }
+    /*
+    @PostMapping("/newProduct")
+    public ResponseEntity<?> dodajProizvod(@RequestBody ProizvodDTO proizvodDTO) {
+        // Provera postojanja kategorije
+        Optional<Kategorija> existingCategory = kategorijaRepository.findByNaziv(proizvodDTO.getNazivKategorije());
+        if (existingCategory.isPresent()) {
+            // Kategorija već postoji
+            // Dodajte logiku ovde ako želite
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija već postoji.");
+        } else {
+            // Dodajte novu kategoriju
+            Kategorija novaKategorija = new Kategorija();
+            novaKategorija.setNaziv(proizvodDTO.getNazivKategorije());
+            kategorijaRepository.save(novaKategorija);
 
+            // Dodajte ostatak logike za dodavanje proizvoda
+            // ...
 
+            return ResponseEntity.ok().build();
+        }
+    }
+
+*/
 
 }
