@@ -2,6 +2,7 @@ package com.webshop.controller;
 
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.error.PasswordMismatchException;
+import com.webshop.error.ProductCanNotBeeChanged;
 import com.webshop.error.ProductNotFoundException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Korisnik;
@@ -106,37 +107,37 @@ public class ProizvodController {
         return ResponseEntity.ok(proizvod);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Proizvod updatedProduct, HttpSession session) throws UserNotFoundException {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Proizvod updatedProduct, HttpSession session) throws UserNotFoundException, ProductCanNotBeeChanged {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik==null){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+           // return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
         }
 
         Optional<Proizvod> existingProduct = proizvodService.findById(id);
         if(existingProduct.get().getProdat()){//ako je prodat proizvod on ne moze da se menja
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+           // return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            throw new ProductCanNotBeeChanged("Proizvod koji je prodat ne može da se menja!");
         }
         // Provera da li postoji proizvod sa datim ID-om
        if (existingProduct.isEmpty()) {
-            return ResponseEntity.notFound().build();
+           // return ResponseEntity.notFound().build();
+           throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
         }
         if (existingProduct.get().getTip() == TipProdaje.AUKCIJA && !existingProduct.get().getPonude().isEmpty()) {
-            for(Ponuda ponuda: existingProduct.get().getPonude()){
-                System.out.println(ponuda.getCena());
-            }
+          /*  for(Ponuda ponuda: existingProduct.get().getPonude()){
+               // System.out.println(ponuda.getCena());
+            }*/
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.");
-
+          // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.");
+            throw new ProductCanNotBeeChanged("Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji!");
         }
-
-        // Provera da li trenutni korisnik nije prodavac proizvoda
 
         if (!existingProduct.get().getProdavac().getKorisnickoIme().equals(korisnik.getKorisnickoIme())) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        // Poziv servisne klase za ažuriranje proizvoda
         proizvodService.updateProduct(existingProduct.get(), updatedProduct);
 
         return ResponseEntity.ok().build();
