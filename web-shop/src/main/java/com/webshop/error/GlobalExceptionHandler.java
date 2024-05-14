@@ -34,6 +34,8 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(CategoryExistsException.class)
     public ResponseEntity<String> handleCategoryExistsException(CategoryExistsException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
     @ExceptionHandler(NoSellerException.class)
     public ResponseEntity<String> handleNoSellerException(NoSellerException ex) {
 

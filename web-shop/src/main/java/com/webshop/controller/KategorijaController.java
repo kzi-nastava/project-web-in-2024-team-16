@@ -1,6 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.error.CategoryExistsException;
+import com.webshop.error.NoSellerException;
 import com.webshop.error.ProductNotFoundException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Korisnik;
@@ -19,7 +20,7 @@ public class KategorijaController {
     private KategorijaService kategorijaService;
 
     @PostMapping("/newCategory/{id}")
-    public ResponseEntity<String> addNewCategory(@PathVariable Long id,@RequestBody String nazivKategorije, HttpSession session) throws CategoryExistsException, UserNotFoundException {
+    public ResponseEntity<String> addNewCategory(@PathVariable Long id,@RequestBody String nazivKategorije, HttpSession session) throws CategoryExistsException, UserNotFoundException, NoSellerException {
             // Provera da li kategorija već postoji
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
@@ -31,13 +32,12 @@ public class KategorijaController {
         }
         if(!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
 
-            throw new UserNotFoundException("MORA BITI PRODAVAC");
+            throw new NoSellerException("MORA BITI PRODAVAC");
         }
         if (kategorijaService.proveriPostojanjeKategorije(nazivKategorije)) {
-               // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Prosleđena kategorija već postoji.");
-                throw new CategoryExistsException("Prosleđena kategorija već postoji!");
-            }
-        System.out.print("nakon if ");
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Prosleđena kategorija već postoji.");
+            throw new CategoryExistsException("Prosleđena kategorija već postoji!");
+        }
             // Dodavanje nove kategorije u sistem
             kategorijaService.dodajNovuKategoriju(nazivKategorije);
 
