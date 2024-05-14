@@ -17,7 +17,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
     @ExceptionHandler(PasswordMismatchException.class)
-    public ResponseEntity<String> handleEmailAlreadyExistsException(PasswordMismatchException ex) {
+    public ResponseEntity<String> handlePasswordMismatchException(PasswordMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ResponseEntity<String> handleProductNotFoundException(ProductNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(ProductCanNotBeeChanged.class)
+    public ResponseEntity<String> handleProductCanNotBeeChanged(ProductCanNotBeeChanged ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
     @ExceptionHandler(UserNotFoundException.class)
@@ -28,5 +36,4 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNoSellerException(NoSellerException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
-
 }

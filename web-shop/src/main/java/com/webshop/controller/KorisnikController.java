@@ -56,7 +56,6 @@ public class KorisnikController {
         session.invalidate();
         return new ResponseEntity("Odjava uspešna!", HttpStatus.OK);
     }
-
     @PutMapping("/updateSeller/{id}")
     public ResponseEntity<?> updateSeller(@PathVariable Long id, @RequestBody KupacDTO updatedSeller, HttpSession session) throws PasswordMismatchException, EmailAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException, NoSellerException {
 

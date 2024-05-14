@@ -90,7 +90,6 @@ public class KorisnikService {
         return  korisnik;
 
     }
-
     public Optional<Korisnik> findById(Long id) throws UserNotFoundException {
         Optional<Korisnik> korisnik = korisnikRepository.findById(id);
         if (korisnik.isPresent()) {

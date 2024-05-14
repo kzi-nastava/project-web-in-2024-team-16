@@ -18,7 +18,7 @@ public class Ponuda implements Serializable {
     private Kupac kupacKojiDajePonudu;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "proizvod_id", insertable = false, updatable = false)
     private Proizvod proizvod;
 
 //    public Long getId() {
