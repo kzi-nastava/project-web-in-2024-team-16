@@ -75,10 +75,17 @@ INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3000, 'alat');
 INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4000, 'automobili');
 INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5000, 'kuhinja');
 
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (1000, 'telefoni');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (2000, 'laptopovi');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3000, 'alat');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4000, 'automobili');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5000, 'kuhinja');
+
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (5000, 1000);
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (7000, 1000);
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (4000, 2000);
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (3000, 3000);
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (2000, 4000);
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (1000, 5000);
+
 

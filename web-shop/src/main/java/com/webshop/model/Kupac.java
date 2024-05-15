@@ -17,15 +17,17 @@ public class Kupac extends Korisnik{
     @JsonIgnore
     private List<Proizvod> kupljeniProizvodi = new ArrayList<>();
 
+
     @OneToMany(mappedBy = "kupacKojiDajePonudu",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Ponuda> ponuda = new HashSet<>();
 
     public List<Proizvod> getKupljeniProizvodi() {
+
         return kupljeniProizvodi;
     }
 
-    public void setKupljeniProizvodi(ArrayList<Proizvod> kupljeniProizvodi) {
+    public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
         this.kupljeniProizvodi = kupljeniProizvodi;
     }
 
