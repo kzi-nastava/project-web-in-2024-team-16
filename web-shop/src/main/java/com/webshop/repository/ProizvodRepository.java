@@ -22,4 +22,6 @@ public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
    List<Proizvod> findByTipProdaje(TipProdaje tipProdaje);
 
     List<Proizvod> findByCenaGreaterThanEqualAndCenaLessThanEqual(Double priceFrom, Double priceTo);
+
+    List<Proizvod> findByKategorijaId(Long kategorijaId);
 }
