@@ -190,10 +190,10 @@ public class ProizvodController {
             throw new NoSellerException("MORA BITI PRODAVAC");
         }
         // Provera da li je kategorija validna
-       /* KategorijaService kategorijaService = new KategorijaService();
-        if (!kategorijaService.proveriPostojanjeKategorije(proizvodDTO.getKategorije().getNazivKategorije())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija ne postoji.");
-        }*/
+       /// KategorijaService kategorijaService = new KategorijaService();
+        //if (!kategorijaService.proveriPostojanjeKategorije(proizvodDTO.getKategorije().getNazivKategorije())) {
+         //   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija ne postoji.");
+        //}
         Set<Kategorija> kategorijeSet = new HashSet<>();
         for (Kategorija kategorijaDTO : proizvodDTO.getKategorije()) {
             Kategorija kategorija = kategorijaRepository.findByNazivKategorije(kategorijaDTO.getNazivKategorije());
