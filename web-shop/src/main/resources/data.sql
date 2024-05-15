@@ -82,3 +82,4 @@ INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (3000, 3000)
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (2000, 4000);
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (1000, 5000);
 
+

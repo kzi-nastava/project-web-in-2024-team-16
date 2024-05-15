@@ -1,11 +1,19 @@
 package com.webshop.service;
 
 import com.webshop.DTO.ProizvodDTO;
+
 import com.webshop.error.*;
 import com.webshop.model.*;
 import com.webshop.repository.KategorijaRepository;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.ProdavacRepository;
+
+import com.webshop.error.PasswordMismatchException;
+import com.webshop.error.ProductNotFoundException;
+import com.webshop.error.UserNotFoundException;
+import com.webshop.model.Proizvod;
+import com.webshop.model.TipProdaje;
+
 import com.webshop.repository.ProizvodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -171,6 +179,7 @@ public class ProizvodService {
         List<Proizvod> proizvodi = proizvodRepository.findByCenaGreaterThanEqualAndCenaLessThanEqual(priceFrom, priceTo);
         List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
 
+
         for(Proizvod proizvod: proizvodi){
             ProizvodDTO proizvodDTO = new ProizvodDTO();
             proizvodDTO.setId(proizvod.getId());
@@ -253,4 +262,5 @@ public class ProizvodService {
         proizvod=proizvodRepository.save(proizvod);//saljem sve ali ja nisam morala pri pravljenju da unosim sve
 
     }
+
 }

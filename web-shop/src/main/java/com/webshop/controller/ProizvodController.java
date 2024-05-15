@@ -1,6 +1,7 @@
 package com.webshop.controller;
 
 import com.webshop.DTO.ProizvodDTO;
+
 import com.webshop.error.*;
 import com.webshop.model.*;
 import com.webshop.repository.KategorijaRepository;
@@ -14,9 +15,30 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.*;
 
+
+import com.webshop.error.PasswordMismatchException;
+import com.webshop.error.ProductCanNotBeeChanged;
+import com.webshop.error.ProductNotFoundException;
+
+import com.webshop.error.UserNotFoundException;
+import com.webshop.model.Korisnik;
+import com.webshop.model.Ponuda;
+import com.webshop.model.Proizvod;
+import com.webshop.model.TipProdaje;
+import com.webshop.service.ProizvodService;
+
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Proizvod;
 import com.webshop.service.ProizvodService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +47,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
+import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping("/api/product")
@@ -149,7 +174,7 @@ public class ProizvodController {
         proizvodService.updateProduct(existingProduct.get(), updatedProduct);
 
         return ResponseEntity.ok().build();
-    }
+
     @PostMapping("/addForSale/{id}")
     public ResponseEntity<String> SetProductForSell(@PathVariable Long id,@RequestBody ProizvodDTO proizvodDTO,HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
@@ -184,6 +209,8 @@ public class ProizvodController {
 
         return ResponseEntity.ok().body("Proizvod uspešno postavljen na prodaju.");
     }
+
+
 
 
 }
