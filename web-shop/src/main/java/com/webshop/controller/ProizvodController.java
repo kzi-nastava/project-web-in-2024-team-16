@@ -140,7 +140,7 @@ public class ProizvodController {
         return ResponseEntity.ok(proizvod);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Proizvod updatedProduct, HttpSession session) throws UserNotFoundException, ProductCanNotBeeChanged {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Proizvod updatedProduct, HttpSession session) throws UserNotFoundException, ProductCanNotBeeChanged, CategoryExistsException, NoSellerException {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik==null){
