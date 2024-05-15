@@ -32,6 +32,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleUserNotFoundException(UserNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+    @ExceptionHandler(CategoryExistsException.class)
+    public ResponseEntity<String> handleCategoryExistsException(CategoryExistsException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
     @ExceptionHandler(NoSellerException.class)
     public ResponseEntity<String> handleNoSellerException(NoSellerException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());

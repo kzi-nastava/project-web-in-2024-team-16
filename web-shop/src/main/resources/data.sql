@@ -40,45 +40,46 @@ INSERT INTO Prodavac(id, prosecna_ocena) VALUES(6000, 4.4);
 
 
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, false, false, false, '2020-06-12 22:03:48', 1 ,1000, 2000, 'tiganj',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, false, false, false, '2020-06-12 22:03:48', 1000 ,1000, 2000, 'tiganj',
                                                                   'metalac', 'metalac.jpg', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (100000, false, false, true, '2019-08-21 19:20:36', 2, 3000, 'automobil',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (100000, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'automobil',
                                                                   'ford', 'ford.jpg', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (4000, false, false, true, '2020-11-28 09:56:24', 3, 5000, 3000, 'akva busilica',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (4000, false, false, true, '2020-11-28 09:56:24', 3000, 5000, 3000, 'akva busilica',
                                                                   'bosch', 'bosch.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4, 7000, 2000, 'laptop',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 7000, 2000, 'laptop',
                                                                   'lenovo', 'lenovo.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5, 1000, 3000, 'telefon',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 3000, 'telefon',
                                                                   'samsung', 'samsung.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2100, false, true, false, '2020-06-12 22:03:48', 6, 5000, 2000, 'serpa',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (2100, false, true, false, '2020-06-12 22:03:48', 6000, 5000, 2000, 'serpa',
                                                                   'metalac', 'metalac2.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (90000, false, false, true, '2019-01-14 16:11:06', 7, 1000, 3000, 'telefon samsungA50',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (90000, false, false, true, '2019-01-14 16:11:06', 7000, 1000, 3000, 'telefon samsungA50',
                                                                   'samsung A50 crni', 'samsung2.jpg', 'FIKSNA');
 
 
-INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (8000, 2, 1000);
-INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (40000, 3, 7000);
-INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (4000, 3, 5000);
-INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (100000, 4, 1000);
-INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (2200, 5, 5000);
+INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (8000, 2000, 1000);
+INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (40000, 3000, 7000);
+INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (4000, 3000, 5000);
+INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (100000, 4000, 1000);
+INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (2200, 5000, 5000);
 
 
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (1, 'telefoni');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (2, 'laptopovi');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3, 'alat');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4, 'automobili');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5, 'kuhinja');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (1000, 'telefoni');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (2000, 'laptopovi');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3000, 'alat');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4000, 'automobili');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5000, 'kuhinja');
 
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (5, 1);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (7, 1);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (4, 2);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (3, 3);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (2, 4);
-INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (1, 5);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (5000, 1000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (7000, 1000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (4000, 2000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (3000, 3000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (2000, 4000);
+INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (1000, 5000);
+
 

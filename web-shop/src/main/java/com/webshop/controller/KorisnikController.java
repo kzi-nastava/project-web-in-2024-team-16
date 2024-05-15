@@ -58,7 +58,6 @@ public class KorisnikController {
     }
     @PutMapping("/updateSeller/{id}")
     public ResponseEntity<?> updateSeller(@PathVariable Long id, @RequestBody KupacDTO updatedSeller, HttpSession session) throws PasswordMismatchException, EmailAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException, NoSellerException {
-
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik == null){

@@ -1,15 +1,32 @@
 package com.webshop.controller;
 
 import com.webshop.DTO.ProizvodDTO;
+
+import com.webshop.error.*;
+import com.webshop.model.*;
+import com.webshop.repository.KategorijaRepository;
+import com.webshop.service.KategorijaService;
+import com.webshop.service.KorisnikService;
+import com.webshop.service.ProizvodService;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.*;
+
+
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.ProductCanNotBeeChanged;
 import com.webshop.error.ProductNotFoundException;
+
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Ponuda;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
 import com.webshop.service.ProizvodService;
+
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +38,7 @@ import java.util.Optional;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Proizvod;
 import com.webshop.service.ProizvodService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,7 +47,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+
 import java.util.NoSuchElementException;
+
 
 @RestController
 @RequestMapping("/api/product")
@@ -37,6 +57,10 @@ public class ProizvodController {
 
     @Autowired
     private ProizvodService proizvodService;
+    @Autowired
+    private KorisnikService korisnikService;
+    @Autowired
+    private KategorijaRepository kategorijaRepository;
 
     @GetMapping("/products")
     public ResponseEntity<List<ProizvodDTO>> getAllProducts() {
@@ -150,28 +174,43 @@ public class ProizvodController {
         proizvodService.updateProduct(existingProduct.get(), updatedProduct);
 
         return ResponseEntity.ok().build();
-    }
-    /*
-    @PostMapping("/newProduct")
-    public ResponseEntity<?> dodajProizvod(@RequestBody ProizvodDTO proizvodDTO) {
-        // Provera postojanja kategorije
-        Optional<Kategorija> existingCategory = kategorijaRepository.findByNaziv(proizvodDTO.getNazivKategorije());
-        if (existingCategory.isPresent()) {
-            // Kategorija već postoji
-            // Dodajte logiku ovde ako želite
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija već postoji.");
-        } else {
-            // Dodajte novu kategoriju
-            Kategorija novaKategorija = new Kategorija();
-            novaKategorija.setNaziv(proizvodDTO.getNazivKategorije());
-            kategorijaRepository.save(novaKategorija);
 
-            // Dodajte ostatak logike za dodavanje proizvoda
-            // ...
+    @PostMapping("/addForSale/{id}")
+    public ResponseEntity<String> SetProductForSell(@PathVariable Long id,@RequestBody ProizvodDTO proizvodDTO,HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
+        Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
+        System.out.println("usao u metodu");
+        if(korisnik==null){
+            // return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
 
-            return ResponseEntity.ok().build();
+            throw new UserNotFoundException("Greska!");
+
         }
+        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
+
+            throw new NoSellerException("MORA BITI PRODAVAC");
+        }
+        // Provera da li je kategorija validna
+       /* KategorijaService kategorijaService = new KategorijaService();
+        if (!kategorijaService.proveriPostojanjeKategorije(proizvodDTO.getKategorije().getNazivKategorije())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija ne postoji.");
+        }*/
+        Set<Kategorija> kategorijeSet = new HashSet<>();
+        for (Kategorija kategorijaDTO : proizvodDTO.getKategorije()) {
+            Kategorija kategorija = kategorijaRepository.findByNazivKategorije(kategorijaDTO.getNazivKategorije());
+            System.out.println("usao u for");
+            if (kategorija == null) {
+                throw new CategoryExistsException("Kategorija koju zelite da unesete ne postoji, morate je dodati!");
+            }
+            kategorijeSet.add(kategorija);
+        }
+
+        // Dodavanje proizvoda u sistem
+        proizvodService.dodajProizvod(proizvodDTO, korisnik);
+
+        return ResponseEntity.ok().body("Proizvod uspešno postavljen na prodaju.");
     }
 
-*/
+
+
+
 }

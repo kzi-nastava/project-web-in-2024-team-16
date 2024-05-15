@@ -1,25 +1,36 @@
 package com.webshop.service;
 
 import com.webshop.DTO.ProizvodDTO;
+
+import com.webshop.error.*;
+import com.webshop.model.*;
+import com.webshop.repository.KategorijaRepository;
+import com.webshop.repository.KorisnikRepository;
+import com.webshop.repository.ProdavacRepository;
+
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.ProductNotFoundException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
+
 import com.webshop.repository.ProizvodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 @Service
 public class ProizvodService {
 
     @Autowired
     private  ProizvodRepository proizvodRepository;
+    @Autowired
+    private KategorijaRepository kategorijaRepository;
+    @Autowired
+    private ProdavacRepository prodavacRepository;
 
    /* public Proizvod findOne(Long id){
         Optional<Proizvod> foundProizvod = proizvodRepository.findById(id);
@@ -168,6 +179,7 @@ public class ProizvodService {
         List<Proizvod> proizvodi = proizvodRepository.findByCenaGreaterThanEqualAndCenaLessThanEqual(priceFrom, priceTo);
         List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
 
+
         for(Proizvod proizvod: proizvodi){
             ProizvodDTO proizvodDTO = new ProizvodDTO();
             proizvodDTO.setId(proizvod.getId());
@@ -210,4 +222,45 @@ public class ProizvodService {
             throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
         }
     }
+
+    public void dodajProizvod(ProizvodDTO proizvodDTO, Korisnik korisnik) throws CategoryExistsException {
+
+        //Kategorija kategorija = proizvodDTO.getKategorija();
+      // String nazivKategorije = proizvodDTO.getKategorija(); // Pretpostavljamo da imate ovu metodu u DTO-u
+       // Kategorija kategorija = kategorijaRepository.findByNazivKategorije(nazivKategorije);
+      /*  if (kategorija == null) {
+            // Kategorija ne postoji, tretirajte ovo u skladu sa vašim zahtevima
+        } else {
+            proizvod.setKategorija(kategorija);
+        }*/
+        Proizvod proizvod=new Proizvod();
+        proizvod.setKupac(null);
+        proizvod.setNaziv(proizvodDTO.getNaziv());
+        proizvod.setTip(proizvodDTO.getTipProdaje());
+        proizvod.setOpis(proizvodDTO.getOpis());
+        proizvod.setSlikaProizvoda(proizvodDTO.getSlikaProizvoda());
+        proizvod.setCena(proizvodDTO.getCena());
+       /* Set<Kategorija> kategorijeSet = new HashSet<>();
+        for (Kategorija kategorijaDTO : proizvodDTO.getKategorije()) {
+            System.out.println("usao u for");
+            Kategorija kategorija = kategorijaRepository.findByNazivKategorije(kategorijaDTO.getNazivKategorije());
+            System.out.println(kategorija);
+            if (kategorija == null) {
+               throw new CategoryExistsException("Kategorija koju zelite da unesete ne postoji, morate je dodati!");
+
+            }
+            kategorijeSet.add(kategorija);
+        }*/
+
+      Optional<Prodavac> prodavac=prodavacRepository.findById(korisnik.getId());
+        proizvod.setProdavac(prodavac.get());///moram get kad je optionalt
+        proizvod.setKategorija(proizvodDTO.getKategorije());
+      //  proizvod.setKategorija(kategorija);
+        proizvod.setDatumObjavljivanja(new Date());
+
+
+        proizvod=proizvodRepository.save(proizvod);//saljem sve ali ja nisam morala pri pravljenju da unosim sve
+
+    }
+
 }
