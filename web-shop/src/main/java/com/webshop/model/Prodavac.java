@@ -2,12 +2,17 @@ package com.webshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Prodavac extends Korisnik{
 
@@ -17,6 +22,12 @@ public class Prodavac extends Korisnik{
 
     @Column
     private Double prosecnaOcena;
+
+    @ElementCollection
+    private Map<Long, Integer> ocene = new HashMap<>(); // Kupac ID, Ocena
+
+    @ElementCollection
+    private Map<Long, String> komentari = new HashMap<>(); // Kupac ID, Komentar
 
     public Set<Proizvod> getProizvodiNaProdaju() {
         return proizvodiNaProdaju;

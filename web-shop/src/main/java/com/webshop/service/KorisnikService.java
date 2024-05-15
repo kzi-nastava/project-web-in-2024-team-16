@@ -6,10 +6,7 @@ import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.UserAlreadyExistsException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.*;
-import com.webshop.repository.KorisnikRepository;
-import com.webshop.repository.PrijavaProfilaRepository;
-import com.webshop.repository.ProdavacRepository;
-import com.webshop.repository.RecenzijaRepository;
+import com.webshop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +26,8 @@ public class KorisnikService {
     private RecenzijaRepository recenzijaRepository;
     @Autowired
     private ProdavacRepository prodavacRepository;
+    @Autowired
+    private ProizvodRepository proizvodRepository;
 
 
     public boolean emailExsist(String mejl) {
@@ -263,5 +262,28 @@ public class KorisnikService {
         } else {
             throw new UserNotFoundException("Korisnik sa datim ID-om nije pronađen: " + id);
         }
+    }
+
+    public boolean jeKupacKupioOdProdavca(Long kupacId, Long prodavacId) {
+        List<Proizvod> proizvodi = proizvodRepository.findAllByKupacIdAndProdavacId(kupacId, prodavacId);
+        return !proizvodi.isEmpty();
+    }
+
+    public Prodavac oceniProdavca(Long kupacId, Long prodavacId, int ocena, String komentar) {
+        // provera da li je kupac kupio proizvod od prodavca
+        // ako jeste, ažuriraj ocenu i komentar
+        Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
+        prodavac.getOcene().put(kupacId, ocena);
+        prodavac.getKomentari().put(kupacId, komentar);
+        double prosecnaOcena = prodavac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(prodavac.getProsecnaOcena());
+        prodavac.setProsecnaOcena(prosecnaOcena);
+
+        return prodavacRepository.save(prodavac);
+    }
+
+    public double izracunajProsecnuOcenu(Long prodavacId) {
+        // izračunaj prosečnu ocenu za prodavca
+        Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
+        return prodavac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(prodavac.getProsecnaOcena());
     }
 }
