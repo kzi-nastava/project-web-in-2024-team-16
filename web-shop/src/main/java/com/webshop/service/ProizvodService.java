@@ -1,20 +1,17 @@
 package com.webshop.service;
 
 import com.webshop.DTO.ProizvodDTO;
-
 import com.webshop.DTO.ProizvodPrekoKategorijeDTO;
 import com.webshop.error.*;
 import com.webshop.model.*;
 import com.webshop.repository.KategorijaRepository;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.ProdavacRepository;
-
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.ProductNotFoundException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
-
 import com.webshop.repository.ProizvodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -179,7 +176,6 @@ public class ProizvodService {
     public List<ProizvodDTO> findByCena(Double priceFrom, Double priceTo) throws ProductNotFoundException {
         List<Proizvod> proizvodi = proizvodRepository.findByCenaGreaterThanEqualAndCenaLessThanEqual(priceFrom, priceTo);
         List<ProizvodDTO> proizvodiDTO = new ArrayList<>();
-
 
         for(Proizvod proizvod: proizvodi){
             ProizvodDTO proizvodDTO = new ProizvodDTO();

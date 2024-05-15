@@ -1,5 +1,6 @@
 package com.webshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +31,11 @@ public class Recenzija implements Serializable {
     private Date datumRecenzije;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Korisnik  korisnikKojiJeDaoRecenziju;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Korisnik  korisnikKojiJeDobioRecenziju;
 
     public Long getId() {
         return id;

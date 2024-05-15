@@ -1,5 +1,6 @@
 package com.webshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -13,12 +14,16 @@ public class Kupac extends Korisnik{
     private Double prosecnaOcena;
 
     @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<Proizvod> kupljeniProizvodi = new HashSet<>();
+    @JsonIgnore
+    private List<Proizvod> kupljeniProizvodi = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "kupacKojiDajePonudu",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Ponuda> ponuda = new HashSet<>();
 
-    public Set<Proizvod> getKupljeniProizvodi() {
+    public List<Proizvod> getKupljeniProizvodi() {
+
         return kupljeniProizvodi;
     }
 

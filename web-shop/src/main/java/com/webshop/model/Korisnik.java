@@ -1,7 +1,11 @@
 package com.webshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.jayway.jsonpath.internal.function.text.Length;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +20,8 @@ import javax.validation.constraints.Pattern;
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "Korisnik")
 @Entity
+@Getter
+@Setter
 public class Korisnik implements Serializable {
 
     @Id
@@ -61,12 +67,19 @@ public class Korisnik implements Serializable {
     private Boolean blokiran;
 
     @OneToMany(mappedBy = "korisnikKojiJeDaoRecenziju", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Recenzija> recenzije = new HashSet<>();
 
+    @OneToMany(mappedBy = "korisnikKojiJeDobioRecenziju", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Recenzija> dobijeneRecenzije = new HashSet<>();
+
     @OneToMany(mappedBy = "podnosiocPrijave", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<PrijavaProfila> prijava = new HashSet<>();
 
     @OneToMany(mappedBy = "prijavljeniKorisnik", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<PrijavaProfila> prijavljen = new HashSet<>();
 
     public Long getId() {
