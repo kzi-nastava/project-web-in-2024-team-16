@@ -14,14 +14,14 @@ INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, d
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (7000,'Sasa', 'Vuksanovic', 'cale', 'sasa@gmail.com', '062359487', 'cale123', '1986-03-28 02:21:22', 'slika7.jpg', 'proveren', 'KUPAC', false);
 
-INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id)
-    VALUES (4, 'zadovoljan', '2021-02-10 19:54:03', 1000);
-INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id)
-    VALUES (5, 'sve preporuke', '2022-03-21 21:39:47', 5000);
-INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id)
-    VALUES (1, 'proizvod stigao u losem stanju', '2022-04-03 17:20:06', 1000);
-INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id)
-    VALUES (4, '10/10', '2022-03-22 13:35:24', 7000);
+INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
+    VALUES (4, 'zadovoljan', '2021-02-10 19:54:03',7000, 2000);
+INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
+    VALUES (5, 'sve preporuke', '2022-03-21 21:39:47',1000, 2000);
+INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
+    VALUES (1, 'proizvod stigao u losem stanju', '2022-04-03 17:20:06',1000, 7000);
+INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
+    VALUES (4, '10/10', '2022-03-22 13:35:24',1000, 7000);
 
 INSERT INTO prijava_profila(razlog_prijave, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
     VALUES ('ne postuje dogovor', '2023-02-10 18:25:48', 'ODBIJENA', 1000, 3000);

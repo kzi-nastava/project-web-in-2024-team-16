@@ -1,5 +1,7 @@
 package com.webshop.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.webshop.model.Proizvod;
 import com.webshop.model.Recenzija;
 import com.webshop.model.Uloga;
@@ -16,6 +18,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+//@JsonIgnoreProperties({"proizvodiNaProdaju"})//DOBRO SE RASPITAJ
 public class ProdavacProfilDTO {
 
     private String ime;
@@ -34,9 +37,9 @@ public class ProdavacProfilDTO {
 
     private Boolean blokiran;
 
-    private Set<Proizvod> proizvodiNaProdaju = new HashSet<>();
+    private Set<ProizvodiNaProdajuDTO> proizvodiNaProdaju = new HashSet<>();
 
-    private Set<Recenzija> recenzije = new HashSet<>();
+    private Set<Recenzija> dobijeneRecenzije = new HashSet<>();
 
     private Double prosecnaOcena;
 

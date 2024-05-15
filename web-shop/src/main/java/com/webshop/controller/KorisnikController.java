@@ -81,22 +81,35 @@ public class KorisnikController {
 
     }
 
-    @GetMapping("/profileView/{korisnickoIme}")
-    public ResponseEntity<?> getUser(@PathVariable(name = "id") String korisnickoIme, HttpSession session) throws UserNotFoundException {
+    @GetMapping("/profileView/{id}")
+    public ResponseEntity<?> getUser(@PathVariable(name = "id") Long id, HttpSession session) throws UserNotFoundException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik == null){
-            throw new UserNotFoundException("Nema korisnika!");
+            throw new UserNotFoundException("Niste prijavljeni!");
         }
 
-        Optional<Korisnik> k = korisnikService.findByKorisnickoIme(korisnickoIme);
-
-        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)){
-            throw new UserNotFoundException("Nije prodavac!");
+        Optional<Korisnik> korisnikOptional = korisnikService.findById(id);
+        if (korisnikOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Korisnik sa datim ID-om nije pronađen.");
         }
 
-        ProdavacProfilDTO prodavac = korisnikService.proveraProdavac(korisnickoIme);
-        return ResponseEntity.ok(prodavac);
+        // Ako gledam profil kupca
+        if (korisnikOptional.get().getUloga().equals(Uloga.KUPAC)) {
+            // Dobavljanje informacija o kupcu
+            KupacProfilDTO kupac = korisnikService.getKupacProfile(id);
+            return ResponseEntity.ok(kupac);
+        }
+        // Ako gledam profil prodavca
+        else if (korisnikOptional.get().getUloga().equals(Uloga.PRODAVAC)) {
+            // Dobavljanje informacija o prodavcu
+            ProdavacProfilDTO prodavac = korisnikService.getProdavacProfile(id);
+            return ResponseEntity.ok(prodavac);
+        }
+        // Ako korisnik nije ni kupac ni prodavac
+        else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nemate pristup ovom profilu.");
+        }
     }
 
     @PutMapping("/updateCustomer/{id}")

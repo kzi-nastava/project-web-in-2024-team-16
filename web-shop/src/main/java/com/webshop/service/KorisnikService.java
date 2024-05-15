@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -140,8 +141,8 @@ public class KorisnikService {
             pp.setOpisKorisnika(korisnik.get().getOpisKorisnika());
             pp.setUloga(korisnik.get().getUloga());
             pp.setBlokiran(korisnik.get().getBlokiran());
-            pp.setProizvodiNaProdaju(korisnik.get().getProizvodiNaProdaju());
-            pp.setRecenzije(korisnik.get().getRecenzije());
+          //  pp.setProizvodiNaProdaju(korisnik.get().getProizvodiNaProdaju());
+            pp.setDobijeneRecenzije(korisnik.get().getDobijeneRecenzije());
             pp.setPrezime(korisnik.get().getPrezime());
             pp.setProsecnaOcena(korisnik.get().getProsecnaOcena());
             return pp;
@@ -170,5 +171,97 @@ public class KorisnikService {
         }
 
         korisnikRepository.save(korisnik);
+    }
+
+    public KupacProfilDTO getKupacProfile(Long id) throws UserNotFoundException {
+        Optional<Korisnik> korisnikOptional = korisnikRepository.findById(id);
+
+        if (korisnikOptional.isPresent()) {
+            Korisnik korisnik = korisnikOptional.get();
+
+            // Provera da li je korisnik zaista tipa Kupac
+            if (korisnik.getUloga().equals(Uloga.KUPAC)) {
+                Kupac kupac = (Kupac) korisnik; // Kastovanje korisnika u kupca
+
+                    Set<ProizvodiNaProdajuDTO> proizvodiNaProdajuDTO=new HashSet<>();
+                    for(Proizvod p: kupac.getKupljeniProizvodi()){
+                        ProizvodiNaProdajuDTO proizvodNaProdajuDTO=new ProizvodiNaProdajuDTO();
+                        proizvodNaProdajuDTO.setCena(p.getCena());
+                        proizvodNaProdajuDTO.setNaziv(p.getNaziv());
+                        proizvodNaProdajuDTO.setSlikaProizvoda(p.getSlikaProizvoda());
+                        proizvodNaProdajuDTO.setOpis(p.getOpis());
+                        proizvodiNaProdajuDTO.add(proizvodNaProdajuDTO);
+                    }
+                // Kreiranje DTO objekta za kupca
+                KupacProfilDTO kupacProfilDTO = new KupacProfilDTO();
+                kupacProfilDTO.setIme(korisnik.getIme());
+                kupacProfilDTO.setPrezime(korisnik.getPrezime());
+                kupacProfilDTO.setKorisnickoIme(korisnik.getKorisnickoIme());
+                kupacProfilDTO.setSlika(korisnik.getSlika());
+                kupacProfilDTO.setOpisKorisnika(korisnik.getOpisKorisnika());
+                kupacProfilDTO.setDatumRodjenja(korisnik.getDatumRodjenja());
+                // Dodajte ostale osnovne informacije o korisniku koje želite da prikažete
+
+                // Računanje prosečne ocene
+                Double prosecnaOcena = kupac.getProsecnaOcena();
+                kupacProfilDTO.setProsecnaOcena(prosecnaOcena);
+
+                kupacProfilDTO.setKupljeniProizvodi(proizvodiNaProdajuDTO);
+
+                // Dohvatanje recenzija koje su ostavili prodavci
+              //  Set<Recenzija> recenzijeProdavaca = korisnik.getDobijeneRecenzije();
+                // Dodajte logiku za obračun prosečne ocene na osnovu recenzija prodavaca
+                kupacProfilDTO.setDobijeneRecenzije(korisnikOptional.get().getDobijeneRecenzije());
+
+                return kupacProfilDTO;
+            } else {
+                throw new UserNotFoundException("Korisnik sa datim ID-om nije kupac: " + id);
+            }
+        } else {
+            throw new UserNotFoundException("Korisnik sa datim ID-om nije pronađen: " + id);
+        }
+}
+
+    public ProdavacProfilDTO getProdavacProfile(Long id) throws UserNotFoundException {
+        Optional<Korisnik> korisnikOptional = korisnikRepository.findById(id);
+
+        if (korisnikOptional.isPresent()) {
+            Korisnik korisnik = korisnikOptional.get();
+
+            // Provera da li je korisnik zaista tipa Kupac
+            if (korisnik.getUloga().equals(Uloga.PRODAVAC)) {
+                Prodavac prodavac = (Prodavac) korisnik; // Kastovanje korisnika u prodavca
+                Set<ProizvodiNaProdajuDTO> proizvodiNaProdajuDTO=new HashSet<>();
+                for(Proizvod p: prodavac.getProizvodiNaProdaju()){
+                    ProizvodiNaProdajuDTO proizvodNaProdajuDTO=new ProizvodiNaProdajuDTO();
+                    proizvodNaProdajuDTO.setCena(p.getCena());
+                    proizvodNaProdajuDTO.setNaziv(p.getNaziv());
+                    proizvodNaProdajuDTO.setSlikaProizvoda(p.getSlikaProizvoda());
+                    proizvodNaProdajuDTO.setOpis(p.getOpis());
+                    proizvodiNaProdajuDTO.add(proizvodNaProdajuDTO);
+                }
+                // Kreiranje DTO objekta za prodavca
+                ProdavacProfilDTO prodavacProfilDTO = new ProdavacProfilDTO();
+                prodavacProfilDTO.setIme(korisnik.getIme());
+                prodavacProfilDTO.setPrezime(korisnik.getPrezime());
+                prodavacProfilDTO.setKorisnickoIme(korisnik.getKorisnickoIme());
+                prodavacProfilDTO.setTelefon(korisnik.getTelefon());
+                prodavacProfilDTO.setSlika(korisnik.getSlika());
+                prodavacProfilDTO.setOpisKorisnika(korisnik.getOpisKorisnika());
+                prodavacProfilDTO.setUloga(korisnik.getUloga());
+                prodavacProfilDTO.setBlokiran(korisnik.getBlokiran());
+                prodavacProfilDTO.setProizvodiNaProdaju(proizvodiNaProdajuDTO);
+               // System.out.println(korisnik.getDobijeneRecenzije());
+                prodavacProfilDTO.setDobijeneRecenzije(korisnikOptional.get().getDobijeneRecenzije());
+                prodavacProfilDTO.setProsecnaOcena(prodavac.getProsecnaOcena());
+
+
+                return  prodavacProfilDTO;
+            } else {
+                throw new UserNotFoundException("Korisnik sa datim ID-om nije prodavac " + id);
+            }
+        } else {
+            throw new UserNotFoundException("Korisnik sa datim ID-om nije pronađen: " + id);
+        }
     }
 }
