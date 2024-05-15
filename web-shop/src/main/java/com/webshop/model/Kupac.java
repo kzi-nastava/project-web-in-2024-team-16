@@ -13,16 +13,16 @@ public class Kupac extends Korisnik{
     private Double prosecnaOcena;
 
     @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ArrayList<Proizvod> kupljeniProizvodi = new ArrayList<>();
+    private Set<Proizvod> kupljeniProizvodi = new HashSet<>();
 
     @OneToMany(mappedBy = "kupacKojiDajePonudu",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Ponuda> ponuda = new HashSet<>();
 
-    public ArrayList<Proizvod> getKupljeniProizvodi() {
+    public Set<Proizvod> getKupljeniProizvodi() {
         return kupljeniProizvodi;
     }
 
-    public void setKupljeniProizvodi(ArrayList<Proizvod> kupljeniProizvodi) {
+    public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
         this.kupljeniProizvodi = kupljeniProizvodi;
     }
 
