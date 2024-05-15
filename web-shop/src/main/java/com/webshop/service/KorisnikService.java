@@ -1,21 +1,21 @@
 package com.webshop.service;
 
 import com.webshop.DTO.KupacDTO;
+import com.webshop.DTO.ProdavacProfilDTO;
+import com.webshop.DTO.ProizvodDTO;
 import com.webshop.DTO.RegistracijaKorisnikaDTO;
 import com.webshop.error.EmailAlreadyExistsException;
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.UserAlreadyExistsException;
 import com.webshop.error.UserNotFoundException;
-import com.webshop.model.Korisnik;
-import com.webshop.model.PrijavaProfila;
-import com.webshop.model.Recenzija;
+import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.PrijavaProfilaRepository;
+import com.webshop.repository.ProdavacRepository;
 import com.webshop.repository.RecenzijaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -29,6 +29,8 @@ public class KorisnikService {
     private PrijavaProfilaRepository prijavaProfilaRepository;
     @Autowired
     private RecenzijaRepository recenzijaRepository;
+    @Autowired
+    private ProdavacRepository prodavacRepository;
 
 
     public boolean emailExsist(String mejl) {
@@ -99,6 +101,15 @@ public class KorisnikService {
         }
     }
 
+    public Optional<Korisnik> findByKorisnickoIme(String korisnickoIme) throws UserNotFoundException {
+        Optional<Korisnik> korisnik = Optional.ofNullable(korisnikRepository.getByKorisnickoIme(korisnickoIme));
+        if (korisnik.isPresent()) {
+            return korisnik;
+        } else {
+            throw new UserNotFoundException("Korisnik sa korisnickim imenom: " + korisnickoIme + " nije pronađen.");
+        }
+    }
+
     public void updateSeller(Korisnik korisnik, KupacDTO updatedSeller) throws PasswordMismatchException {
 
             korisnik.setIme(updatedSeller.getIme());
@@ -115,9 +126,30 @@ public class KorisnikService {
            korisnik.setLozinka(updatedSeller.getNovaLozinka());
         }
         else{
-            throw new PasswordMismatchException("Morate uneti ispravnu lozniku!");
+            throw new PasswordMismatchException("Morate uneti ispravnu lozinku!");
         }
 
         korisnikRepository.save(korisnik);
+    }
+
+    public ProdavacProfilDTO proveraProdavac(String korisnickoIme) throws UserNotFoundException {
+        Optional<Prodavac> korisnik = prodavacRepository.findByKorisnickoIme(korisnickoIme);
+        if (korisnik.isPresent()) {
+            ProdavacProfilDTO pp = new ProdavacProfilDTO();
+            pp.setIme(korisnik.get().getIme());
+            pp.setTelefon(korisnik.get().getTelefon());
+            pp.setKorisnickoIme(korisnik.get().getKorisnickoIme());
+            pp.setSlika(korisnik.get().getSlika());
+            pp.setOpisKorisnika(korisnik.get().getOpisKorisnika());
+            pp.setUloga(korisnik.get().getUloga());
+            pp.setBlokiran(korisnik.get().getBlokiran());
+            pp.setProizvodiNaProdaju(korisnik.get().getProizvodiNaProdaju());
+            pp.setRecenzije(korisnik.get().getRecenzije());
+            pp.setPrezime(korisnik.get().getPrezime());
+            pp.setProsecnaOcena(korisnik.get().getProsecnaOcena());
+            return pp;
+        }else{
+            throw new UserNotFoundException("Korisnik sa korisnickim imenom: " + korisnickoIme + " ne postoji!");
+        }
     }
 }

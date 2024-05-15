@@ -1,11 +1,8 @@
 package com.webshop.controller;
 
-import com.webshop.DTO.KupacDTO;
-import com.webshop.DTO.PrijavaKorisnikaDTO;
-import com.webshop.DTO.RegistracijaKorisnikaDTO;
+import com.webshop.DTO.*;
 import com.webshop.error.*;
 import com.webshop.model.Korisnik;
-import com.webshop.model.Kupac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import jakarta.servlet.http.HttpSession;
@@ -15,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.NoPermissionException;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -83,5 +79,23 @@ public class KorisnikController {
         korisnikService.updateSeller(existingUser.get(), updatedSeller);
         return ResponseEntity.ok().build();
 
+    }
+
+    @GetMapping("/profileView/{korisnickoIme}")
+    public ResponseEntity<?> getUser(@PathVariable(name = "id") String korisnickoIme, HttpSession session) throws UserNotFoundException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Nema korisnika!");
+        }
+
+        Optional<Korisnik> k = korisnikService.findByKorisnickoIme(korisnickoIme);
+
+        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)){
+            throw new UserNotFoundException("Nije prodavac!");
+        }
+
+        ProdavacProfilDTO prodavac = korisnikService.proveraProdavac(korisnickoIme);
+        return ResponseEntity.ok(prodavac);
     }
 }
