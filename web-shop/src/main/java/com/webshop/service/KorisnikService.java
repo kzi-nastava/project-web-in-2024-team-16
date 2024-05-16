@@ -10,10 +10,7 @@ import com.webshop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class KorisnikService {
@@ -269,16 +266,30 @@ public class KorisnikService {
         return !proizvodi.isEmpty();
     }
 
-    public Prodavac oceniProdavca(Long kupacId, Long prodavacId, int ocena, String komentar) {
+    public ProdavacOceneDTO oceniProdavca(Long kupacId, Long prodavacId, int ocena, String komentar) {
         // provera da li je kupac kupio proizvod od prodavca
         // ako jeste, ažuriraj ocenu i komentar
         Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
-        prodavac.getOcene().put(kupacId, ocena);
-        prodavac.getKomentari().put(kupacId, komentar);
+
+        String kupacKorisnickoIme = korisnikRepository.findById(kupacId).map(Korisnik::getKorisnickoIme).orElse(null);
+
+        prodavac.getOcene().put(kupacKorisnickoIme, ocena);
+        prodavac.getKomentari().put(kupacKorisnickoIme, komentar);
+
         double prosecnaOcena = prodavac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(prodavac.getProsecnaOcena());
         prodavac.setProsecnaOcena(prosecnaOcena);
+        prodavac = prodavacRepository.save(prodavac);
 
-        return prodavacRepository.save(prodavac);
+        ProdavacOceneDTO prodavacDTO = new ProdavacOceneDTO();
+        prodavacDTO.setIme(prodavac.getIme());
+        prodavacDTO.setPrezime(prodavac.getPrezime());
+        prodavacDTO.setKorisnickoIme(prodavac.getKorisnickoIme());
+        prodavacDTO.setSlika(prodavac.getSlika());
+        prodavacDTO.setOcene(prodavac.getOcene());
+        prodavacDTO.setKomentari(prodavac.getKomentari());
+        prodavacDTO.setProsecnaOcena(prodavac.getProsecnaOcena());
+
+        return prodavacDTO;
     }
 
     public double izracunajProsecnuOcenu(Long prodavacId) {

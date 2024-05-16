@@ -1,5 +1,6 @@
 package com.webshop.repository;
 
+import com.webshop.DTO.ProdavacDTO;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Prodavac;
 import org.springframework.data.jpa.repository.JpaRepository;

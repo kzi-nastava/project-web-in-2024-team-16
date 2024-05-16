@@ -144,7 +144,7 @@ public class KorisnikController {
     }
 
     @PostMapping("/rate/{prodavacId}")
-    public Prodavac oceniProdavca(@PathVariable Long prodavacId, @RequestParam int ocena, @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
+    public ProdavacOceneDTO oceniProdavca(@PathVariable Long prodavacId, @RequestParam int ocena, @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik == null){
