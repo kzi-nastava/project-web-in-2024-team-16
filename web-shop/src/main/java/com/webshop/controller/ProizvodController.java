@@ -133,7 +133,6 @@ public class ProizvodController {
 
         if(korisnik==null){
            // return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
             throw new UserNotFoundException("Greska!");
         }
 
@@ -147,7 +146,6 @@ public class ProizvodController {
        if (existingProduct.isEmpty()) {
            // return ResponseEntity.notFound().build();
            throw new UserNotFoundException("Proizvod sa ID-jem " + id + " nije pronađen.");
-
         }
         if (existingProduct.get().getTip() == TipProdaje.AUKCIJA && !existingProduct.get().getPonude().isEmpty()) {
           /*  for(Ponuda ponuda: existingProduct.get().getPonude()){
@@ -167,6 +165,7 @@ public class ProizvodController {
 
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/addForSale/{id}")
     public ResponseEntity<String> SetProductForSell(@PathVariable Long id,@RequestBody ProizvodDTO proizvodDTO,HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
@@ -182,10 +181,10 @@ public class ProizvodController {
             throw new NoSellerException("MORA BITI PRODAVAC");
         }
         // Provera da li je kategorija validna
-       /* KategorijaService kategorijaService = new KategorijaService();
-        if (!kategorijaService.proveriPostojanjeKategorije(proizvodDTO.getKategorije().getNazivKategorije())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija ne postoji.");
-        }*/
+       /// KategorijaService kategorijaService = new KategorijaService();
+        //if (!kategorijaService.proveriPostojanjeKategorije(proizvodDTO.getKategorije().getNazivKategorije())) {
+         //   return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Kategorija ne postoji.");
+        //}
         Set<Kategorija> kategorijeSet = new HashSet<>();
         for (Kategorija kategorijaDTO : proizvodDTO.getKategorije()) {
             Kategorija kategorija = kategorijaRepository.findByNazivKategorije(kategorijaDTO.getNazivKategorije());
