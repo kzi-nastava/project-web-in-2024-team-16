@@ -1,13 +1,12 @@
 package com.webshop.controller;
 
-import com.webshop.DTO.KupacDTO;
-import com.webshop.DTO.PrijavaKorisnikaDTO;
-import com.webshop.DTO.RegistracijaKorisnikaDTO;
+import com.webshop.DTO.*;
 import com.webshop.error.*;
 import com.webshop.model.Korisnik;
-import com.webshop.model.Kupac;
+import com.webshop.model.Prodavac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
+import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.naming.NoPermissionException;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -84,4 +82,85 @@ public class KorisnikController {
         return ResponseEntity.ok().build();
 
     }
+
+    @GetMapping("/profileView/{id}")
+    public ResponseEntity<?> getUser(@PathVariable(name = "id") Long id, HttpSession session) throws UserNotFoundException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Niste prijavljeni!");
+        }
+
+        Optional<Korisnik> korisnikOptional = korisnikService.findById(id);
+        if (korisnikOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Korisnik sa datim ID-om nije pronađen.");
+        }
+
+        // Ako gledam profil kupca
+        if (korisnikOptional.get().getUloga().equals(Uloga.KUPAC)) {
+            // Dobavljanje informacija o kupcu
+            KupacProfilDTO kupac = korisnikService.getKupacProfile(id);
+            return ResponseEntity.ok(kupac);
+        }
+        // Ako gledam profil prodavca
+        else if (korisnikOptional.get().getUloga().equals(Uloga.PRODAVAC)) {
+            // Dobavljanje informacija o prodavcu
+            ProdavacProfilDTO prodavac = korisnikService.getProdavacProfile(id);
+            return ResponseEntity.ok(prodavac);
+        }
+        // Ako korisnik nije ni kupac ni prodavac
+        else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Nemate pristup ovom profilu.");
+        }
+    }
+
+    @PutMapping("/updateCustomer/{id}")
+    public ResponseEntity<?> updateCustomer(@PathVariable Long id, @RequestBody ProdavacDTO updatedCustomer, HttpSession session) throws PasswordMismatchException, EmailAlreadyExistsException, UserAlreadyExistsException, UserNotFoundException, NoSellerException, NoCustomerException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            // return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        Optional<Korisnik> existingUser = korisnikService.findById(id);
+
+        if (existingUser.isEmpty()) {
+            // return ResponseEntity.notFound().build();
+            throw new UserNotFoundException("Korisnik sa ID-jem " + id + " nije pronađen.");
+        }
+
+        if (!existingUser.get().getKorisnickoIme().equals(korisnik.getKorisnickoIme())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if(existingUser.get().getUloga() != Uloga.PRODAVAC){
+            throw new NoCustomerException("Samo PRODAVAC moze da menja podatke!");
+        }
+
+        korisnikService.updateCustomer(existingUser.get(), updatedCustomer);
+        return ResponseEntity.ok().build();
+
+    }
+
+    @PostMapping("/rate/{prodavacId}")
+    public Prodavac oceniProdavca(@PathVariable Long prodavacId, @RequestParam int ocena, @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnikService.jeKupacKupioOdProdavca(korisnik.getId(), prodavacId)) {
+            throw new IllegalArgumentException("Kupac može da oceni prodavca samo ako je kupio proizvod od tog prodavca!");
+        }
+
+        return korisnikService.oceniProdavca(korisnik.getId(), prodavacId, ocena, komentar);
+    }
+
+    @GetMapping("/averageRating/{prodavacId}")
+    public double prosecnaOcena(@PathVariable Long prodavacId) {
+        return korisnikService.izracunajProsecnuOcenu(prodavacId);
+    }
+
 }

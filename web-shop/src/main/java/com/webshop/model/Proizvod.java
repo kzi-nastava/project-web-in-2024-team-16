@@ -1,5 +1,6 @@
 package com.webshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -35,6 +36,7 @@ public class Proizvod implements Serializable {
                     @JoinColumn(name = "kategorija_id", referencedColumnName = "id")
             }
     )
+  //  @JsonIgnore
     private Set<Kategorija> kategorija = new HashSet<>();
 /*
    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -61,6 +63,7 @@ public class Proizvod implements Serializable {
     private Boolean prodat;
 
     @OneToMany(mappedBy = "proizvod", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Ponuda> ponude =new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

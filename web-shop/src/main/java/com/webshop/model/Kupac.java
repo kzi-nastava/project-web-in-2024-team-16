@@ -1,30 +1,43 @@
 package com.webshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Kupac extends Korisnik{
     @Column
     private Double prosecnaOcena;
 
     @OneToMany(mappedBy = "kupac", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ArrayList<Proizvod> kupljeniProizvodi = new ArrayList<>();
+    @JsonIgnore
+    private List<Proizvod> kupljeniProizvodi = new ArrayList<>();
+
 
     @OneToMany(mappedBy = "kupacKojiDajePonudu",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Ponuda> ponuda = new HashSet<>();
 
-    public ArrayList<Proizvod> getKupljeniProizvodi() {
-        return kupljeniProizvodi;
-    }
+//    public List<Proizvod> getKupljeniProizvodi() {
+//
+//        return kupljeniProizvodi;
+//    }
 
-    public void setKupljeniProizvodi(ArrayList<Proizvod> kupljeniProizvodi) {
-        this.kupljeniProizvodi = kupljeniProizvodi;
-    }
+//    public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
+//        this.kupljeniProizvodi = kupljeniProizvodi;
+//    }
 
     public Set<Ponuda> getPonuda() {
         return ponuda;

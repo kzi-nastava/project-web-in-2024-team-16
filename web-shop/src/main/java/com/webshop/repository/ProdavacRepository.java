@@ -11,4 +11,7 @@ import java.util.Optional;
 @Repository
 public interface ProdavacRepository extends JpaRepository<Prodavac, String> {
     Optional<Prodavac> findById(Long id);
+
+    Optional<Prodavac> findByKorisnickoIme(String korisnickoIme);
+
 }
