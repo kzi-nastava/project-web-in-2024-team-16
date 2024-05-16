@@ -7,6 +7,7 @@ import com.webshop.model.PrijavaProfila;
 import com.webshop.model.Prodavac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
+import com.webshop.service.PrijavaProfilaService;
 import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -24,6 +26,8 @@ public class KorisnikController {
 
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private PrijavaProfilaService prijavaProfilaService;
 
     @PostMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Korisnik> registracijaKorisnika(@Valid @RequestBody RegistracijaKorisnikaDTO korisnik) throws UserAlreadyExistsException, EmailAlreadyExistsException, PasswordMismatchException {//valid proverava da li su ispunjeni zahtevi unutar registracija korstnika dTO
@@ -162,6 +166,21 @@ public class KorisnikController {
     @GetMapping("/averageRating/{prodavacId}")
     public double prosecnaOcena(@PathVariable Long prodavacId) {
         return korisnikService.izracunajProsecnuOcenu(prodavacId);
+    }
+    @GetMapping("/admin/reports")
+    public ResponseEntity<List<PrijavaProfila>> pregledPrijava(HttpSession session) throws UserNotFoundException, NoAdministratorException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Morate se ulogovati!");
+        }
+        if(!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)){
+
+            throw new NoAdministratorException("Samo administrator može da vidi prijave.");
+        }
+
+        List<PrijavaProfila> prijave = prijavaProfilaService.pregledPrijava();
+        return ResponseEntity.ok(prijave);
     }
 
 }

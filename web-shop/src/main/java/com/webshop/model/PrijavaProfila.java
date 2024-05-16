@@ -1,6 +1,7 @@
 package com.webshop.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -35,9 +36,11 @@ public class PrijavaProfila implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Korisnik prijavljeniKorisnik;*/
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Korisnik podnosiocPrijave;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Korisnik prijavljeniKorisnik;
 
     public Long getId() {
