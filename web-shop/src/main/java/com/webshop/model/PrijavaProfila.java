@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 
-enum  Status{PODNETA, ODBIJENA, PRIHVACENA}
+
 
 @Entity
 @Table(name="prijava_profila")
@@ -29,10 +29,15 @@ public class PrijavaProfila implements Serializable {
     @Enumerated(EnumType.STRING)
     private Status statusPrijave;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+/*   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Korisnik podnosiocPrijave;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Korisnik prijavljeniKorisnik;*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Korisnik podnosiocPrijave;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     private Korisnik prijavljeniKorisnik;
 
     public Long getId() {

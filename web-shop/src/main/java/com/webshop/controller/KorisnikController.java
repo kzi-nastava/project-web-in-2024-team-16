@@ -3,6 +3,7 @@ package com.webshop.controller;
 import com.webshop.DTO.*;
 import com.webshop.error.*;
 import com.webshop.model.Korisnik;
+import com.webshop.model.PrijavaProfila;
 import com.webshop.model.Prodavac;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
