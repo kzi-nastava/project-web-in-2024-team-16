@@ -143,7 +143,7 @@ public class KorisnikController {
 
     }
 
-    @PostMapping("/rate/{prodavacId}")
+    @PostMapping("/rateSeller/{prodavacId}")
     public ProdavacOceneDTO oceniProdavca(@PathVariable Long prodavacId, @RequestParam int ocena, @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
@@ -152,15 +152,36 @@ public class KorisnikController {
         }
 
         if(!korisnikService.jeKupacKupioOdProdavca(korisnik.getId(), prodavacId)) {
-            throw new IllegalArgumentException("Kupac može da oceni prodavca samo ako je kupio proizvod od tog prodavca!");
+            throw new UserNotFoundException("Kupac može da oceni prodavca samo ako je kupio proizvod od tog prodavca!");
         }
 
         return korisnikService.oceniProdavca(korisnik.getId(), prodavacId, ocena, komentar);
     }
 
-    @GetMapping("/averageRating/{prodavacId}")
+    @GetMapping("/averageRatingSeller/{prodavacId}")
     public double prosecnaOcena(@PathVariable Long prodavacId) {
         return korisnikService.izracunajProsecnuOcenu(prodavacId);
     }
+
+    @PostMapping("/rateBuyer/{kupacId}")
+    public KupacOcenaDTO oceniKupca(@PathVariable Long kupacId, @RequestParam int ocena, @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnikService.jeProdavacProdaoKupcu(korisnik.getId(), kupacId)) {
+            throw new UserNotFoundException("Prodavac može da oceni kupca samo ako je prodao proizvod tom kupcu!");
+        }
+
+        return korisnikService.oceniKupca(korisnik.getId(), kupacId, ocena, komentar);
+    }
+
+    @GetMapping("/averageRatingBuyer/{kupacId}")
+    public double prosecnaOcenaKupca(@PathVariable Long kupacId) {
+        return korisnikService.izracunajProsecnuOcenuKupca(kupacId);
+    }
+
 
 }
