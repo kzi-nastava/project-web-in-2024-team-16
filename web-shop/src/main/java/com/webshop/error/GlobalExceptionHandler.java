@@ -40,9 +40,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNoSellerException(NoSellerException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
-
     @ExceptionHandler(NoCustomerException.class)
     public ResponseEntity<String> handleNoSellerException(NoCustomerException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
 }

@@ -1,9 +1,12 @@
 package com.webshop.controller;
 
+import com.webshop.DTO.KategorijaDTO;
+import com.webshop.DTO.ProizvodDTO;
 import com.webshop.error.CategoryExistsException;
 import com.webshop.error.NoSellerException;
 import com.webshop.error.ProductNotFoundException;
 import com.webshop.error.UserNotFoundException;
+import com.webshop.model.Kategorija;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Uloga;
 import com.webshop.service.KategorijaService;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/category")
@@ -43,6 +47,12 @@ public class KategorijaController {
 
             return ResponseEntity.ok().body("Nova kategorija uspešno dodata!");
 
+    }
+  
+    @GetMapping("/categories")
+    public ResponseEntity<List<KategorijaDTO>> getAllCategories() {
+        List<KategorijaDTO> kategorijaDTO = kategorijaService.findAll();
+        return ResponseEntity.ok(kategorijaDTO);
     }
 
 }

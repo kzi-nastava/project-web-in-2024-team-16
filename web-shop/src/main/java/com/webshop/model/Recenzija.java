@@ -6,11 +6,14 @@ import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.xml.crypto.Data;
 import java.io.Serializable;
 import java.util.Date;
-
+@Getter
+@Setter
 @Entity
 public class Recenzija implements Serializable {
 
