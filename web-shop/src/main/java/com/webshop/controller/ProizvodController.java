@@ -203,14 +203,14 @@ public class ProizvodController {
     }
 
 
-    @GetMapping("/products/category/{kategorijaId}")
-    public ResponseEntity<List<ProizvodPrekoKategorijeDTO>> getProductsByCategory(@PathVariable Long kategorijaId) throws ProductNotFoundException {
-        List<ProizvodPrekoKategorijeDTO> proizvodi = proizvodService.findByKategorijaId(kategorijaId);
-        if (proizvodi.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(proizvodi);
-    }
+//    @GetMapping("/products/category/{kategorijaId}")
+//    public ResponseEntity<List<ProizvodPrekoKategorijeDTO>> getProductsByCategory(@PathVariable Long kategorijaId) throws ProductNotFoundException {
+//        List<ProizvodPrekoKategorijeDTO> proizvodi = proizvodService.findByKategorijaId(kategorijaId);
+//        if (proizvodi.isEmpty()) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        return ResponseEntity.ok(proizvodi);
+//    }
 
 
 }

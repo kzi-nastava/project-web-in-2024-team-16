@@ -43,23 +43,23 @@ public class RecenzijaService {
         return recenzijeDTO;
     }*/
 
-    public List<RecenzijaDTO> findRecenzijeKupca(Long kupacId) {
-        // Pronađi sve recenzije za datog kupca
-        List<Recenzija> recenzije = recenzijaRepository.findByKorisnikKojiJeDaoRecenzijuId(kupacId);
-
-        // Mapiranje entiteta Recenzija na DTO objekte
-        List<RecenzijaDTO> recenzijeDTO = new ArrayList<>();
-        for (Recenzija recenzija : recenzije) {
-            RecenzijaDTO recenzijaDTO = new RecenzijaDTO();
-            recenzijaDTO.setOcena(recenzija.getOcena());
-            recenzijaDTO.setKomentar(recenzija.getKomentar());
-            recenzijaDTO.setDatumRecenzije(recenzija.getDatumRecenzije());
-            // Dodaj recenziju u listu DTO objekata
-            recenzijeDTO.add(recenzijaDTO);
-        }
-
-        return recenzijeDTO;
-    }
+//    public List<RecenzijaDTO> findRecenzijeKupca(Long kupacId) {
+//        // Pronađi sve recenzije za datog kupca
+//        List<Recenzija> recenzije = recenzijaRepository.findByKorisnikKojiJeDaoRecenzijuId(kupacId);
+//
+//        // Mapiranje entiteta Recenzija na DTO objekte
+//        List<RecenzijaDTO> recenzijeDTO = new ArrayList<>();
+//        for (Recenzija recenzija : recenzije) {
+//            RecenzijaDTO recenzijaDTO = new RecenzijaDTO();
+//            recenzijaDTO.setOcena(recenzija.getOcena());
+//            recenzijaDTO.setKomentar(recenzija.getKomentar());
+//            recenzijaDTO.setDatumRecenzije(recenzija.getDatumRecenzije());
+//            // Dodaj recenziju u listu DTO objekata
+//            recenzijeDTO.add(recenzijaDTO);
+//        }
+//
+//        return recenzijeDTO;
+//    }
 
 
 

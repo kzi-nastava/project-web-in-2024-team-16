@@ -2,12 +2,20 @@ package com.webshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Kupac extends Korisnik{
     @Column
@@ -22,14 +30,14 @@ public class Kupac extends Korisnik{
     @JsonIgnore
     private Set<Ponuda> ponuda = new HashSet<>();
 
-    public List<Proizvod> getKupljeniProizvodi() {
+//    public List<Proizvod> getKupljeniProizvodi() {
+//
+//        return kupljeniProizvodi;
+//    }
 
-        return kupljeniProizvodi;
-    }
-
-    public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
-        this.kupljeniProizvodi = kupljeniProizvodi;
-    }
+//    public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
+//        this.kupljeniProizvodi = kupljeniProizvodi;
+//    }
 
     public Set<Ponuda> getPonuda() {
         return ponuda;
