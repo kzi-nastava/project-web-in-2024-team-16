@@ -48,5 +48,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNoAdministratorException(NoAdministratorException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+    @ExceptionHandler(ProductSoldException.class)
+    public ResponseEntity<String> handleProductSoldException(ProductSoldException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 
 }

@@ -2,10 +2,7 @@ package com.webshop.controller;
 
 import com.webshop.DTO.*;
 import com.webshop.error.*;
-import com.webshop.model.Korisnik;
-import com.webshop.model.PrijavaProfila;
-import com.webshop.model.Prodavac;
-import com.webshop.model.Uloga;
+import com.webshop.model.*;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.PrijavaProfilaService;
 import com.webshop.service.ProizvodService;
@@ -28,6 +25,8 @@ public class KorisnikController {
     private KorisnikService korisnikService;
     @Autowired
     private PrijavaProfilaService prijavaProfilaService;
+    @Autowired
+    private ProizvodService proizvodService;
 
     @PostMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Korisnik> registracijaKorisnika(@Valid @RequestBody RegistracijaKorisnikaDTO korisnik) throws UserAlreadyExistsException, EmailAlreadyExistsException, PasswordMismatchException {//valid proverava da li su ispunjeni zahtevi unutar registracija korstnika dTO
@@ -182,5 +181,50 @@ public class KorisnikController {
         List<PrijavaProfila> prijave = prijavaProfilaService.pregledPrijava();
         return ResponseEntity.ok(prijave);
     }
+    @PostMapping("/shopNowFixedPrice/{id}")
+    public ProizvodiNaProdajuDTO kupovinaProizvodaFiksnaCena(@PathVariable Long id, HttpSession session) throws UserNotFoundException, NoCustomerException, ProductNotFoundException, ProductSoldException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
+        }
+        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
+            throw new NoCustomerException("Samo kupac može da kupuje!");
+        }
+
+        Optional<Proizvod> proizvod =proizvodService.findById(id);
+        if (proizvod.isEmpty()) {
+            throw new ProductNotFoundException("Proizvod ne postoji!");
+        }
+        if(!proizvod.get().getTip().equals(TipProdaje.FIKSNA)) {
+            throw new ProductNotFoundException("Cena nije fiksna.");
+
+        }
+        ProizvodiNaProdajuDTO kupljeniProizvodFiksna=proizvodService.kupiProizvodFiksnaCena(proizvod.get(), korisnik);
+        return kupljeniProizvodFiksna;
+
+
+    }
+  /*  @PostMapping("/shopNowAutction/{id}")
+    public ResponseEntity<?> kupovinaProizvodaAukcija(@PathVariable Long proizvodId, HttpSession session) throws UserNotFoundException, NoCustomerException, ProductNotFoundException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
+        }
+        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
+            throw new NoCustomerException("Samo kupac može da kupuje!");
+        }
+
+        Optional<Proizvod> proizvod =proizvodService.findById(proizvodId);
+        if (proizvod.isEmpty()) {
+            throw new ProductNotFoundException("Proizvod ne postoji!");
+        }
+        if(proizvod.get().getTip().equals(TipProdaje.AUKCIJA)) {
+            Proizvod kupljeniProizvodAukcija=proizvodService.kupiProizvodAukcija(proizvodId, korisnik);
+            //VRATI PROIZVOD
+        }
+        throw new ProductNotFoundException("Došlo je do greške");
+
+    }*/
 
 }

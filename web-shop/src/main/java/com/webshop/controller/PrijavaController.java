@@ -4,6 +4,7 @@ import com.webshop.DTO.KupacProfilDTO;
 import com.webshop.DTO.PrijavaProfilaDTO;
 import com.webshop.DTO.PrijavaRequestDTO;
 import com.webshop.DTO.ProdavacProfilDTO;
+import com.webshop.error.NoCustomerException;
 import com.webshop.error.NoSellerException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Korisnik;
@@ -31,7 +32,7 @@ public class PrijavaController {
     private KorisnikService korisnikService;
 
     @PostMapping("/sellerRequest/{id}")
-    public ResponseEntity<?> ProdavacpodnosiPrijavu(@PathVariable Long id, @RequestBody PrijavaRequestDTO prijavaRequestDTO, HttpSession session) throws UserNotFoundException, NoSellerException {
+    public ResponseEntity<?> ProdavacpodnosiPrijavu(@PathVariable Long id, @RequestBody PrijavaRequestDTO prijavaRequestDTO, HttpSession session) throws UserNotFoundException, NoSellerException, NoCustomerException {
 
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
@@ -45,7 +46,7 @@ public class PrijavaController {
             throw new NoSellerException("Korisnik koji nije prodavac, ne može da prijavi kupca.");
 
         }
-        if(!korisnikService.jeKupacKupioOdProdavca(korisnik.getId(), id)) {
+        if(!korisnikService.jeKupacKupioOdProdavca(id, korisnik.getId())) {
             throw new UserNotFoundException("Prodavac može da da recenziju onom kupcu, koji je od njega kupio proizvod!");
         }
 
@@ -87,7 +88,7 @@ public class PrijavaController {
         if (korisnikOptional.isEmpty()) {
             throw new UserNotFoundException("Korisnik nije pronađen.");
         }
-        if (korisnikOptional.get().getUloga().equals(Uloga.KUPAC)) {
+        if (korisnikOptional.get().getUloga().equals(Uloga.PRODAVAC)) {
 
             PrijavaProfilaDTO prijavljen = prijavaProfilaService.PodnesiPrijacuZaProdavca(korisnik,prijavaRequestDTO, id);
 
@@ -98,4 +99,5 @@ public class PrijavaController {
         }
 
     }
+
 }

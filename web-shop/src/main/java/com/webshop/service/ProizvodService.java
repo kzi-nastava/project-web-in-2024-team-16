@@ -2,17 +2,15 @@ package com.webshop.service;
 
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.DTO.ProizvodPrekoKategorijeDTO;
+import com.webshop.DTO.ProizvodiNaProdajuDTO;
 import com.webshop.error.*;
 import com.webshop.model.*;
-import com.webshop.repository.KategorijaRepository;
-import com.webshop.repository.KorisnikRepository;
-import com.webshop.repository.ProdavacRepository;
+import com.webshop.repository.*;
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.ProductNotFoundException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
-import com.webshop.repository.ProizvodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +27,11 @@ public class ProizvodService {
     private KategorijaRepository kategorijaRepository;
     @Autowired
     private ProdavacRepository prodavacRepository;
+    @Autowired
+    private KupacRepository kupacRepository;
 
-   /* public Proizvod findOne(Long id){
+
+    /* public Proizvod findOne(Long id){
         Optional<Proizvod> foundProizvod = proizvodRepository.findById(id);
         if (foundProizvod.isPresent())
             return foundProizvod.get();
@@ -222,60 +223,66 @@ public class ProizvodService {
 
     public void dodajProizvod(ProizvodDTO proizvodDTO, Korisnik korisnik) throws CategoryExistsException {
 
-        //Kategorija kategorija = proizvodDTO.getKategorija();
-      // String nazivKategorije = proizvodDTO.getKategorija(); // Pretpostavljamo da imate ovu metodu u DTO-u
-       // Kategorija kategorija = kategorijaRepository.findByNazivKategorije(nazivKategorije);
-      /*  if (kategorija == null) {
-            // Kategorija ne postoji, tretirajte ovo u skladu sa vašim zahtevima
-        } else {
-            proizvod.setKategorija(kategorija);
-        }*/
         Proizvod proizvod=new Proizvod();
+
         proizvod.setKupac(null);
         proizvod.setNaziv(proizvodDTO.getNaziv());
         proizvod.setTip(proizvodDTO.getTipProdaje());
         proizvod.setOpis(proizvodDTO.getOpis());
         proizvod.setSlikaProizvoda(proizvodDTO.getSlikaProizvoda());
         proizvod.setCena(proizvodDTO.getCena());
-       /* Set<Kategorija> kategorijeSet = new HashSet<>();
-        for (Kategorija kategorijaDTO : proizvodDTO.getKategorije()) {
-            System.out.println("usao u for");
-            Kategorija kategorija = kategorijaRepository.findByNazivKategorije(kategorijaDTO.getNazivKategorije());
-            System.out.println(kategorija);
-            if (kategorija == null) {
-               throw new CategoryExistsException("Kategorija koju zelite da unesete ne postoji, morate je dodati!");
 
-            }
-            kategorijeSet.add(kategorija);
-        }*/
+        Optional<Prodavac> prodavac=prodavacRepository.findById(korisnik.getId());
+        proizvod.setProdavac(prodavac.get());///moram get kad je optional
 
-      Optional<Prodavac> prodavac=prodavacRepository.findById(korisnik.getId());
-        proizvod.setProdavac(prodavac.get());///moram get kad je optionalt
         proizvod.setKategorija(proizvodDTO.getKategorije());
-      //  proizvod.setKategorija(kategorija);
         proizvod.setDatumObjavljivanja(new Date());
 
 
-        proizvod=proizvodRepository.save(proizvod);//saljem sve ali ja nisam morala pri pravljenju da unosim sve
+        proizvod=proizvodRepository.save(proizvod);
 
     }
 
-//    public List<ProizvodPrekoKategorijeDTO> findByKategorijaId(Long kategorijaId) throws ProductNotFoundException {
-//        List<Proizvod> proizvodi=proizvodRepository.findByKategorijaId(kategorijaId);
-//
-//        List<ProizvodPrekoKategorijeDTO> proizvodiDTO = new ArrayList<>();
-//
-//
-//        for(Proizvod proizvod: proizvodi){
-//            ProizvodPrekoKategorijeDTO proizvodDTO = new ProizvodPrekoKategorijeDTO();
-//            proizvodDTO.setNaziv(proizvod.getNaziv());
-//            proizvodDTO.setOpis(proizvod.getOpis());
-//            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
-//            proizvodiDTO.add(proizvodDTO);
-//        }
-//        if (proizvodiDTO.isEmpty()) {
-//            throw new ProductNotFoundException("U kategoriji ne postoji ni jedan proizvod!");
-//        }
-//        return proizvodiDTO;
-//    }
+    public ProizvodiNaProdajuDTO kupiProizvodFiksnaCena(Proizvod proizvod, Korisnik korisnik) throws ProductSoldException {
+
+        if(proizvod.getProdat()){
+            throw  new ProductSoldException("Ovaj proizvod je već prodat.");
+        }
+
+        Optional<Kupac> kupac = kupacRepository.findById(korisnik.getId());
+        kupac.get().getKupljeniProizvodi().add(proizvod);
+
+        proizvod.setProdat(true);
+        proizvod.setKupac(kupac.get());
+
+        Optional<Prodavac> prodavac = prodavacRepository.findById(proizvod.getProdavac().getId());
+
+        prodavac.get().getProizvodiNaProdaju().remove(proizvod);
+
+        proizvod.setProdavac(prodavac.get());
+        proizvodRepository.save(proizvod);
+        ProizvodiNaProdajuDTO proizvodiNaProdajuDTO=new ProizvodiNaProdajuDTO();
+        proizvodiNaProdajuDTO.setOpis(proizvod.getOpis());
+        proizvodiNaProdajuDTO.setCena(proizvod.getCena());
+        proizvodiNaProdajuDTO.setNaziv(proizvod.getNaziv());
+        proizvodiNaProdajuDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+
+
+
+
+        return proizvodiNaProdajuDTO;
+    }
+
+
+  /*  public Proizvod kupiProizvodAukcija(Long id, Korisnik korisnik) {
+        Optional<Proizvod> proizvod = proizvodRepository.findById(id);
+
+        //kastovanje korisnika u kupca
+        Kupac kupac = (Kupac) korisnik;
+        kupac.getKupljeniProizvodi().add(proizvod.get());
+
+
+
+        return proizvod.get();
+    }*/
 }
