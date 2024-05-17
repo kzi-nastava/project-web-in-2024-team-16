@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import java.util.*;
 @Service
 public class KorisnikService {
 
@@ -28,6 +29,10 @@ public class KorisnikService {
     private ProdavacRepository prodavacRepository;
     @Autowired
     private ProizvodRepository proizvodRepository;
+
+    @Autowired
+    private KupacRepository kupacRepository;
+
 
 
     public boolean emailExsist(String mejl) {
@@ -269,16 +274,44 @@ public class KorisnikService {
         return !proizvodi.isEmpty();
     }
 
-    public Prodavac oceniProdavca(Long kupacId, Long prodavacId, int ocena, String komentar) {
+
+    public ProdavacOceneDTO oceniProdavca(Long kupacId, Long prodavacId, int ocena, String komentar) {
         // provera da li je kupac kupio proizvod od prodavca
         // ako jeste, ažuriraj ocenu i komentar
         Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
-        prodavac.getOcene().put(kupacId, ocena);
-        prodavac.getKomentari().put(kupacId, komentar);
+
+        String kupacKorisnickoIme = korisnikRepository.findById(kupacId).map(Korisnik::getKorisnickoIme).orElse(null);
+
+        prodavac.getOcene().put(kupacKorisnickoIme, ocena);
+        prodavac.getKomentari().put(kupacKorisnickoIme, komentar);
+
         double prosecnaOcena = prodavac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(prodavac.getProsecnaOcena());
         prodavac.setProsecnaOcena(prosecnaOcena);
+        prodavac = prodavacRepository.save(prodavac);
 
-        return prodavacRepository.save(prodavac);
+        Date d = new Date();
+
+
+        Korisnik k = korisnikRepository.getByKorisnickoIme(kupacKorisnickoIme);
+        Recenzija recenzija = new Recenzija();
+        recenzija.setKorisnikKojiJeDaoRecenziju(k);
+        recenzija.setKorisnikKojiJeDobioRecenziju(prodavac);
+        recenzija.setDatumRecenzije(d);
+        recenzija.setOcena(ocena);
+        recenzija.setKomentar(komentar);
+        recenzijaRepository.save(recenzija);
+
+        ProdavacOceneDTO prodavacDTO = new ProdavacOceneDTO();
+        prodavacDTO.setIme(prodavac.getIme());
+        prodavacDTO.setPrezime(prodavac.getPrezime());
+        prodavacDTO.setKorisnickoIme(prodavac.getKorisnickoIme());
+        prodavacDTO.setSlika(prodavac.getSlika());
+        prodavacDTO.setOcene(prodavac.getOcene());
+        prodavacDTO.setKomentari(prodavac.getKomentari());
+        prodavacDTO.setProsecnaOcena(prodavac.getProsecnaOcena());
+
+        return prodavacDTO;
+
     }
 
     public double izracunajProsecnuOcenu(Long prodavacId) {
@@ -286,4 +319,88 @@ public class KorisnikService {
         Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
         return prodavac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(prodavac.getProsecnaOcena());
     }
+
+
+    public boolean jeProdavacProdaoKupcu(Long prodavacId, Long kupacId) {
+        List<Proizvod> proizvodi = proizvodRepository.findAllByProdavacIdAndKupacId(prodavacId, kupacId);
+        return !proizvodi.isEmpty();
+    }
+
+    public KupacOcenaDTO oceniKupca(Long prodavacId, Long kupacId, int ocena, String komentar) {
+        // provera da li je prodavac prodao proizvod kupcu
+        // ako jeste, ažuriraj ocenu i komentar
+        Kupac kupac = kupacRepository.findById(kupacId).get();
+
+
+        String prodavacKorisnickoIme = korisnikRepository.findById(prodavacId).map(Korisnik::getKorisnickoIme).orElse(null);
+
+        kupac.getOcene().put(prodavacKorisnickoIme, ocena);
+        kupac.getKomentari().put(prodavacKorisnickoIme, komentar);
+
+        double prosecnaOcena = kupac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(kupac.getProsecnaOcena());
+        kupac.setProsecnaOcena(prosecnaOcena);
+        kupac = kupacRepository.save(kupac);
+
+
+        Date d = new Date();
+
+
+        Prodavac p = prodavacRepository.findProdavacByKorisnickoIme(prodavacKorisnickoIme);
+        Recenzija recenzija = new Recenzija();
+        recenzija.setKorisnikKojiJeDaoRecenziju(p);
+        recenzija.setKorisnikKojiJeDobioRecenziju(kupac);
+        recenzija.setDatumRecenzije(d);
+        recenzija.setOcena(ocena);
+        recenzija.setKomentar(komentar);
+        recenzijaRepository.save(recenzija);
+
+
+        KupacOcenaDTO kupacDTO = new KupacOcenaDTO();
+        kupacDTO.setIme(kupac.getIme());
+        kupacDTO.setPrezime(kupac.getPrezime());
+        kupacDTO.setKorisnickoIme(kupac.getKorisnickoIme());
+        kupacDTO.setSlika(kupac.getSlika());
+        kupacDTO.setOcene(kupac.getOcene());
+        kupacDTO.setKomentari(kupac.getKomentari());
+        kupacDTO.setProsecnaOcena(kupac.getProsecnaOcena());
+
+        return kupacDTO;
+    }
+
+    public double izracunajProsecnuOcenuKupca(Long kupacId) {
+        // izračunaj prosečnu ocenu za kupca
+        Kupac kupac = kupacRepository.findById(kupacId).get();
+        return kupac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(kupac.getProsecnaOcena());
+    }
+
+    public List<RecenzijaPrikazDTO> vratiRecenzije(Long kupacId){
+        Kupac kupac = kupacRepository.findById(kupacId).get();
+        List<Recenzija> sveRecenzije = recenzijaRepository.findAllBykorisnikKojiJeDaoRecenziju(kupac);
+
+        List<RecenzijaPrikazDTO> recenzije = new ArrayList<>();
+        for(Recenzija recenzija : sveRecenzije) {
+            RecenzijaPrikazDTO dto = new RecenzijaPrikazDTO();
+            Korisnik temp = recenzija.getKorisnikKojiJeDobioRecenziju();
+            dto.setOcena(recenzija.getOcena());
+            dto.setKomentar(recenzija.getKomentar());
+            dto.setDatumPodnosenjaRecenzije(recenzija.getDatumRecenzije());
+            //dto.setProdavacKojiJeDobioRecenziju(kupac);
+
+            Korisnik prodavac = recenzija.getKorisnikKojiJeDobioRecenziju();
+
+            ProdavacPrikazRecenzijeDTO prodavacDto = new ProdavacPrikazRecenzijeDTO();
+            prodavacDto.setIme(prodavac.getIme());
+            prodavacDto.setPrezime(prodavac.getPrezime());
+            prodavacDto.setKorisnickoIme(prodavac.getKorisnickoIme());
+
+            dto.setProdavacKojiJeDobioRecenziju(prodavacDto);
+
+            recenzije.add(dto);
+        }
+
+        return recenzije;
+
+    }
+
+
 }

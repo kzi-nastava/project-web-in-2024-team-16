@@ -7,10 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Getter
 @Setter
@@ -37,6 +34,14 @@ public class Kupac extends Korisnik{
 
 //    public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
 //        this.kupljeniProizvodi = kupljeniProizvodi;
+
+
+    @ElementCollection
+    private Map<String, Integer> ocene = new HashMap<>(); // Kupac ID, Ocena
+
+    @ElementCollection
+    private Map<String, String> komentari = new HashMap<>(); // Kupac ID, Komentar
+
 //    }
 
     public Set<Ponuda> getPonuda() {

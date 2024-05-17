@@ -2,15 +2,25 @@ package com.webshop.service;
 
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.DTO.ProizvodPrekoKategorijeDTO;
+
 import com.webshop.DTO.ProizvodiNaProdajuDTO;
 import com.webshop.error.*;
 import com.webshop.model.*;
 import com.webshop.repository.*;
+
+
+import com.webshop.repository.KategorijaRepository;
+import com.webshop.repository.KorisnikRepository;
+import com.webshop.repository.ProdavacRepository;
+
 import com.webshop.error.PasswordMismatchException;
 import com.webshop.error.ProductNotFoundException;
 import com.webshop.error.UserNotFoundException;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
+
+import com.webshop.repository.ProizvodRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -243,6 +253,7 @@ public class ProizvodService {
 
     }
 
+
     public ProizvodiNaProdajuDTO kupiProizvodFiksnaCena(Proizvod proizvod, Korisnik korisnik) throws ProductSoldException {
 
         if(proizvod.getProdat()){
@@ -285,4 +296,24 @@ public class ProizvodService {
 
         return proizvod.get();
     }*/
+
+//    public List<ProizvodPrekoKategorijeDTO> findByKategorijaId(Long kategorijaId) throws ProductNotFoundException {
+//        List<Proizvod> proizvodi=proizvodRepository.findByKategorijaId(kategorijaId);
+//
+//        List<ProizvodPrekoKategorijeDTO> proizvodiDTO = new ArrayList<>();
+//
+//
+//        for(Proizvod proizvod: proizvodi){
+//            ProizvodPrekoKategorijeDTO proizvodDTO = new ProizvodPrekoKategorijeDTO();
+//            proizvodDTO.setNaziv(proizvod.getNaziv());
+//            proizvodDTO.setOpis(proizvod.getOpis());
+//            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+//            proizvodiDTO.add(proizvodDTO);
+//        }
+//        if (proizvodiDTO.isEmpty()) {
+//            throw new ProductNotFoundException("U kategoriji ne postoji ni jedan proizvod!");
+//        }
+//        return proizvodiDTO;
+//    }
+
 }

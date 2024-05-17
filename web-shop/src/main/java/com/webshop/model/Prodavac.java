@@ -24,10 +24,11 @@ public class Prodavac extends Korisnik{
     private Double prosecnaOcena;
 
     @ElementCollection
-    private Map<Long, Integer> ocene = new HashMap<>(); // Kupac ID, Ocena
+
+    private Map<String, Integer> ocene = new HashMap<>(); // Kupac ID, Ocena
 
     @ElementCollection
-    private Map<Long, String> komentari = new HashMap<>(); // Kupac ID, Komentar
+    private Map<String, String> komentari = new HashMap<>(); // Kupac ID, Komentar
 
     public Set<Proizvod> getProizvodiNaProdaju() {
         return proizvodiNaProdaju;
