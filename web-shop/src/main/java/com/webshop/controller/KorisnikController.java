@@ -264,4 +264,26 @@ public class KorisnikController {
         return new ResponseEntity<>(recenzije, HttpStatus.OK);
     }
 
+    // Metoda za brisanje recenzije
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId, HttpSession session) throws UserNotFoundException, NoSellerException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)){
+            throw new NoSellerException("Samo ADMINISTRATOR moze da modifikuje recenzije!");
+        }
+        korisnikService.deleteReview(reviewId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    // Metoda za izmenu komentara u recenziji
+//    @PutMapping("/{reviewId}")
+//    public ResponseEntity<Recenzija> updateReviewComment(@PathVariable Long reviewId, @RequestBody String newComment) {
+//        Recenzija updatedReview = korisnikService.updateReviewComment(reviewId, newComment);
+//        return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+//    }
+
 }

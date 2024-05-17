@@ -523,4 +523,23 @@ public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenzi
         return recenzije;
     }
 
+    public void deleteReview(Long reviewId) {
+        if(recenzijaRepository.existsById(reviewId)) {
+            recenzijaRepository.deleteById(reviewId);
+            System.out.println("Recenzija sa ID " + reviewId + " je obrisana.");
+        } else {
+            System.out.println("Recenzija sa ID " + reviewId + " ne postoji.");
+        }
+        //recenzijaRepository.deleteById(reviewId);
+    }
+
+    // Metoda za izmenu komentara u recenziji
+//    public Recenzija updateReviewComment(Long reviewId, String newComment) {
+//        Recenzija recenzija = korisnikRepository.findById(reviewId)
+//                .orElseThrow(() -> new ResourceNotFoundException("Recenzija sa ID " + reviewId + " nije pronađena"));
+//
+//        recenzija.setKomentar(newComment);
+//        return korisnikRepository.save(recenzija);
+//    }
+
 }
