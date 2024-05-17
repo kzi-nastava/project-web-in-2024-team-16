@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../../ShopProject/shopProject/shopProject/src/main/main.iml" filepath="$PROJECT_DIR$/../../ShopProject/shopProject/shopProject/src/main/main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/project-web-in-2024-team-16.iml" filepath="$PROJECT_DIR$/.idea/project-web-in-2024-team-16.iml" />
     </modules>
   </component>
