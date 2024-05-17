@@ -44,6 +44,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNoSellerException(NoCustomerException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
     @ExceptionHandler(NoAdministratorException.class)
     public ResponseEntity<String> handleNoAdministratorException(NoAdministratorException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -56,5 +57,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNotHighestOfferException(NotHighestOfferException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
 
 }
