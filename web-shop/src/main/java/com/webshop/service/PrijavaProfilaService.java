@@ -143,7 +143,7 @@ public class PrijavaProfilaService {
     private void sendReportRejected(Korisnik korisnik, String razlogOdbijanja) throws IOException {
 
         Email from = new Email("webshopjm.in@gmail.com");
-        String subject = "Kupljen proizvod";
+        String subject = "Prijava odbijena.";
         Email to = new Email(korisnik.getMejl());
         Content content = new Content("text/plain", "Poštovani " + korisnik.getIme() + "," +
                 " Vaša prijava je odbijena. Razlog je sledeći:  "+ razlogOdbijanja +

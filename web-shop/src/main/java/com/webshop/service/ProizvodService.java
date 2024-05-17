@@ -314,7 +314,7 @@ public class ProizvodService {
     private void sendVerificationEmailSeller(Korisnik korisnik) throws IOException {
 
         Email from = new Email("webshopjm.in@gmail.com");
-        String subject = "Kupljen proizvod";
+        String subject = "Proizvod prodat";
         Email to = new Email(korisnik.getMejl());
         Content content = new Content("text/plain", "Poštovani " + korisnik.getIme() + "," +
                 " Vaš proizvod je prodat."
