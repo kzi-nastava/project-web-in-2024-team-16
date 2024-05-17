@@ -232,4 +232,19 @@ public class KorisnikController {
         return new ResponseEntity<>(recenzije, HttpStatus.OK);
     }
 
+    @GetMapping("/reviewedBuyer/received")
+    public ResponseEntity<List<RecenzijaPrikaz2DTO>> getReviewsFromReviewedBuyers(HttpSession session) throws UserNotFoundException, NoSellerException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)){
+            throw new NoSellerException("Samo PRODAVAC moze da pregleda recenzije!");
+        }
+        List<RecenzijaPrikaz2DTO> recenzije = korisnikService.vratiRecenzijeOdKupcaAkoJeProdavacDaoRecenziju(korisnik.getId());
+        return new ResponseEntity<>(recenzije, HttpStatus.OK);
+    }
+
 }
