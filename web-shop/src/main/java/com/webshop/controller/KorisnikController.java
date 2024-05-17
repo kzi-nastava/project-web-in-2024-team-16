@@ -184,8 +184,8 @@ public class KorisnikController {
         return korisnikService.izracunajProsecnuOcenuKupca(kupacId);
     }
 
-    @GetMapping("/reviews/sent")
-    public ResponseEntity<List<RecenzijaPrikazDTO>> getUserReviews(HttpSession session) throws UserNotFoundException, NoSellerException {
+    @GetMapping("/reviewsBuyer/sent")
+    public ResponseEntity<List<RecenzijaPrikazDTO>> getUserReviewsBuyer(HttpSession session) throws UserNotFoundException, NoSellerException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik == null){
@@ -196,7 +196,7 @@ public class KorisnikController {
             throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
         }
 
-        List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzije(korisnik.getId());
+        List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzijeKupac(korisnik.getId());
         return new ResponseEntity<>(recenzije, HttpStatus.OK);
     }
 
@@ -212,6 +212,23 @@ public class KorisnikController {
             throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
         }
         List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenziju(korisnik.getId());
+        return new ResponseEntity<>(recenzije, HttpStatus.OK);
+    }
+
+
+    @GetMapping("/reviewsSeller/sent")
+    public ResponseEntity<List<RecenzijaPrikaz2DTO>> getUserReviewsSeller(HttpSession session) throws UserNotFoundException, NoSellerException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)){
+            throw new NoSellerException("Samo PRODAVAC moze da pregleda recenzije!");
+        }
+
+        List<RecenzijaPrikaz2DTO> recenzije = korisnikService.vratiRecenzijeProdavac(korisnik.getId());
         return new ResponseEntity<>(recenzije, HttpStatus.OK);
     }
 

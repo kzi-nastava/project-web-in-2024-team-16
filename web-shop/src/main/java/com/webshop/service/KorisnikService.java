@@ -365,7 +365,7 @@ public class KorisnikService {
         return kupac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(kupac.getProsecnaOcena());
     }
 
-    public List<RecenzijaPrikazDTO> vratiRecenzije(Long kupacId){
+    public List<RecenzijaPrikazDTO> vratiRecenzijeKupac(Long kupacId){
         Kupac kupac = kupacRepository.findById(kupacId).get();
         List<Recenzija> sveRecenzije = recenzijaRepository.findAllBykorisnikKojiJeDaoRecenziju(kupac);
 
@@ -385,7 +385,7 @@ public class KorisnikService {
             prodavacDto.setPrezime(prodavac.getPrezime());
             prodavacDto.setKorisnickoIme(prodavac.getKorisnickoIme());
 
-            dto.setProdavacKojiJeDobioRecenziju(prodavacDto);
+            dto.setProdavacKojemSamDaoRecenziju(prodavacDto);
 
             recenzije.add(dto);
         }
@@ -394,35 +394,6 @@ public class KorisnikService {
 
     }
 
-//    public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenziju(Long kupacId){
-//        Kupac kupac = kupacRepository.findById(kupacId).get();
-//        List<Recenzija> sveRecenzije = recenzijaRepository.findAllBykorisnikKojiJeDaoRecenziju(kupac);
-//
-//        List<RecenzijaPrikazDTO> recenzije = new ArrayList<>();
-//        for(Recenzija recenzija : sveRecenzije) {
-//            // Provera da li je kupac dao recenziju prodavcu
-//            Korisnik prodavac = recenzija.getKorisnikKojiJeDobioRecenziju();
-//            if(recenzija.getKorisnikKojiJeDaoRecenziju().equals(prodavac)) {
-//                RecenzijaPrikazDTO dto = new RecenzijaPrikazDTO();
-//                //Korisnik prodavac = recenzija.getKorisnikKojiJeDobioRecenziju();
-//
-//                dto.setOcena(recenzija.getOcena());
-//                dto.setKomentar(recenzija.getKomentar());
-//                dto.setDatumPodnosenjaRecenzije(recenzija.getDatumRecenzije());
-//
-//                ProdavacPrikazRecenzijeDTO prodavacDto = new ProdavacPrikazRecenzijeDTO();
-//                prodavacDto.setIme(prodavac.getIme());
-//                prodavacDto.setPrezime(prodavac.getPrezime());
-//                prodavacDto.setKorisnickoIme(prodavac.getKorisnickoIme());
-//
-//                dto.setProdavacKojiJeDobioRecenziju(prodavacDto);
-//
-//                recenzije.add(dto);
-//            }
-//        }
-//
-//        return recenzije;
-//    }
 public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenziju(Long kupacId){
     Kupac kupac = kupacRepository.findById(kupacId).get();
     List<Recenzija> sveRecenzije = recenzijaRepository.findAllBykorisnikKojiJeDaoRecenziju(kupac);
@@ -446,7 +417,7 @@ public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenzi
             prodavacDto.setPrezime(prodavac.getPrezime());
             prodavacDto.setKorisnickoIme(prodavac.getKorisnickoIme());
 
-            dto.setProdavacKojiJeDobioRecenziju(prodavacDto);
+            dto.setProdavacKojemSamDaoRecenziju(prodavacDto);
 
             recenzije.add(dto);
         }
@@ -454,5 +425,35 @@ public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenzi
 
     return recenzije;
 }
+
+
+    public List<RecenzijaPrikaz2DTO> vratiRecenzijeProdavac(Long prodavacId){
+        Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
+        List<Recenzija> sveRecenzije = recenzijaRepository.findAllBykorisnikKojiJeDaoRecenziju(prodavac);
+
+        List<RecenzijaPrikaz2DTO> recenzije = new ArrayList<>();
+        for(Recenzija recenzija : sveRecenzije) {
+            RecenzijaPrikaz2DTO dto = new RecenzijaPrikaz2DTO();
+            Korisnik temp = recenzija.getKorisnikKojiJeDobioRecenziju();
+            dto.setOcena(recenzija.getOcena());
+            dto.setKomentar(recenzija.getKomentar());
+            dto.setDatumPodnosenjaRecenzije(recenzija.getDatumRecenzije());
+            //dto.setProdavacKojiJeDobioRecenziju(kupac);
+
+            Korisnik kupac = recenzija.getKorisnikKojiJeDobioRecenziju();
+
+            KupacPrikazRecenzijeDTO prodavacDto = new KupacPrikazRecenzijeDTO();
+            prodavacDto.setIme(kupac.getIme());
+            prodavacDto.setPrezime(kupac.getPrezime());
+            prodavacDto.setKorisnickoIme(kupac.getKorisnickoIme());
+
+            dto.setKupacKojemSamDaoRecenziju(prodavacDto);
+
+            recenzije.add(dto);
+        }
+
+        return recenzije;
+
+    }
 
 }
