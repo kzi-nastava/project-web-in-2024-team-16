@@ -184,7 +184,7 @@ public class KorisnikController {
         return korisnikService.izracunajProsecnuOcenuKupca(kupacId);
     }
 
-    @GetMapping("/reviews")
+    @GetMapping("/reviews/sent")
     public ResponseEntity<List<RecenzijaPrikazDTO>> getUserReviews(HttpSession session) throws UserNotFoundException, NoSellerException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
@@ -200,5 +200,19 @@ public class KorisnikController {
         return new ResponseEntity<>(recenzije, HttpStatus.OK);
     }
 
+    @GetMapping("/reviewedSellers/received")
+    public ResponseEntity<List<RecenzijaPrikazDTO>> getReviewsFromReviewedSellers(HttpSession session) throws UserNotFoundException, NoSellerException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
+            throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
+        }
+        List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenziju(korisnik.getId());
+        return new ResponseEntity<>(recenzije, HttpStatus.OK);
+    }
 
 }
