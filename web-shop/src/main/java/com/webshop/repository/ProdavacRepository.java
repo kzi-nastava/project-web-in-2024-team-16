@@ -1,5 +1,6 @@
 package com.webshop.repository;
 
+import com.webshop.DTO.ProdavacDTO;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Prodavac;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,5 @@ public interface ProdavacRepository extends JpaRepository<Prodavac, String> {
 
     Optional<Prodavac> findByKorisnickoIme(String korisnickoIme);
 
+    Prodavac findProdavacByKorisnickoIme(String prodavacKorisnickoIme);
 }
