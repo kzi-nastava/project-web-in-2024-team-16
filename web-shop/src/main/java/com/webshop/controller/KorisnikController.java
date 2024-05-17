@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -181,6 +182,22 @@ public class KorisnikController {
     @GetMapping("/averageRatingBuyer/{kupacId}")
     public double prosecnaOcenaKupca(@PathVariable Long kupacId) {
         return korisnikService.izracunajProsecnuOcenuKupca(kupacId);
+    }
+
+    @GetMapping("/reviews")
+    public ResponseEntity<List<RecenzijaPrikazDTO>> getUserReviews(HttpSession session) throws UserNotFoundException, NoSellerException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
+            throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
+        }
+
+        List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzije(korisnik.getId());
+        return new ResponseEntity<>(recenzije, HttpStatus.OK);
     }
 
 
