@@ -20,29 +20,25 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/category")
 public class KategorijaController {
+
     @Autowired
     private KategorijaService kategorijaService;
 
     @PostMapping("/newCategory/{id}")
     public ResponseEntity<String> addNewCategory(@PathVariable Long id,@RequestBody String nazivKategorije, HttpSession session) throws CategoryExistsException, UserNotFoundException, NoSellerException {
-            // Provera da li kategorija već postoji
+
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik==null){
-            // return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-
             throw new UserNotFoundException("Greska!");
-
         }
         if(!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
-
             throw new NoSellerException("MORA BITI PRODAVAC");
         }
         if (kategorijaService.proveriPostojanjeKategorije(nazivKategorije)) {
-            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Prosleđena kategorija već postoji.");
-            throw new CategoryExistsException("Prosleđena kategorija već postoji!");
+             throw new CategoryExistsException("Prosleđena kategorija već postoji!");
         }
-            // Dodavanje nove kategorije u sistem
+
             kategorijaService.dodajNovuKategoriju(nazivKategorije);
 
             return ResponseEntity.ok().body("Nova kategorija uspešno dodata!");
@@ -51,6 +47,7 @@ public class KategorijaController {
   
     @GetMapping("/categories")
     public ResponseEntity<List<KategorijaDTO>> getAllCategories() {
+
         List<KategorijaDTO> kategorijaDTO = kategorijaService.findAll();
         return ResponseEntity.ok(kategorijaDTO);
     }

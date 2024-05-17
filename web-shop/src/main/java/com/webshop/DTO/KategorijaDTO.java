@@ -11,7 +11,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KategorijaDTO {
+
     private Long id;
+
     private String nazivKategorije;
 
 }

@@ -17,19 +17,21 @@ import java.util.Set;
 
 @Service
 public class KategorijaService {
+
     @Autowired
     private KategorijaRepository kategorijaRepository;
 
     public boolean proveriPostojanjeKategorije(String nazivKategorije) {
+
         Kategorija kategorija = kategorijaRepository.findByNazivKategorije(nazivKategorije);
         return kategorija!=null;
     }
 
     public void dodajNovuKategoriju(String nazivKategorije) {
+
         Kategorija novaKategorija = new Kategorija();
         novaKategorija.setNazivKategorije(nazivKategorije);
 
-        // Čuvanje nove kategorije u repozitorijumu
         kategorijaRepository.save(novaKategorija);
     }
 
@@ -38,7 +40,6 @@ public class KategorijaService {
         List<Kategorija>kategorije= kategorijaRepository.findAll();
         List<KategorijaDTO>kategorijeDTO=new ArrayList<>();
         List<Kategorija> slanje=new ArrayList<>();
-
 
         for(Kategorija k:kategorije){
             KategorijaDTO kategorijaDTO=new KategorijaDTO();

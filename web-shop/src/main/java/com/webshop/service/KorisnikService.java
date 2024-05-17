@@ -29,7 +29,6 @@ public class KorisnikService {
     private ProdavacRepository prodavacRepository;
     @Autowired
     private ProizvodRepository proizvodRepository;
-
     @Autowired
     private KupacRepository kupacRepository;
 
@@ -65,22 +64,20 @@ public class KorisnikService {
         Set<Recenzija> recenzije = new HashSet<>();
         korisnik.setRecenzije(recenzije);
 
-        if(this.emailExsist(korisnikDTO.getMejl()))//poziva metodu, ako vrati gresku, ispisace...
-        {//proveri u bazi uz pomoc repozitorijuma, ako postoji vrati mi gresku
+        if(this.emailExsist(korisnikDTO.getMejl())) {
 
-            throw new EmailAlreadyExistsException("Korisnik sa ovim email-om vec postoji!");
+            throw new EmailAlreadyExistsException("Korisnik sa ovim email-om već postoji.");
         }
-        if(this.userExsist(korisnikDTO.getKorisnickoIme()))
-        {
 
-            throw new UserAlreadyExistsException("Korisnik sa ovim korisnickim imenom vec postoji!");
+        if(this.userExsist(korisnikDTO.getKorisnickoIme())){
+
+            throw new UserAlreadyExistsException("Korisnik sa ovim korisnickim imenom vec postoji.");
         }
         if (!korisnikDTO.getLozinka().equals(korisnikDTO.getPonovljenaLozinka())) {
-            throw new PasswordMismatchException("Lozinke se ne poklapaju!");
+
+            throw new PasswordMismatchException("Lozinke se ne poklapaju.");
         }
-
-
-        korisnik=korisnikRepository.save(korisnik);//saljem sve ali ja nisam morala pri pravljenju da unosim sve
+        korisnik=korisnikRepository.save(korisnik);
 
 
         return korisnik;
@@ -95,19 +92,25 @@ public class KorisnikService {
 
     }
     public Optional<Korisnik> findById(Long id) throws UserNotFoundException {
+
         Optional<Korisnik> korisnik = korisnikRepository.findById(id);
         if (korisnik.isPresent()) {
+
             return korisnik;
         } else {
+
             throw new UserNotFoundException("Korisnik sa ID-jem " + id + " nije pronađen.");
         }
     }
 
     public Optional<Korisnik> findByKorisnickoIme(String korisnickoIme) throws UserNotFoundException {
+
         Optional<Korisnik> korisnik = Optional.ofNullable(korisnikRepository.getByKorisnickoIme(korisnickoIme));
         if (korisnik.isPresent()) {
+
             return korisnik;
         } else {
+
             throw new UserNotFoundException("Korisnik sa korisnickim imenom: " + korisnickoIme + " nije pronađen.");
         }
     }
@@ -128,15 +131,17 @@ public class KorisnikService {
            korisnik.setLozinka(updatedSeller.getNovaLozinka());
         }
         else{
-            throw new PasswordMismatchException("Morate uneti ispravnu lozinku!");
+            throw new PasswordMismatchException("Morate uneti ispravnu lozinku.");
         }
 
         korisnikRepository.save(korisnik);
     }
 
     public ProdavacProfilDTO proveraProdavac(String korisnickoIme) throws UserNotFoundException {
+
         Optional<Prodavac> korisnik = prodavacRepository.findByKorisnickoIme(korisnickoIme);
         if (korisnik.isPresent()) {
+
             ProdavacProfilDTO pp = new ProdavacProfilDTO();
             pp.setIme(korisnik.get().getIme());
             pp.setTelefon(korisnik.get().getTelefon());
@@ -145,13 +150,13 @@ public class KorisnikService {
             pp.setOpisKorisnika(korisnik.get().getOpisKorisnika());
             pp.setUloga(korisnik.get().getUloga());
             pp.setBlokiran(korisnik.get().getBlokiran());
-          //  pp.setProizvodiNaProdaju(korisnik.get().getProizvodiNaProdaju());
             pp.setDobijeneRecenzije(korisnik.get().getDobijeneRecenzije());
             pp.setPrezime(korisnik.get().getPrezime());
             pp.setProsecnaOcena(korisnik.get().getProsecnaOcena());
             return pp;
         }else{
-            throw new UserNotFoundException("Korisnik sa korisnickim imenom: " + korisnickoIme + " ne postoji!");
+
+            throw new UserNotFoundException("Korisnik sa korisnickim imenom: " + korisnickoIme + " ne postoji.");
         }
     }
 
@@ -166,28 +171,33 @@ public class KorisnikService {
         korisnik.setOpisKorisnika(updatedCustomer.getOpisKorisnika());
 
         if(korisnik.getLozinka().equals(updatedCustomer.getStaraLozinka())){
+
             korisnik.setMejl(updatedCustomer.getMejl());
             korisnik.setKorisnickoIme(updatedCustomer.getKorisnickoIme());
             korisnik.setLozinka(updatedCustomer.getNovaLozinka());
         }
         else{
-            throw new PasswordMismatchException("Morate uneti ispravnu lozinku!");
+
+            throw new PasswordMismatchException("Morate uneti ispravnu lozinku.");
         }
 
         korisnikRepository.save(korisnik);
     }
 
     public KupacProfilDTO getKupacProfile(Long id) throws UserNotFoundException {
+
         Optional<Korisnik> korisnikOptional = korisnikRepository.findById(id);
 
         if (korisnikOptional.isPresent()) {
+
             Korisnik korisnik = korisnikOptional.get();
 
-            // Provera da li je korisnik zaista tipa Kupac
             if (korisnik.getUloga().equals(Uloga.KUPAC)) {
-                Kupac kupac = (Kupac) korisnik; // Kastovanje korisnika u kupca
+
+                Kupac kupac = (Kupac) korisnik;
 
                     Set<ProizvodiNaProdajuDTO> proizvodiNaProdajuDTO=new HashSet<>();
+
                     for(Proizvod p: kupac.getKupljeniProizvodi()){
                         ProizvodiNaProdajuDTO proizvodNaProdajuDTO=new ProizvodiNaProdajuDTO();
                         proizvodNaProdajuDTO.setCena(p.getCena());
@@ -196,7 +206,6 @@ public class KorisnikService {
                         proizvodNaProdajuDTO.setOpis(p.getOpis());
                         proizvodiNaProdajuDTO.add(proizvodNaProdajuDTO);
                     }
-                // Kreiranje DTO objekta za kupca
                 KupacProfilDTO kupacProfilDTO = new KupacProfilDTO();
                 kupacProfilDTO.setIme(korisnik.getIme());
                 kupacProfilDTO.setPrezime(korisnik.getPrezime());
@@ -204,38 +213,38 @@ public class KorisnikService {
                 kupacProfilDTO.setSlika(korisnik.getSlika());
                 kupacProfilDTO.setOpisKorisnika(korisnik.getOpisKorisnika());
                 kupacProfilDTO.setDatumRodjenja(korisnik.getDatumRodjenja());
-                // Dodajte ostale osnovne informacije o korisniku koje želite da prikažete
 
-                // Računanje prosečne ocene
                 Double prosecnaOcena = kupac.getProsecnaOcena();
                 kupacProfilDTO.setProsecnaOcena(prosecnaOcena);
 
                 kupacProfilDTO.setKupljeniProizvodi(proizvodiNaProdajuDTO);
 
-                // Dohvatanje recenzija koje su ostavili prodavci
-              //  Set<Recenzija> recenzijeProdavaca = korisnik.getDobijeneRecenzije();
-                // Dodajte logiku za obračun prosečne ocene na osnovu recenzija prodavaca
                 kupacProfilDTO.setDobijeneRecenzije(korisnikOptional.get().getDobijeneRecenzije());
 
                 return kupacProfilDTO;
             } else {
+
                 throw new UserNotFoundException("Korisnik sa datim ID-om nije kupac: " + id);
             }
         } else {
+
             throw new UserNotFoundException("Korisnik sa datim ID-om nije pronađen: " + id);
         }
 }
 
     public ProdavacProfilDTO getProdavacProfile(Long id) throws UserNotFoundException {
+
         Optional<Korisnik> korisnikOptional = korisnikRepository.findById(id);
 
         if (korisnikOptional.isPresent()) {
+
             Korisnik korisnik = korisnikOptional.get();
 
-            // Provera da li je korisnik zaista tipa Kupac
             if (korisnik.getUloga().equals(Uloga.PRODAVAC)) {
-                Prodavac prodavac = (Prodavac) korisnik; // Kastovanje korisnika u prodavca
+
+                Prodavac prodavac = (Prodavac) korisnik;
                 Set<ProizvodiNaProdajuDTO> proizvodiNaProdajuDTO=new HashSet<>();
+
                 for(Proizvod p: prodavac.getProizvodiNaProdaju()){
                     ProizvodiNaProdajuDTO proizvodNaProdajuDTO=new ProizvodiNaProdajuDTO();
                     proizvodNaProdajuDTO.setCena(p.getCena());
@@ -244,7 +253,6 @@ public class KorisnikService {
                     proizvodNaProdajuDTO.setOpis(p.getOpis());
                     proizvodiNaProdajuDTO.add(proizvodNaProdajuDTO);
                 }
-                // Kreiranje DTO objekta za prodavca
                 ProdavacProfilDTO prodavacProfilDTO = new ProdavacProfilDTO();
                 prodavacProfilDTO.setIme(korisnik.getIme());
                 prodavacProfilDTO.setPrezime(korisnik.getPrezime());
@@ -255,29 +263,30 @@ public class KorisnikService {
                 prodavacProfilDTO.setUloga(korisnik.getUloga());
                 prodavacProfilDTO.setBlokiran(korisnik.getBlokiran());
                 prodavacProfilDTO.setProizvodiNaProdaju(proizvodiNaProdajuDTO);
-               // System.out.println(korisnik.getDobijeneRecenzije());
                 prodavacProfilDTO.setDobijeneRecenzije(korisnikOptional.get().getDobijeneRecenzije());
                 prodavacProfilDTO.setProsecnaOcena(prodavac.getProsecnaOcena());
 
 
                 return  prodavacProfilDTO;
             } else {
+
                 throw new UserNotFoundException("Korisnik sa datim ID-om nije prodavac " + id);
             }
         } else {
+
             throw new UserNotFoundException("Korisnik sa datim ID-om nije pronađen: " + id);
         }
     }
 
     public boolean jeKupacKupioOdProdavca(Long kupacId, Long prodavacId) {
+
         List<Proizvod> proizvodi = proizvodRepository.findAllByKupacIdAndProdavacId(kupacId, prodavacId);
         return !proizvodi.isEmpty();
     }
 
 
     public ProdavacOceneDTO oceniProdavca(Long kupacId, Long prodavacId, int ocena, String komentar) {
-        // provera da li je kupac kupio proizvod od prodavca
-        // ako jeste, ažuriraj ocenu i komentar
+
         Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
 
         String kupacKorisnickoIme = korisnikRepository.findById(kupacId).map(Korisnik::getKorisnickoIme).orElse(null);
@@ -290,7 +299,6 @@ public class KorisnikService {
         prodavac = prodavacRepository.save(prodavac);
 
         Date d = new Date();
-
 
         Korisnik k = korisnikRepository.getByKorisnickoIme(kupacKorisnickoIme);
         Recenzija recenzija = new Recenzija();
@@ -315,20 +323,20 @@ public class KorisnikService {
     }
 
     public double izracunajProsecnuOcenu(Long prodavacId) {
-        // izračunaj prosečnu ocenu za prodavca
+
         Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
         return prodavac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(prodavac.getProsecnaOcena());
     }
 
 
     public boolean jeProdavacProdaoKupcu(Long prodavacId, Long kupacId) {
+
         List<Proizvod> proizvodi = proizvodRepository.findAllByProdavacIdAndKupacId(prodavacId, kupacId);
         return !proizvodi.isEmpty();
     }
 
     public KupacOcenaDTO oceniKupca(Long prodavacId, Long kupacId, int ocena, String komentar) {
-        // provera da li je prodavac prodao proizvod kupcu
-        // ako jeste, ažuriraj ocenu i komentar
+
         Kupac kupac = kupacRepository.findById(kupacId).get();
 
 
@@ -384,7 +392,6 @@ public class KorisnikService {
             dto.setOcena(recenzija.getOcena());
             dto.setKomentar(recenzija.getKomentar());
             dto.setDatumPodnosenjaRecenzije(recenzija.getDatumRecenzije());
-            //dto.setProdavacKojiJeDobioRecenziju(kupac);
 
             Korisnik prodavac = recenzija.getKorisnikKojiJeDobioRecenziju();
 

@@ -1,12 +1,7 @@
 package com.webshop.controller;
 
-import com.webshop.DTO.KupacProfilDTO;
-import com.webshop.DTO.PrijavaProfilaDTO;
-import com.webshop.DTO.PrijavaRequestDTO;
-import com.webshop.DTO.ProdavacProfilDTO;
-import com.webshop.error.NoCustomerException;
-import com.webshop.error.NoSellerException;
-import com.webshop.error.UserNotFoundException;
+import com.webshop.DTO.*;
+import com.webshop.error.*;
 import com.webshop.model.Korisnik;
 import com.webshop.model.PrijavaProfila;
 import com.webshop.model.Uloga;
@@ -18,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 
@@ -68,6 +64,7 @@ public class PrijavaController {
     }
     @PostMapping("/customerRequest/{id}")
     public ResponseEntity<?> KupacPodnosiPrijavu(@PathVariable Long id, @RequestBody PrijavaRequestDTO prijavaRequestDTO, HttpSession session) throws UserNotFoundException, NoSellerException {
+
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if(korisnik == null){
 
@@ -85,6 +82,7 @@ public class PrijavaController {
 
 
         Optional<Korisnik> korisnikOptional = korisnikService.findById(id);
+
         if (korisnikOptional.isEmpty()) {
             throw new UserNotFoundException("Korisnik nije pronađen.");
         }
@@ -98,6 +96,22 @@ public class PrijavaController {
             throw new UserNotFoundException("Možete prijaviti samo prodavce!");
         }
 
+    }
+    @PostMapping("/adminRejectionReport/{prijavaId}")
+    public ResponseEntity<String> odbijPrijavu(@PathVariable Long prijavaId, @RequestBody OdbijenaPrijavaDTO razlogOdbijanjaDTO, HttpSession session) throws IOException {
+
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            throw new UserNotFoundException("Morate se ulogovati!");
+        }
+
+        if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            throw new NoAdministratorException("Samo admin može odbiti prijave.");
+        }
+
+        prijavaProfilaService.odbijPrijavu(prijavaId, razlogOdbijanjaDTO.getRazlogOdbijanja());
+        return ResponseEntity.ok("Prijava je odbijena.");
     }
 
 }

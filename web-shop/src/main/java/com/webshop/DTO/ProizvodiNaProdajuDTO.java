@@ -10,8 +10,12 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProizvodiNaProdajuDTO {
+
     private String naziv;
+
     private String opis;
+
     private String slikaProizvoda;
+
     private Double cena;
 }

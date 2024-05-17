@@ -12,7 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PonudaDTO {
+
     private double cena;
-    private Kupac kupacKojiDajePonudu;
-    private Proizvod proizvod;
+
+    private PrijavaKorisnikDTO kupacKojiDajePonudu;
+
+    private ProizvodAukcijaDTO proizvod;
 }

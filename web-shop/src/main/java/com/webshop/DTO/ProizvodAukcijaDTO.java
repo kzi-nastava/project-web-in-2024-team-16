@@ -1,22 +1,22 @@
 package com.webshop.DTO;
 
-
-
+import com.webshop.model.TipProdaje;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecenzijaDTO {
+public class ProizvodAukcijaDTO {
 
-    private double ocena;
+    private String naziv;
 
-    private String komentar;
+    private String opis;
 
-    private Date datumRecenzije;
+    private String slikaProizvoda;
+
+    private TipProdaje tipProdaje;
 }
