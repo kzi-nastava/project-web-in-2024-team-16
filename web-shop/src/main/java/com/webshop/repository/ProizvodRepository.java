@@ -3,6 +3,8 @@ package com.webshop.repository;
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -29,6 +31,8 @@ public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
     List<Proizvod> findAllByKupacIdAndProdavacId(Long kupacId, Long prodavacId);
 
     List<Proizvod> findAllByProdavacIdAndKupacId(Long prodavacId, Long kupacId);
+
+    Page<Proizvod> findAll(Pageable pageable);
 
 
     //List<Proizvod> findByKategorijaId(Long kategorijaId);

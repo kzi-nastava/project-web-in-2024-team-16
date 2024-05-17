@@ -212,4 +212,12 @@ public class ProizvodController {
 //    }
 
 
+    @GetMapping("/pages")
+    public List<ProizvodDTO> getProizvodi(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size) {
+        return proizvodService.findAll(page, size);
+    }
+
+
 }
