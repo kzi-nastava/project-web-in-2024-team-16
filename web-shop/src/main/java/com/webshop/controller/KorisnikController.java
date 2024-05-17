@@ -7,6 +7,7 @@ import com.webshop.service.KorisnikService;
 import com.webshop.service.PrijavaProfilaService;
 import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -188,12 +189,12 @@ public class KorisnikController {
             throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
         }
         if(!korisnik.getUloga().equals(Uloga.KUPAC)){
-            throw new NoCustomerException("Samo kupac može da kupuje!");
+            throw new NoCustomerException("Samo kupac može da kupuje.");
         }
 
         Optional<Proizvod> proizvod =proizvodService.findById(id);
         if (proizvod.isEmpty()) {
-            throw new ProductNotFoundException("Proizvod ne postoji!");
+            throw new ProductNotFoundException("Proizvod ne postoji.");
         }
         if(!proizvod.get().getTip().equals(TipProdaje.FIKSNA)) {
             throw new ProductNotFoundException("Cena nije fiksna.");
@@ -204,27 +205,24 @@ public class KorisnikController {
 
 
     }
-  /*  @PostMapping("/shopNowAutction/{id}")
-    public ResponseEntity<?> kupovinaProizvodaAukcija(@PathVariable Long proizvodId, HttpSession session) throws UserNotFoundException, NoCustomerException, ProductNotFoundException {
+    @PostMapping("/shopNowAuction")
+    public ResponseEntity<PonudaDTO>  kupovinaProizvodaAukcija(@RequestParam(required = true) Long id,@RequestParam(required = true) @Positive(message = "Nova ponuda mora biti veća od 0.") Double novaPonuda, HttpSession session) throws Exception, NoCustomerException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-
         if(korisnik == null){
             throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
         }
         if(!korisnik.getUloga().equals(Uloga.KUPAC)){
-            throw new NoCustomerException("Samo kupac može da kupuje!");
+            throw new NoCustomerException("Samo kupac može da kupuje.");
         }
-
-        Optional<Proizvod> proizvod =proizvodService.findById(proizvodId);
+        Optional<Proizvod> proizvod =proizvodService.findById(id);
         if (proizvod.isEmpty()) {
-            throw new ProductNotFoundException("Proizvod ne postoji!");
+            throw new ProductNotFoundException("Proizvod ne postoji.");
         }
-        if(proizvod.get().getTip().equals(TipProdaje.AUKCIJA)) {
-            Proizvod kupljeniProizvodAukcija=proizvodService.kupiProizvodAukcija(proizvodId, korisnik);
-            //VRATI PROIZVOD
+        if(!proizvod.get().getTip().equals(TipProdaje.AUKCIJA)) {
+            throw new ProductNotFoundException("Proizvod nije na aukciji.");
+
         }
-        throw new ProductNotFoundException("Došlo je do greške");
-
-    }*/
-
+        PonudaDTO ponudaDTO=proizvodService.postavljanjeProizvodaNaAukciju(proizvod.get(), korisnik, novaPonuda);
+        return ResponseEntity.ok(ponudaDTO);
+    }
 }

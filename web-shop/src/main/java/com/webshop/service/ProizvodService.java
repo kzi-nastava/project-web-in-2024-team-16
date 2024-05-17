@@ -1,5 +1,10 @@
 package com.webshop.service;
 
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.webshop.DTO.PonudaDTO;
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.DTO.ProizvodPrekoKategorijeDTO;
 import com.webshop.DTO.ProizvodiNaProdajuDTO;
@@ -13,8 +18,13 @@ import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.webshop.config.Config;
 
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -29,6 +39,8 @@ public class ProizvodService {
     private ProdavacRepository prodavacRepository;
     @Autowired
     private KupacRepository kupacRepository;
+    @Autowired
+    private PonudaRepository ponudaRepository;
 
 
     /* public Proizvod findOne(Long id){
@@ -272,17 +284,52 @@ public class ProizvodService {
 
         return proizvodiNaProdajuDTO;
     }
+    private void sendVerificationEmail(Korisnik korisnik) throws IOException {
+        Email from = new Email("webshopjm.in@gmail.com");
+        String subject = "Kupljen proizvod";
+        Email to = new Email(korisnik.getMejl());
+        Content content = new Content("text/plain", "Postovani " + korisnik.getIme() + "," +
+                "Uspesno ste kupili proizvod"
+                + "Hvala Vam,\n"
+                + "Webshop.");
+        Mail mail = new Mail(from, subject, to, content);
+        SendGrid sg = new SendGrid(Config.SENDGRID_API_KEY);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+        } catch (IOException ex) {
+            throw ex;
+        }
+    }
+
+    public PonudaDTO postavljanjeProizvodaNaAukciju(Proizvod proizvod, Korisnik korisnik, Double novaPonuda) throws NotHighestOfferException {
+        List<Ponuda> postojecePonude = ponudaRepository.findByProizvodId(proizvod.getId());
+
+        boolean najvecaPonuda = true;
+        //Proveravam da li je trenutna poslata ponuda najveca, ako nije, svakako nece proci na aukciji
+        for (Ponuda ponuda : postojecePonude) {
+            if (novaPonuda <= ponuda.getCena()) {
+                throw new NotHighestOfferException("Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću)" + ponuda.getCena() + ").");
+            }
+        }
+        Optional<Kupac> kupac = kupacRepository.findById(korisnik.getId());
+
+        Ponuda ponuda = new Ponuda();
+        ponuda.setCena(novaPonuda);
+        ponuda.setKupacKojiDajePonudu(kupac.get());
+        ponuda.setProizvod(proizvod);
+        ponudaRepository.save(ponuda);
+        PonudaDTO ponudaDTO = new PonudaDTO();
+        ponudaDTO.setCena(ponuda.getCena());
+        ponudaDTO.setProizvod(ponuda.getProizvod());
+        ponudaDTO.setKupacKojiDajePonudu(ponudaDTO.getKupacKojiDajePonudu());
+        return ponudaDTO;
+
+    }
 
 
-  /*  public Proizvod kupiProizvodAukcija(Long id, Korisnik korisnik) {
-        Optional<Proizvod> proizvod = proizvodRepository.findById(id);
 
-        //kastovanje korisnika u kupca
-        Kupac kupac = (Kupac) korisnik;
-        kupac.getKupljeniProizvodi().add(proizvod.get());
-
-
-
-        return proizvod.get();
-    }*/
 }
