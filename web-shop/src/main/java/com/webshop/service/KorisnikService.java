@@ -10,8 +10,12 @@ import com.webshop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
+import java.util.*;
 @Service
 public class KorisnikService {
 
@@ -25,8 +29,10 @@ public class KorisnikService {
     private ProdavacRepository prodavacRepository;
     @Autowired
     private ProizvodRepository proizvodRepository;
+
     @Autowired
     private KupacRepository kupacRepository;
+
 
 
     public boolean emailExsist(String mejl) {
@@ -268,6 +274,7 @@ public class KorisnikService {
         return !proizvodi.isEmpty();
     }
 
+
     public ProdavacOceneDTO oceniProdavca(Long kupacId, Long prodavacId, int ocena, String komentar) {
         // provera da li je kupac kupio proizvod od prodavca
         // ako jeste, ažuriraj ocenu i komentar
@@ -304,6 +311,7 @@ public class KorisnikService {
         prodavacDTO.setProsecnaOcena(prodavac.getProsecnaOcena());
 
         return prodavacDTO;
+
     }
 
     public double izracunajProsecnuOcenu(Long prodavacId) {
@@ -311,6 +319,7 @@ public class KorisnikService {
         Prodavac prodavac = prodavacRepository.findById(prodavacId).get();
         return prodavac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(prodavac.getProsecnaOcena());
     }
+
 
     public boolean jeProdavacProdaoKupcu(Long prodavacId, Long kupacId) {
         List<Proizvod> proizvodi = proizvodRepository.findAllByProdavacIdAndKupacId(prodavacId, kupacId);
@@ -392,5 +401,6 @@ public class KorisnikService {
         return recenzije;
 
     }
+
 
 }

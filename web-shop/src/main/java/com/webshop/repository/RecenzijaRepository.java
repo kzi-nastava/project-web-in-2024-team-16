@@ -12,5 +12,7 @@ import java.util.List;
 public interface RecenzijaRepository extends JpaRepository<Recenzija, Long> {
     List<Recenzija> findByKorisnikKojiJeDaoRecenzijuId(Long korisnikId);
 
+
     List<Recenzija> findAllBykorisnikKojiJeDaoRecenziju(Korisnik korisnikKojiJeDaoRecenziju);
+
 }

@@ -11,5 +11,4 @@ import java.util.Optional;
 public interface KupacRepository extends JpaRepository<Kupac, String> {
 
     Optional<Kupac> findById(Long id);
-
 }

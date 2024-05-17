@@ -28,6 +28,7 @@ public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
 
     List<Proizvod> findAllByKupacIdAndProdavacId(Long kupacId, Long prodavacId);
 
+
     List<Proizvod> findAllByProdavacIdAndKupacId(Long prodavacId, Long kupacId);
 
 

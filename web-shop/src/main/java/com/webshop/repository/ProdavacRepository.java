@@ -16,4 +16,5 @@ public interface ProdavacRepository extends JpaRepository<Prodavac, String> {
     Optional<Prodavac> findByKorisnickoIme(String korisnickoIme);
 
     Prodavac findProdavacByKorisnickoIme(String prodavacKorisnickoIme);
+
 }
