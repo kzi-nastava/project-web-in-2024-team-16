@@ -4,6 +4,7 @@ import com.webshop.DTO.*;
 import com.webshop.error.*;
 import com.webshop.model.Korisnik;
 import com.webshop.model.Prodavac;
+import com.webshop.model.Recenzija;
 import com.webshop.model.Uloga;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.ProizvodService;
@@ -265,7 +266,7 @@ public class KorisnikController {
     }
 
     // Metoda za brisanje recenzije
-    @DeleteMapping("/{reviewId}")
+    @DeleteMapping("/deleteReview/{reviewId}")
     public ResponseEntity<?> deleteReview(@PathVariable Long reviewId, HttpSession session) throws UserNotFoundException, NoSellerException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if(korisnik == null){
@@ -280,10 +281,10 @@ public class KorisnikController {
     }
 
     // Metoda za izmenu komentara u recenziji
-//    @PutMapping("/{reviewId}")
-//    public ResponseEntity<Recenzija> updateReviewComment(@PathVariable Long reviewId, @RequestBody String newComment) {
-//        Recenzija updatedReview = korisnikService.updateReviewComment(reviewId, newComment);
-//        return new ResponseEntity<>(updatedReview, HttpStatus.OK);
-//    }
+    @PutMapping("/updateReview/{reviewId}")
+    public ResponseEntity<Recenzija> updateReviewComment(@PathVariable Long reviewId, RecenzijaPrikaz3DTO recenzija) throws ResourceNotFoundException {
+        Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
+        return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+    }
 
 }

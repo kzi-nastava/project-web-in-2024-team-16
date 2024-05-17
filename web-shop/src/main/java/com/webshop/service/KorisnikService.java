@@ -1,10 +1,7 @@
 package com.webshop.service;
 
 import com.webshop.DTO.*;
-import com.webshop.error.EmailAlreadyExistsException;
-import com.webshop.error.PasswordMismatchException;
-import com.webshop.error.UserAlreadyExistsException;
-import com.webshop.error.UserNotFoundException;
+import com.webshop.error.*;
 import com.webshop.model.*;
 import com.webshop.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -523,23 +520,27 @@ public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenzi
         return recenzije;
     }
 
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId) throws UserNotFoundException {
+        if(!recenzijaRepository.existsById(reviewId))
+            throw new UserNotFoundException("Recenzija koja ima id " + reviewId + " ne postoji!");
         if(recenzijaRepository.existsById(reviewId)) {
             recenzijaRepository.deleteById(reviewId);
             System.out.println("Recenzija sa ID " + reviewId + " je obrisana.");
         } else {
             System.out.println("Recenzija sa ID " + reviewId + " ne postoji.");
         }
-        //recenzijaRepository.deleteById(reviewId);
     }
 
-    // Metoda za izmenu komentara u recenziji
-//    public Recenzija updateReviewComment(Long reviewId, String newComment) {
-//        Recenzija recenzija = korisnikRepository.findById(reviewId)
-//                .orElseThrow(() -> new ResourceNotFoundException("Recenzija sa ID " + reviewId + " nije pronađena"));
-//
-//        recenzija.setKomentar(newComment);
-//        return korisnikRepository.save(recenzija);
-//    }
+//     Metoda za izmenu komentara u recenziji
+public Recenzija updateReview(Long reviewId, RecenzijaPrikaz3DTO updatedReview) throws ResourceNotFoundException {
+    Recenzija existingReview = recenzijaRepository.findById(reviewId)
+            .orElseThrow(() -> new ResourceNotFoundException("Recenzija sa ID " + reviewId + " nije pronađena"));
+
+    existingReview.setOcena(updatedReview.getOcena());
+    existingReview.setKomentar(updatedReview.getKomentar());
+    // Postavite ostale atribute koje želite da izmenite
+
+    return recenzijaRepository.save(existingReview);
+}
 
 }
