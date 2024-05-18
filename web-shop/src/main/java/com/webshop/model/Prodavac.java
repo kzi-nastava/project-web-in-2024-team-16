@@ -24,7 +24,6 @@ public class Prodavac extends Korisnik{
     private Double prosecnaOcena;
 
     @ElementCollection
-
     private Map<String, Integer> ocene = new HashMap<>(); // Kupac ID, Ocena
 
     @ElementCollection
