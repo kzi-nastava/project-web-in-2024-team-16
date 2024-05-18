@@ -71,7 +71,35 @@ public class ProizvodService {
         }
         return null;
     }
+    public List<SviProizvodiDTO> findAllProducts() {
 
+        List<Proizvod> proizvodi = proizvodRepository.findAll();
+        List<SviProizvodiDTO> proizvodiDTO = new ArrayList<>();
+        List<Proizvod> slanje = new ArrayList<>();
+
+        for (Proizvod proizvod : proizvodi) {
+            SviProizvodiDTO proizvodDTO = new SviProizvodiDTO();
+            proizvodDTO.setId(proizvod.getId());
+            proizvodDTO.setNaziv(proizvod.getNaziv());
+            proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
+           Set< Kategorija> kategorije=proizvod.getKategorija();
+           Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+           for(Kategorija kategorija: kategorije){
+               KategorijaDTO kategorijaDTO= new KategorijaDTO();
+               kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+               kategorijaDTO.setId(kategorija.getId());
+               kategorijeDTO.add(kategorijaDTO);
+           }
+            // KategorijaDTO kategorijaDTO= new KategorijaDTO();
+            //  proizvodDTO.setKategorije(proizvod.getKategorija()); OVO VALJA AL JE BESKONACNA
+            proizvodDTO.setKategorije(kategorijeDTO);
+            proizvodiDTO.add(proizvodDTO);
+        }
+        return proizvodiDTO;
+    }
 
     public List<ProizvodDTO> findAll() {
 
@@ -85,7 +113,17 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
-
+         /*  Set< Kategorija> kategorije=proizvod.getKategorija();
+           Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+           for(Kategorija kategorija: kategorije){
+               KategorijaDTO kategorijaDTO= new KategorijaDTO();
+               kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+               kategorijaDTO.setId(kategorija.getId());
+               kategorijeDTO.add(kategorijaDTO);
+           }*/
+           // KategorijaDTO kategorijaDTO= new KategorijaDTO();
+          //  proizvodDTO.setKategorije(proizvod.getKategorija()); OVO VALJA AL JE BESKONACNA
+           // proizvodDTO.setKategorije(kategorij);
             proizvodiDTO.add(proizvodDTO);
      }
      return proizvodiDTO;
@@ -234,8 +272,7 @@ public class ProizvodService {
         }
         return proizvodiDTO;
     }
-
-    public void updateProduct(Proizvod proizvod, Proizvod updatedProduct) {
+    public SviProizvodiDTO updateProduct(Proizvod proizvod, Proizvod updatedProduct) {
 
 
         proizvod.setCena(updatedProduct.getCena());
@@ -248,7 +285,29 @@ public class ProizvodService {
         proizvod.setTip(updatedProduct.getTip());
         proizvodRepository.save(proizvod);
 
+        SviProizvodiDTO updateProduct= new SviProizvodiDTO();
+        updateProduct.setNaziv(proizvod.getNaziv());
+        updateProduct.setOpis(proizvod.getOpis());
+        updateProduct.setId(proizvod.getId());
+        updateProduct.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+        updateProduct.setTipProdaje(proizvod.getTip());
+        return updateProduct;
+
     }
+  /*  public void updateProduct(Proizvod proizvod, Proizvod updatedProduct) {
+
+
+        proizvod.setCena(updatedProduct.getCena());
+        proizvod.setNaziv(updatedProduct.getNaziv());
+        proizvod.setDatumObjavljivanja(updatedProduct.getDatumObjavljivanja());
+        proizvod.setKategorija(updatedProduct.getKategorija());
+        proizvod.setPonude(updatedProduct.getPonude());
+        proizvod.setOpis(updatedProduct.getOpis());
+        proizvod.setSlikaProizvoda(updatedProduct.getSlikaProizvoda());
+        proizvod.setTip(updatedProduct.getTip());
+        proizvodRepository.save(proizvod);
+
+    }*/
 
     public Optional<Proizvod> findById(Long id) throws UserNotFoundException {
 
@@ -272,6 +331,7 @@ public class ProizvodService {
         proizvod.setOpis(proizvodDTO.getOpis());
         proizvod.setSlikaProizvoda(proizvodDTO.getSlikaProizvoda());
         proizvod.setCena(proizvodDTO.getCena());
+        proizvod.setProdat(false);
 
         Optional<Prodavac> prodavac=prodavacRepository.findById(korisnik.getId());
         proizvod.setProdavac(prodavac.get());
@@ -317,7 +377,7 @@ public class ProizvodService {
         Email from = new Email("webshopjm.in@gmail.com");
         String subject = "Kupljen proizvod";
         Email to = new Email(korisnik.getMejl());
-        Content content = new Content("text/plain", "Poštovani " + korisnik.getIme() + "," +
+        Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
                 " Uspešno ste obavili kupovinu proizvoda. "
                 + "Hvala Vam,\n"
                 + " Vaš Webshop.");
@@ -340,7 +400,7 @@ public class ProizvodService {
         Email from = new Email("webshopjm.in@gmail.com");
         String subject = "Proizvod prodat";
         Email to = new Email(korisnik.getMejl());
-        Content content = new Content("text/plain", "Poštovani " + korisnik.getIme() + "," +
+        Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
                 " Vaš proizvod je prodat."
                 + " Srdačno,\n"
                 + " Vaš Webshop.");
@@ -367,7 +427,7 @@ public class ProizvodService {
 
         for (Ponuda ponuda : postojecePonude) {
             if (novaPonuda <= ponuda.getCena()) {
-                throw new NotHighestOfferException("Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću)" + ponuda.getCena() + ").");
+                throw new NotHighestOfferException("Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću.)" + ponuda.getCena() + ").");
             }
         }
         Optional<Kupac> kupac = kupacRepository.findById(korisnik.getId());

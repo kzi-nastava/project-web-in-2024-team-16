@@ -2,6 +2,7 @@ package com.webshop.controller;
 
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.DTO.ProizvodPrekoKategorijeDTO;
+import com.webshop.DTO.SviProizvodiDTO;
 import com.webshop.error.*;
 import com.webshop.model.*;
 import com.webshop.repository.KategorijaRepository;
@@ -49,24 +50,29 @@ public class ProizvodController {
     private KategorijaRepository kategorijaRepository;
 
     @GetMapping("/products")
-    public ResponseEntity<List<ProizvodDTO>> getAllProducts() {
+    public ResponseEntity<List<SviProizvodiDTO>> getAllProducts() {
 
-        List<ProizvodDTO> proizvodiDTO = proizvodService.findAll();
+        List<SviProizvodiDTO> proizvodiDTO = proizvodService.findAllProducts();
         return ResponseEntity.ok(proizvodiDTO);
     }
+    /* @GetMapping("/products")
+    public ResponseEntity<List<ProizvodDTO>> getAllProducts() {
+
+        List<ProizvodDTO> proizvodiDTO = proizvodService.findAllProducts();
+        return ResponseEntity.ok(proizvodiDTO);
+    }*/
 
     @GetMapping("/{id}")
-    public ProizvodDTO getEmployee(@PathVariable(name = "id") Long id, HttpSession session){
+    public ProizvodDTO getEmployee(@PathVariable(name = "id") Long id, HttpSession session) throws ProductNotFoundException {
 
         Proizvod proizvod = (Proizvod) session.getAttribute("proizvod");
         session.invalidate();
+        ProizvodDTO nadjenProizvod=proizvodService.findOne(id);
+        if(nadjenProizvod==null){
+            throw new ProductNotFoundException("Traženi proizvod ne postoji.");
+        }
         return proizvodService.findOne(id);
-    }/*
-  @GetMapping("/{Id}")
-  public ResponseEntity<Proizvod> getProductById(@Valid  @PathVariable Long id, @PathVariable String Id) throws UserNotFoundException {
-      Proizvod proizvod = ProizvodService.findById(id);
-      return ResponseEntity.ok(proizvod);
-  }*/
+    }
 
     @GetMapping("/search")
     public ResponseEntity<List<ProizvodDTO>> searchProducts(@RequestParam(required = false) String name, @RequestParam(required = false) String description) throws ProductNotFoundException, PasswordMismatchException {
@@ -134,7 +140,7 @@ public class ProizvodController {
         return ResponseEntity.ok(proizvod);
     }
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Proizvod updatedProduct, HttpSession session) throws UserNotFoundException, ProductCanNotBeeChanged {
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Proizvod updatedProduct, HttpSession session) throws UserNotFoundException, ProductCanNotBeeChanged, NoSellerException {
 
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
@@ -155,21 +161,22 @@ public class ProizvodController {
         }
         if (existingProduct.get().getTip() == TipProdaje.AUKCIJA && !existingProduct.get().getPonude().isEmpty()) {
 
-            throw new ProductCanNotBeeChanged("Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji!");
+            throw new ProductCanNotBeeChanged("Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.");
         }
 
         if (!existingProduct.get().getProdavac().getKorisnickoIme().equals(korisnik.getKorisnickoIme())) {
 
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+          //  return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw  new NoSellerException("Niste prodavac ovog proizvoda, ne možete ga izmeniti.");
         }
+        SviProizvodiDTO proizvodDTO =proizvodService.updateProduct(existingProduct.get(), updatedProduct);
 
-        proizvodService.updateProduct(existingProduct.get(), updatedProduct);
-
-        return ResponseEntity.ok().build();
+       // return ResponseEntity.ok().build();
+        return ResponseEntity.ok(proizvodDTO);
     }
-
-    @PostMapping("/addForSale/{id}")
-    public ResponseEntity<String> SetProductForSell(@PathVariable Long id,@RequestBody ProizvodDTO proizvodDTO,HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
+//@PathVariable Long id, @PostMapping("/addForSale/{id}")
+    @PostMapping("/addForSale")
+    public ResponseEntity<String> SetProductForSell(@RequestBody ProizvodDTO proizvodDTO,HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
 
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
         if(korisnik==null){

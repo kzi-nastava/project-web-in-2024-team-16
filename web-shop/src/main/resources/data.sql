@@ -34,9 +34,9 @@ VALUES (1, 'akva park', '2020-01-08 20:25:56',2000, 5000);
 INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
     VALUES ('ne postuje dogovor', 'Nije konkretno navedeno sta nije bilo u redu.',NULL,'2023-02-10 18:25:48', 'ODBIJENA', 1000, 3000);
 INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
-    VALUES ('prodao mi je pokvaren proizvod', NULL,NULL,'2023-11-13 20:56:41', 'PODNETA', 5000, 2000);
+    VALUES ('prodao mi je pokvaren proizvod', NULL,NULL,'2023-11-13 20:56:41', 'PODNETA', 2000, 5000);
 INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
-    VALUES ('prevarant',NULL,'Vise ljudi je izjavilo ovaj komentar', '2023-08-14 10:56:31', 'PODNETA', 1000, 3000);
+    VALUES ('prevarant',NULL,'Vise ljudi je izjavilo ovaj komentar', '2023-08-14 10:56:31', 'PODNETA', 1000, 2000);
 
 INSERT INTO Kupac(id, prosecna_ocena) VALUES (1000, 4.5);
 INSERT INTO Kupac(id, prosecna_ocena) VALUES (5000, 4.7);

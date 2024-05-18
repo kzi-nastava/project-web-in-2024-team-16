@@ -30,18 +30,18 @@ public class KategorijaController {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik==null){
-            throw new UserNotFoundException("Greska!");
+            throw new UserNotFoundException("Niste prijavljeni.");
         }
         if(!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
-            throw new NoSellerException("MORA BITI PRODAVAC");
+            throw new NoSellerException("Da bi ste dodali kategoriju, morate biti prodavac.");
         }
         if (kategorijaService.proveriPostojanjeKategorije(nazivKategorije)) {
-             throw new CategoryExistsException("Prosleđena kategorija već postoji!");
+             throw new CategoryExistsException("Prosleđena kategorija već postoji.");
         }
 
             kategorijaService.dodajNovuKategoriju(nazivKategorije);
 
-            return ResponseEntity.ok().body("Nova kategorija uspešno dodata!");
+            return ResponseEntity.ok().body("Nova kategorija uspešno dodata.");
 
     }
   

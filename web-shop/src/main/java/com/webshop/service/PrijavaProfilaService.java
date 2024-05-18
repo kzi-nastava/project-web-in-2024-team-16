@@ -54,7 +54,7 @@ public class PrijavaProfilaService {
 
         if (!prijavljeniKorisnik.getUloga().equals(Uloga.KUPAC)) {
 
-            throw new NoCustomerException("Možete prijaviti samo kupce vaših proizvoda!");
+            throw new NoCustomerException("Možete prijaviti samo kupce vaših proizvoda.");
         }
         PrijavaProfila prijavaProfila = new PrijavaProfila();
         prijavaProfila.setRazlogPrijave(prijavaRequestDTO.getRazlogPrijave());
@@ -170,7 +170,7 @@ public class PrijavaProfilaService {
         Email to = new Email(korisnik.getMejl());
         Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
                 " Uprkos podnetim zahtevima za prijavu vašeg profila, vaš profil je sada blokiran.  "+
-                ". Srdačno,\n"
+                "Srdačno,\n"
                 + " Vaš Webshop.");
         Mail mail = new Mail(from, subject, to, content);
         String kljuc = System.getenv("SENDGRID_API_KEY");
@@ -192,7 +192,7 @@ public class PrijavaProfilaService {
         String subject = "Vaša prijava je prihvaćena.";
         Email to = new Email(korisnik.getMejl());
         Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
-                " Vaša prijava korisnika "+ prijavljeniKorisnik.getIme() +" "+ " je prihvaćena."+
+                " Vaša prijava korisnika "+ prijavljeniKorisnik.getIme() +" "+ " je prihvaćena"+
                 ". Srdačno,\n"
                 + " Vaš Webshop.");
         Mail mail = new Mail(from, subject, to, content);
@@ -231,7 +231,7 @@ public class PrijavaProfilaService {
         Optional<PrijavaProfila> prijava = prijavaProfilaRepository.findById(prijavaId);
         if(prijava.isEmpty()){
 
-            throw new NoReportException("Tražena prijava ne postoji");
+            throw new NoReportException("Tražena prijava ne postoji.");
         }
 
         prijava.get().setStatusPrijave(Status.PRIHVACENA);

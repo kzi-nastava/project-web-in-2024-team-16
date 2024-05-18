@@ -370,6 +370,7 @@ public class KorisnikService {
     public double izracunajProsecnuOcenuKupca(Long kupacId) {
         // izračunaj prosečnu ocenu za kupca
         Kupac kupac = kupacRepository.findById(kupacId).get();
+
         return kupac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(kupac.getProsecnaOcena());
     }
 
@@ -445,7 +446,6 @@ public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenzi
             dto.setOcena(recenzija.getOcena());
             dto.setKomentar(recenzija.getKomentar());
             dto.setDatumPodnosenjaRecenzije(recenzija.getDatumRecenzije());
-            //dto.setProdavacKojiJeDobioRecenziju(kupac);
 
             Korisnik kupac = recenzija.getKorisnikKojiJeDobioRecenziju();
 
@@ -532,7 +532,7 @@ public List<RecenzijaPrikazDTO> vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenzi
 
     public void deleteReview(Long reviewId) throws UserNotFoundException {
         if(!recenzijaRepository.existsById(reviewId))
-            throw new UserNotFoundException("Recenzija koja ima id " + reviewId + " ne postoji!");
+            throw new UserNotFoundException("Recenzija koja ima id " + reviewId + " ne postoji.");
         if(recenzijaRepository.existsById(reviewId)) {
             recenzijaRepository.deleteById(reviewId);
             System.out.println("Recenzija sa ID " + reviewId + " je obrisana.");

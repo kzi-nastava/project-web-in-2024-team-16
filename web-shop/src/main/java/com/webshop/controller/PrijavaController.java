@@ -4,7 +4,9 @@ import com.webshop.DTO.*;
 import com.webshop.error.*;
 import com.webshop.model.Korisnik;
 import com.webshop.model.PrijavaProfila;
+import com.webshop.model.Status;
 import com.webshop.model.Uloga;
+import com.webshop.repository.PrijavaProfilaRepository;
 import com.webshop.service.KorisnikService;
 import com.webshop.service.PrijavaProfilaService;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +28,8 @@ public class PrijavaController {
     private PrijavaProfilaService prijavaProfilaService;
     @Autowired
     private KorisnikService korisnikService;
+    @Autowired
+    private PrijavaProfilaRepository prijavaProfilaRepository;
 
     @PostMapping("/sellerRequest/{id}")
     public ResponseEntity<?> ProdavacpodnosiPrijavu(@PathVariable Long id, @RequestBody PrijavaRequestDTO prijavaRequestDTO, HttpSession session) throws UserNotFoundException, NoSellerException, NoCustomerException {
@@ -43,7 +47,7 @@ public class PrijavaController {
 
         }
         if(!korisnikService.jeKupacKupioOdProdavca(id, korisnik.getId())) {
-            throw new UserNotFoundException("Prodavac može da da recenziju onom kupcu, koji je od njega kupio proizvod!");
+            throw new UserNotFoundException("Prodavac može da da recenziju onom kupcu, koji je od njega kupio proizvod.");
         }
 
 
@@ -58,7 +62,7 @@ public class PrijavaController {
             return ResponseEntity.ok(prijavljen);
         }
         else {
-            throw new UserNotFoundException("Možete prijaviti samo kupce vaših proizvoda!");
+            throw new UserNotFoundException("Možete prijaviti samo kupce vaših proizvoda.");
         }
 
     }
@@ -68,7 +72,7 @@ public class PrijavaController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
         if(korisnik == null){
 
-            throw new UserNotFoundException("Niste prijavljeni!");
+            throw new UserNotFoundException("Niste prijavljeni.");
 
         }
         if(!korisnik.getUloga().equals(Uloga.KUPAC)){
@@ -93,7 +97,7 @@ public class PrijavaController {
             return ResponseEntity.ok(prijavljen);
         }
         else {
-            throw new UserNotFoundException("Možete prijaviti samo prodavce!");
+            throw new UserNotFoundException("Možete prijaviti samo prodavce.");
         }
 
     }
@@ -103,11 +107,18 @@ public class PrijavaController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
-            throw new UserNotFoundException("Morate se ulogovati!");
+            throw new UserNotFoundException("Morate se ulogovati.");
         }
 
         if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
             throw new NoAdministratorException("Samo admin može odbiti prijave.");
+        }
+        Optional<PrijavaProfila> prijavaProfila=prijavaProfilaRepository.findById(prijavaId);
+        if(prijavaProfila.isEmpty()){
+            throw new NoReportException("Prijava ne postoji.");
+        }
+        if(prijavaProfila.get().getStatusPrijave()!=Status.PODNETA){
+            throw new NoReportException("Prijava je već obrađena.");
         }
 
         prijavaProfilaService.odbijPrijavu(prijavaId, razlogOdbijanjaDTO.getRazlog());
@@ -119,15 +130,22 @@ public class PrijavaController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
-            throw new UserNotFoundException("Morate se ulogovati!");
+            throw new UserNotFoundException("Morate se ulogovati.");
         }
 
         if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
-            throw new NoAdministratorException("Samo admin može odbiti prijave.");
+            throw new NoAdministratorException("Samo admin može prihavtiti prijave.");
+        }
+        Optional<PrijavaProfila> prijavaProfila=prijavaProfilaRepository.findById(prijavaId);
+        if(prijavaProfila.isEmpty()){
+            throw new NoReportException("Prijava ne postoji.");
+        }
+        if(prijavaProfila.get().getStatusPrijave()!=Status.PODNETA){
+            throw new NoReportException("Prijava je već obrađena.");
         }
 
         prijavaProfilaService.prihvatiPrijavu(prijavaId, razlogPrihvatanjaDTO.getRazlog());
-        return ResponseEntity.ok("Prijava je odbijena.");
+        return ResponseEntity.ok("Prijava je prihvaćena.");
     }
 
 }
