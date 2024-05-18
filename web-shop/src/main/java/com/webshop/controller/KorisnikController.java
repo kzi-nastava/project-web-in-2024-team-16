@@ -193,7 +193,7 @@ public class KorisnikController {
         }
         @PostMapping("/shopNowFixedPrice/{id}")
         public ProizvodiNaProdajuDTO kupovinaProizvodaFiksnaCena (@PathVariable Long id, HttpSession session) throws
-        UserNotFoundException, NoCustomerException, ProductNotFoundException, ProductSoldException {
+                IOException, NoCustomerException {
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
             if (korisnik == null) {
                 throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
