@@ -29,7 +29,6 @@ public class KorisnikService {
 
 
 
-
     public boolean emailExsist(String mejl) {
         return korisnikRepository.existsByMejl(mejl);
     }
