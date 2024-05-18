@@ -35,8 +35,6 @@ public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
     Page<Proizvod> findAll(Pageable pageable);
 
 
-    List<Proizvod> findAllByProdavacIdAndKupacId(Long prodavacId, Long kupacId);
-
 
     //List<Proizvod> findByKategorijaId(Long kategorijaId);
 

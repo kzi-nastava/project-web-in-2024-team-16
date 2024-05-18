@@ -27,9 +27,6 @@ public class KorisnikService {
     @Autowired
     private KupacRepository kupacRepository;
 
-    @Autowired
-    private KupacRepository kupacRepository;
-
 
 
     public boolean emailExsist(String mejl) {
@@ -551,4 +548,3 @@ public Recenzija updateReview(Long reviewId, RecenzijaPrikaz3DTO updatedReview) 
     }
 
 
-}
