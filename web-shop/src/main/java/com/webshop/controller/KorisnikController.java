@@ -159,56 +159,60 @@ public class KorisnikController {
     public ProdavacOceneDTO oceniProdavca(@PathVariable Long prodavacId, @RequestParam int ocena, @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(korisnik == null){
+        if (korisnik == null) {
             throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
         }
 
-        if(!korisnikService.jeKupacKupioOdProdavca(korisnik.getId(), prodavacId)) {
+        if (!korisnikService.jeKupacKupioOdProdavca(korisnik.getId(), prodavacId)) {
             throw new UserNotFoundException("Kupac može da oceni prodavca samo ako je kupio proizvod od tog prodavca!");
 
+        }
+            return korisnikService.oceniProdavca(korisnik.getId(), prodavacId, ocena, komentar);
 
-        return korisnikService.oceniProdavca(korisnik.getId(), prodavacId, ocena, komentar);
     }
 
 
-    @GetMapping("/admin/reports")
-    public ResponseEntity<List<PrijavaProfila>> pregledPrijava(HttpSession session) throws UserNotFoundException, NoAdministratorException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(korisnik == null){
-            throw new UserNotFoundException("Morate se ulogovati!");
+        @GetMapping("/admin/reports")
+        public ResponseEntity<List<PrijavaProfila>> pregledPrijava (HttpSession session) throws
+        UserNotFoundException, NoAdministratorException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+            if (korisnik == null) {
+                throw new UserNotFoundException("Morate se ulogovati!");
+            }
+            if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+
+                throw new NoAdministratorException("Samo administrator može da vidi prijave.");
+            }
+
+            List<PrijavaProfila> prijave = prijavaProfilaService.pregledPrijava();
+            return ResponseEntity.ok(prijave);
         }
-        if(!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)){
+        @PostMapping("/shopNowFixedPrice/{id}")
+        public ProizvodiNaProdajuDTO kupovinaProizvodaFiksnaCena (@PathVariable Long id, HttpSession session) throws
+        UserNotFoundException, NoCustomerException, ProductNotFoundException, ProductSoldException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
+            }
+            if (!korisnik.getUloga().equals(Uloga.KUPAC)) {
+                throw new NoCustomerException("Samo kupac može da kupuje!");
+            }
 
-            throw new NoAdministratorException("Samo administrator može da vidi prijave.");
-        }
+            Optional<Proizvod> proizvod = proizvodService.findById(id);
+            if (proizvod.isEmpty()) {
+                throw new ProductNotFoundException("Proizvod ne postoji!");
+            }
+            if (!proizvod.get().getTip().equals(TipProdaje.FIKSNA)) {
+                throw new ProductNotFoundException("Cena nije fiksna.");
 
-        List<PrijavaProfila> prijave = prijavaProfilaService.pregledPrijava();
-        return ResponseEntity.ok(prijave);
-    }
-    @PostMapping("/shopNowFixedPrice/{id}")
-    public ProizvodiNaProdajuDTO kupovinaProizvodaFiksnaCena(@PathVariable Long id, HttpSession session) throws UserNotFoundException, NoCustomerException, ProductNotFoundException, ProductSoldException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
-        }
-        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
-            throw new NoCustomerException("Samo kupac može da kupuje!");
-        }
+            }
+            ProizvodiNaProdajuDTO kupljeniProizvodFiksna = proizvodService.kupiProizvodFiksnaCena(proizvod.get(), korisnik);
+            return kupljeniProizvodFiksna;
 
-        Optional<Proizvod> proizvod =proizvodService.findById(id);
-        if (proizvod.isEmpty()) {
-            throw new ProductNotFoundException("Proizvod ne postoji!");
-        }
-        if(!proizvod.get().getTip().equals(TipProdaje.FIKSNA)) {
-            throw new ProductNotFoundException("Cena nije fiksna.");
 
         }
-        ProizvodiNaProdajuDTO kupljeniProizvodFiksna=proizvodService.kupiProizvodFiksnaCena(proizvod.get(), korisnik);
-        return kupljeniProizvodFiksna;
-
-
-    }
   /*  @PostMapping("/shopNowAutction/{id}")
     public ResponseEntity<?> kupovinaProizvodaAukcija(@PathVariable Long proizvodId, HttpSession session) throws UserNotFoundException, NoCustomerException, ProductNotFoundException {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
@@ -232,131 +236,138 @@ public class KorisnikController {
 
     }*/
 
-    @GetMapping("/averageRatingSeller/{prodavacId}")
-    public double prosecnaOcena(@PathVariable Long prodavacId) {
-        return korisnikService.izracunajProsecnuOcenu(prodavacId);
-    }
-
-    @PostMapping("/rateBuyer/{kupacId}")
-    public KupacOcenaDTO oceniKupca(@PathVariable Long kupacId, @RequestParam int ocena, @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        @GetMapping("/averageRatingSeller/{prodavacId}")
+        public double prosecnaOcena (@PathVariable Long prodavacId){
+            return korisnikService.izracunajProsecnuOcenu(prodavacId);
         }
 
-        if(!korisnikService.jeProdavacProdaoKupcu(korisnik.getId(), kupacId)) {
-            throw new UserNotFoundException("Prodavac može da oceni kupca samo ako je prodao proizvod tom kupcu!");
+        @PostMapping("/rateBuyer/{kupacId}")
+        public KupacOcenaDTO oceniKupca (@PathVariable Long kupacId,@RequestParam int ocena,
+        @RequestParam String komentar, HttpSession session) throws UserNotFoundException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            }
+
+            if (!korisnikService.jeProdavacProdaoKupcu(korisnik.getId(), kupacId)) {
+                throw new UserNotFoundException("Prodavac može da oceni kupca samo ako je prodao proizvod tom kupcu!");
+            }
+
+            return korisnikService.oceniKupca(korisnik.getId(), kupacId, ocena, komentar);
         }
 
-        return korisnikService.oceniKupca(korisnik.getId(), kupacId, ocena, komentar);
-    }
-
-    @GetMapping("/averageRatingBuyer/{kupacId}")
-    public double prosecnaOcenaKupca(@PathVariable Long kupacId) {
-        return korisnikService.izracunajProsecnuOcenuKupca(kupacId);
-    }
-
-    @GetMapping("/reviewsBuyer/sent")
-    public ResponseEntity<List<RecenzijaPrikazDTO>> getUserReviewsBuyer(HttpSession session) throws UserNotFoundException, NoSellerException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        @GetMapping("/averageRatingBuyer/{kupacId}")
+        public double prosecnaOcenaKupca (@PathVariable Long kupacId){
+            return korisnikService.izracunajProsecnuOcenuKupca(kupacId);
         }
 
-        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
-            throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
+        @GetMapping("/reviewsBuyer/sent")
+        public ResponseEntity<List<RecenzijaPrikazDTO>> getUserReviewsBuyer (HttpSession session) throws
+        UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            }
+
+            if (!korisnik.getUloga().equals(Uloga.KUPAC)) {
+                throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
+            }
+
+            List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzijeKupac(korisnik.getId());
+            return new ResponseEntity<>(recenzije, HttpStatus.OK);
         }
 
-        List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzijeKupac(korisnik.getId());
-        return new ResponseEntity<>(recenzije, HttpStatus.OK);
-    }
+        @GetMapping("/reviewedSellers/received")
+        public ResponseEntity<List<RecenzijaPrikazDTO>> getReviewsFromReviewedSellers (HttpSession session) throws
+        UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-    @GetMapping("/reviewedSellers/received")
-    public ResponseEntity<List<RecenzijaPrikazDTO>> getReviewsFromReviewedSellers(HttpSession session) throws UserNotFoundException, NoSellerException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            }
 
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            if (!korisnik.getUloga().equals(Uloga.KUPAC)) {
+                throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
+            }
+            List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenziju(korisnik.getId());
+            return new ResponseEntity<>(recenzije, HttpStatus.OK);
         }
 
-        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
-            throw new NoSellerException("Samo KUPAC moze da pregleda recenzije!");
-        }
-        List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzijeOdProdavacaKojimaJeKupacDaoRecenziju(korisnik.getId());
-        return new ResponseEntity<>(recenzije, HttpStatus.OK);
-    }
 
+        @GetMapping("/reviewsSeller/sent")
+        public ResponseEntity<List<RecenzijaPrikaz2DTO>> getUserReviewsSeller (HttpSession session) throws
+        UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-    @GetMapping("/reviewsSeller/sent")
-    public ResponseEntity<List<RecenzijaPrikaz2DTO>> getUserReviewsSeller(HttpSession session) throws UserNotFoundException, NoSellerException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            }
 
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
-        }
+            if (!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
+                throw new NoSellerException("Samo PRODAVAC moze da pregleda recenzije!");
+            }
 
-        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)){
-            throw new NoSellerException("Samo PRODAVAC moze da pregleda recenzije!");
+            List<RecenzijaPrikaz2DTO> recenzije = korisnikService.vratiRecenzijeProdavac(korisnik.getId());
+            return new ResponseEntity<>(recenzije, HttpStatus.OK);
         }
 
-        List<RecenzijaPrikaz2DTO> recenzije = korisnikService.vratiRecenzijeProdavac(korisnik.getId());
-        return new ResponseEntity<>(recenzije, HttpStatus.OK);
-    }
+        @GetMapping("/reviewedBuyer/received")
+        public ResponseEntity<List<RecenzijaPrikaz2DTO>> getReviewsFromReviewedBuyers (HttpSession session) throws
+        UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-    @GetMapping("/reviewedBuyer/received")
-    public ResponseEntity<List<RecenzijaPrikaz2DTO>> getReviewsFromReviewedBuyers(HttpSession session) throws UserNotFoundException, NoSellerException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            }
 
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            if (!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
+                throw new NoSellerException("Samo PRODAVAC moze da pregleda recenzije!");
+            }
+            List<RecenzijaPrikaz2DTO> recenzije = korisnikService.vratiRecenzijeOdKupcaAkoJeProdavacDaoRecenziju(korisnik.getId());
+            return new ResponseEntity<>(recenzije, HttpStatus.OK);
         }
 
-        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)){
-            throw new NoSellerException("Samo PRODAVAC moze da pregleda recenzije!");
-        }
-        List<RecenzijaPrikaz2DTO> recenzije = korisnikService.vratiRecenzijeOdKupcaAkoJeProdavacDaoRecenziju(korisnik.getId());
-        return new ResponseEntity<>(recenzije, HttpStatus.OK);
-    }
 
+        @GetMapping("/reviews/admin")
+        public ResponseEntity<List<RecenzijaPrikaz3DTO>> getAllReviews (HttpSession session) throws
+        UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-    @GetMapping("/reviews/admin")
-    public ResponseEntity<List<RecenzijaPrikaz3DTO>> getAllReviews(HttpSession session) throws UserNotFoundException, NoSellerException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            }
 
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
-        }
+            if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+                throw new NoSellerException("Samo ADMINISTRATOR moze da pregleda recenzije!");
+            }
 
-        if(!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)){
-            throw new NoSellerException("Samo ADMINISTRATOR moze da pregleda recenzije!");
+            List<RecenzijaPrikaz3DTO> recenzije = korisnikService.vratiRecenzijeAdministrator(korisnik.getId());
+            return new ResponseEntity<>(recenzije, HttpStatus.OK);
         }
 
-        List<RecenzijaPrikaz3DTO> recenzije = korisnikService.vratiRecenzijeAdministrator(korisnik.getId());
-        return new ResponseEntity<>(recenzije, HttpStatus.OK);
-    }
+        // Metoda za brisanje recenzije
+        @DeleteMapping("/deleteReview/{reviewId}")
+        public ResponseEntity<?> deleteReview (@PathVariable Long reviewId, HttpSession session) throws
+        UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            }
 
-    // Metoda za brisanje recenzije
-    @DeleteMapping("/deleteReview/{reviewId}")
-    public ResponseEntity<?> deleteReview(@PathVariable Long reviewId, HttpSession session) throws UserNotFoundException, NoSellerException {
-        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-        if(korisnik == null){
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+            if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+                throw new NoSellerException("Samo ADMINISTRATOR moze da modifikuje recenzije!");
+            }
+            korisnikService.deleteReview(reviewId);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        if(!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)){
-            throw new NoSellerException("Samo ADMINISTRATOR moze da modifikuje recenzije!");
+        // Metoda za izmenu komentara u recenziji
+        @PutMapping("/updateReview/{reviewId}")
+        public ResponseEntity<Recenzija> updateReviewComment (@PathVariable Long reviewId, RecenzijaPrikaz3DTO recenzija) throws
+        ResourceNotFoundException {
+            Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
+            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
         }
-        korisnikService.deleteReview(reviewId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    // Metoda za izmenu komentara u recenziji
-    @PutMapping("/updateReview/{reviewId}")
-    public ResponseEntity<Recenzija> updateReviewComment(@PathVariable Long reviewId, RecenzijaPrikaz3DTO recenzija) throws ResourceNotFoundException {
-        Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
-        return new ResponseEntity<>(updatedReview, HttpStatus.OK);
-    }
-
 }
