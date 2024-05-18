@@ -19,7 +19,6 @@ public class ProizvodDTO {
     private String naziv;
     private String opis;
     private String slikaProizvoda;
-   // private Kategorija kategorija;
    private Set<Kategorija> kategorije = new HashSet<>();;
     private Double cena;
     private TipProdaje tipProdaje;

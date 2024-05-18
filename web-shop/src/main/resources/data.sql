@@ -36,7 +36,7 @@ INSERT INTO prijava_profila(razlog_prijave, datum_podnosenja_prijave, status_pri
 INSERT INTO prijava_profila(razlog_prijave, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
     VALUES ('prodao mi je pokvaren proizvod', '2023-11-13 20:56:41', 'PODNETA', 5000, 2000);
 INSERT INTO prijava_profila(razlog_prijave, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
-    VALUES ('prevarant', '2023-08-14 10:56:31', 'PRIHVACENA', 1000, 3000);
+    VALUES ('prevarant', '2023-08-14 10:56:31', 'PODNETA', 1000, 3000);
 
 INSERT INTO Kupac(id, prosecna_ocena) VALUES (1000, 4.5);
 INSERT INTO Kupac(id, prosecna_ocena) VALUES (5000, 4.7);
@@ -48,7 +48,7 @@ INSERT INTO Prodavac(id, prosecna_ocena) VALUES(6000, 4.4);
 
 
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, false, false, false, '2020-06-12 22:03:48', 1000 ,1000, 2000, 'tiganj',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,5000, 2000, 'tiganj',
                                                                   'metalac', 'metalac.jpg', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (100000, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'automobil',

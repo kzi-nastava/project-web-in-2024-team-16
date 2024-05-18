@@ -35,11 +35,13 @@ public class Kupac extends Korisnik{
 //    public void setKupljeniProizvodi(Set<Proizvod> kupljeniProizvodi) {
 //        this.kupljeniProizvodi = kupljeniProizvodi;
 
+
     @ElementCollection
     private Map<String, Integer> ocene = new HashMap<>(); // Kupac ID, Ocena
 
     @ElementCollection
     private Map<String, String> komentari = new HashMap<>(); // Kupac ID, Komentar
+
 //    }
 
     public Set<Ponuda> getPonuda() {

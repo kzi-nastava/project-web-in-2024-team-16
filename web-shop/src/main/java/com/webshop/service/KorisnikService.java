@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import java.util.*;
 @Service
 public class KorisnikService {
 
@@ -25,6 +26,10 @@ public class KorisnikService {
     private ProizvodRepository proizvodRepository;
     @Autowired
     private KupacRepository kupacRepository;
+
+    @Autowired
+    private KupacRepository kupacRepository;
+
 
 
     public boolean emailExsist(String mejl) {
@@ -542,5 +547,8 @@ public Recenzija updateReview(Long reviewId, RecenzijaPrikaz3DTO updatedReview) 
 
     return recenzijaRepository.save(existingReview);
 }
+
+    }
+
 
 }
