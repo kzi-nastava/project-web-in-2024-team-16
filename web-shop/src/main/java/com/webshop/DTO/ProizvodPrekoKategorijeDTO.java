@@ -12,6 +12,8 @@ import lombok.Setter;
 public class ProizvodPrekoKategorijeDTO {
 
     private String naziv;
+
     private String opis;
+
     private String slikaProizvoda;
 }

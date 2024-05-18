@@ -2,9 +2,9 @@
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (1000,'Aleksandar', 'Aleksić', 'aleksa92', 'aleksandar@gmail.com', '060123456', 'lozinka123', '1992-05-20 12:56:12', 'slika1.jpg', 'ljubazan', 'KUPAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (2000,'Mila', 'Milic', 'mila12', 'mila@gmail.com', '0664444', 'milalala', '2003-05-20 21:01:48', 'slika2.jpg', 'iskusan', 'PRODAVAC', false);
+    VALUES (2000,'Mila', 'Milic', 'mila12', 'milicasalajic13@gmail.com', '0664444', 'milalala', '2003-05-20 21:01:48', 'slika2.jpg', 'iskusan', 'PRODAVAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (3000,'Petar', 'Markovic', 'peki001', 'petar@gmail.com', '062335514', 'password', '2000-08-15 10:17:29', 'slika3.jpg', 'neiskusan', 'PRODAVAC', true);
+    VALUES (3000,'Petar', 'Markovic', 'peki001', 'jovantrkulja003@gmail.com', '062335514', 'password', '2000-08-15 10:17:29', 'slika3.jpg', 'neiskusan', 'PRODAVAC', true);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (4000,'Stefan', 'Nikolic', 'Stefa3', 'stefan@gmail.com', '063588966', 'Lozinka1', '2003-11-29 19:39:56', 'slika4.jpg', 'profesionalan', 'ADMINISTRATOR', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
@@ -12,7 +12,7 @@ INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, d
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (6000,'Darko', 'Lazic', 'dare99', 'darko@gmail.com', '066698235', 'bivsa121', '1991-10-19 08:59:00', 'slika6.jpg', 'iskusan', 'PRODAVAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (7000,'Sasa', 'Vuksanovic', 'cale', 'sasa@gmail.com', '062359487', 'cale123', '1986-03-28 02:21:22', 'slika7.jpg', 'proveren', 'KUPAC', false);
+    VALUES (7000,'Sasa', 'Vuksanovic', 'cale', 'salajicm3@gmail.com', '062359487', 'cale123', '1986-03-28 02:21:22', 'slika7.jpg', 'proveren', 'KUPAC', false);
 
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
     VALUES (4, 'zadovoljan', '2021-02-10 19:54:03',7000, 2000);
@@ -31,12 +31,12 @@ VALUES (5, 't reks', '2020-01-08 20:25:56',2000, 7000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
 VALUES (1, 'akva park', '2020-01-08 20:25:56',2000, 5000);
 
-INSERT INTO prijava_profila(razlog_prijave, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
-    VALUES ('ne postuje dogovor', '2023-02-10 18:25:48', 'ODBIJENA', 1000, 3000);
-INSERT INTO prijava_profila(razlog_prijave, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
-    VALUES ('prodao mi je pokvaren proizvod', '2023-11-13 20:56:41', 'PODNETA', 5000, 2000);
-INSERT INTO prijava_profila(razlog_prijave, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
-    VALUES ('prevarant', '2023-08-14 10:56:31', 'PODNETA', 1000, 3000);
+INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
+    VALUES ('ne postuje dogovor', 'Nije konkretno navedeno sta nije bilo u redu.',NULL,'2023-02-10 18:25:48', 'ODBIJENA', 1000, 3000);
+INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
+    VALUES ('prodao mi je pokvaren proizvod', NULL,NULL,'2023-11-13 20:56:41', 'PODNETA', 5000, 2000);
+INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
+    VALUES ('prevarant',NULL,'Vise ljudi je izjavilo ovaj komentar', '2023-08-14 10:56:31', 'PODNETA', 1000, 3000);
 
 INSERT INTO Kupac(id, prosecna_ocena) VALUES (1000, 4.5);
 INSERT INTO Kupac(id, prosecna_ocena) VALUES (5000, 4.7);
@@ -71,7 +71,7 @@ INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_o
 
 
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (8000, 2000, 1000);
-INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (40000, 3000, 7000);
+INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (4500, 3000, 7000);
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (4000, 3000, 5000);
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (100000, 4000, 1000);
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (2200, 5000, 5000);

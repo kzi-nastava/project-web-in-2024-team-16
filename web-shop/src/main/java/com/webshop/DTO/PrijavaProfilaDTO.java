@@ -17,20 +17,11 @@ public class PrijavaProfilaDTO {
 
     private String razlogPrijave;
 
-
     private Date datumPodnosenjaPrijave;
-
 
     private Status statusPrijave;
 
-    /*   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-        private Korisnik podnosiocPrijave;
-
-        @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-        private Korisnik prijavljeniKorisnik;*/
-
     private PrijavaKorisnikDTO podnosiocPrijave;
-
 
     private PrijavaKorisnikDTO prijavljeniKorisnik;
 

@@ -14,6 +14,7 @@ import com.webshop.service.KorisnikService;
 
 import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.constraints.Positive;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +37,7 @@ public class KorisnikController {
     @Autowired
     private ProizvodService proizvodService;
 
-    @PostMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+      @PostMapping(value = "/registration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Korisnik> registracijaKorisnika(@Valid @RequestBody RegistracijaKorisnikaDTO korisnik) throws UserAlreadyExistsException, EmailAlreadyExistsException, PasswordMismatchException {//valid proverava da li su ispunjeni zahtevi unutar registracija korstnika dTO
         Korisnik registrovaniKorisnik = korisnikService.registracijaKorisnika(korisnik);
         return new ResponseEntity<>(registrovaniKorisnik, HttpStatus.CREATED);
@@ -370,4 +372,21 @@ public class KorisnikController {
             Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
             return new ResponseEntity<>(updatedReview, HttpStatus.OK);
         }
+   @GetMapping("/reviews")
+    public ResponseEntity<List<RecenzijaPrikazDTO>> getUserReviews(HttpSession session) throws UserNotFoundException, NoSellerException {
+
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnik.getUloga().equals(Uloga.KUPAC)){
+            throw new NoSellerException("Samo Kupac moze da pregleda recenzije!");
+        }
+
+        List<RecenzijaPrikazDTO> recenzije = korisnikService.vratiRecenzije(korisnik.getId());
+        return new ResponseEntity<>(recenzije, HttpStatus.OK);
+    }
 }
+

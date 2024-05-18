@@ -1,6 +1,7 @@
 package com.webshop.repository;
 
 import com.webshop.DTO.ProizvodDTO;
+import com.webshop.model.Prodavac;
 import com.webshop.model.Proizvod;
 import com.webshop.model.TipProdaje;
 import org.springframework.data.domain.Page;
@@ -8,8 +9,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProizvodRepository extends JpaRepository<Proizvod, Long> {
+
+    Optional<Proizvod> findById(Long id);
 
     List<Proizvod> findByNazivAndOpis(String name, String description);
 

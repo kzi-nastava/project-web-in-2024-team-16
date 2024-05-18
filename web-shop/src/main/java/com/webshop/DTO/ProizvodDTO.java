@@ -15,11 +15,18 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProizvodDTO {
+
     private Long id;
+
     private String naziv;
+
     private String opis;
+
     private String slikaProizvoda;
-   private Set<Kategorija> kategorije = new HashSet<>();;
+
+    private Set<Kategorija> kategorije = new HashSet<>();
+
     private Double cena;
+
     private TipProdaje tipProdaje;
 }

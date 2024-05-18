@@ -3,6 +3,10 @@ package com.webshop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
@@ -11,7 +15,10 @@ import java.util.Date;
 
 
 
-
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="prijava_profila")
 public class PrijavaProfila implements Serializable {
@@ -20,21 +27,22 @@ public class PrijavaProfila implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String razlogPrijave;
 
-    @Column
+    @Column(nullable = true)
+    private String razlogOdbijanja;
+
+    @Column(nullable = true)
+    private String razlogPrihvatanja;
+
+    @Column(nullable = false)
     private Date datumPodnosenjaPrijave;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status statusPrijave;
 
-/*   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Korisnik podnosiocPrijave;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Korisnik prijavljeniKorisnik;*/
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
     private Korisnik podnosiocPrijave;

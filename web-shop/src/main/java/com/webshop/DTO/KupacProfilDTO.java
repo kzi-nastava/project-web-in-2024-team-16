@@ -19,6 +19,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KupacProfilDTO {
+
     private String ime;
 
     private String prezime;
@@ -30,6 +31,7 @@ public class KupacProfilDTO {
     private String slika;
 
     private String opisKorisnika;
+
     private Double prosecnaOcena;
 
     private Set<ProizvodiNaProdajuDTO> kupljeniProizvodi = new HashSet<>();

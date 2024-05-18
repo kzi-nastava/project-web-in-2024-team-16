@@ -16,12 +16,18 @@ import java.util.Map;
 public class ProdavacOceneDTO {
 
     private String ime;
+
     private String prezime;
+
     private String korisnickoIme;
+
     private String slika;
+
     private Double prosecnaOcena;
+
     @ElementCollection
     private Map<String, Integer> ocene = new HashMap<>(); // Kupac ID, Ocena
+
     @ElementCollection
     private Map<String, String> komentari = new HashMap<>(); // Kupac ID, Komentar
 

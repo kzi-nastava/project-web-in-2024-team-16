@@ -57,6 +57,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleProductSoldException(ProductSoldException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+    @ExceptionHandler(NotHighestOfferException.class)
+    public ResponseEntity<String> handleNotHighestOfferException(NotHighestOfferException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
 
 
 }

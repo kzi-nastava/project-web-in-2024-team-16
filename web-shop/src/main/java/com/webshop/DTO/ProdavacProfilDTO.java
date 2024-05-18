@@ -18,7 +18,6 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-//@JsonIgnoreProperties({"proizvodiNaProdaju"})//DOBRO SE RASPITAJ
 public class ProdavacProfilDTO {
 
     private String ime;
