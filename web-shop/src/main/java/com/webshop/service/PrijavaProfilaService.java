@@ -163,10 +163,58 @@ public class PrijavaProfilaService {
             throw ex;
         }
     }
+    private void sendBlockEmail(Korisnik korisnik) throws IOException {
+
+        Email from = new Email("webshopjm.in@gmail.com");
+        String subject = "Blokirani ste na sajtu WebShop.";
+        Email to = new Email(korisnik.getMejl());
+        Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
+                " Uprkos podnetim zahtevima za prijavu vašeg profila, vaš profil je sada blokiran.  "+
+                ". Srdačno,\n"
+                + " Vaš Webshop.");
+        Mail mail = new Mail(from, subject, to, content);
+        String kljuc = System.getenv("SENDGRID_API_KEY");
+
+        SendGrid sg = new SendGrid(kljuc);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+        } catch (IOException ex) {
+            throw ex;
+        }
+    }
+    private void sendReportAccept(Korisnik korisnik, Korisnik prijavljeniKorisnik) throws IOException {
+
+        Email from = new Email("webshopjm.in@gmail.com");
+        String subject = "Vaša prijava je prihvaćena.";
+        Email to = new Email(korisnik.getMejl());
+        Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
+                " Vaša prijava korisnika "+ prijavljeniKorisnik.getIme() +" "+ " je prihvaćena."+
+                ". Srdačno,\n"
+                + " Vaš Webshop.");
+        Mail mail = new Mail(from, subject, to, content);
+        String kljuc = System.getenv("SENDGRID_API_KEY");
+
+        SendGrid sg = new SendGrid(kljuc);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+        } catch (IOException ex) {
+            throw ex;
+        }
+    }
 
     public void odbijPrijavu(Long prijavaId, String razlogOdbijanja) throws IOException {
+
         Optional<PrijavaProfila> prijava = prijavaProfilaRepository.findById(prijavaId);
         if(prijava.isEmpty()){
+
             throw new NoReportException("Tražena prijava ne postoji");
         }
       //  PrijavaProfila izmenjenaPrijava= new PrijavaProfila();
@@ -176,5 +224,24 @@ public class PrijavaProfilaService {
         Korisnik korisnik=prijava.get().getPodnosiocPrijave();
         sendReportRejected(korisnik, razlogOdbijanja);
 
+    }
+
+    public void prihvatiPrijavu(Long prijavaId, String razlogPrihvatanja) throws IOException {
+
+        Optional<PrijavaProfila> prijava = prijavaProfilaRepository.findById(prijavaId);
+        if(prijava.isEmpty()){
+
+            throw new NoReportException("Tražena prijava ne postoji");
+        }
+
+        prijava.get().setStatusPrijave(Status.PRIHVACENA);
+        prijava.get().setRazlogOdbijanja(razlogPrihvatanja);
+        prijavaProfilaRepository.save(prijava.get());
+        Korisnik korisnik=prijava.get().getPodnosiocPrijave();
+        Korisnik prijavljeniKorisnik=prijava.get().getPrijavljeniKorisnik();
+        prijavljeniKorisnik.setBlokiran(true);
+
+        sendBlockEmail(prijavljeniKorisnik);
+        sendReportAccept(korisnik, prijavljeniKorisnik);
     }
 }

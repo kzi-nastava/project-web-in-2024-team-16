@@ -98,7 +98,7 @@ public class PrijavaController {
 
     }
     @PostMapping("/adminRejectionReport/{prijavaId}")
-    public ResponseEntity<String> odbijPrijavu(@PathVariable Long prijavaId, @RequestBody OdbijenaPrijavaDTO razlogOdbijanjaDTO, HttpSession session) throws IOException {
+    public ResponseEntity<String> odbijPrijavu(@PathVariable Long prijavaId, @RequestBody IshodPrijaveDTO razlogOdbijanjaDTO, HttpSession session) throws IOException {
 
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
@@ -110,7 +110,23 @@ public class PrijavaController {
             throw new NoAdministratorException("Samo admin može odbiti prijave.");
         }
 
-        prijavaProfilaService.odbijPrijavu(prijavaId, razlogOdbijanjaDTO.getRazlogOdbijanja());
+        prijavaProfilaService.odbijPrijavu(prijavaId, razlogOdbijanjaDTO.getRazlog());
+        return ResponseEntity.ok("Prijava je odbijena.");
+    }
+    @PostMapping("/adminAcceptReport/{prijavaId}")
+    public ResponseEntity<String> prihvatiPrijavu(@PathVariable Long prijavaId, @RequestBody IshodPrijaveDTO razlogPrihvatanjaDTO, HttpSession session) throws IOException {
+
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        if (korisnik == null) {
+            throw new UserNotFoundException("Morate se ulogovati!");
+        }
+
+        if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            throw new NoAdministratorException("Samo admin može odbiti prijave.");
+        }
+
+        prijavaProfilaService.prihvatiPrijavu(prijavaId, razlogPrihvatanjaDTO.getRazlog());
         return ResponseEntity.ok("Prijava je odbijena.");
     }
 
