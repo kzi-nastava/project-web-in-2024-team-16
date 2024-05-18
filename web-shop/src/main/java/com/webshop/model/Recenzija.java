@@ -30,10 +30,10 @@ public class Recenzija implements Serializable {
     @Column
     private Date datumRecenzije;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Korisnik  korisnikKojiJeDaoRecenziju;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Korisnik  korisnikKojiJeDobioRecenziju;
 

@@ -15,5 +15,6 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 
     boolean existsByMejlAndIdNot(String mejl, Long id);
 
+
     //boolean existsByKorisnickoImeAndIdNot(String korisnickoIme, Long id);
 }

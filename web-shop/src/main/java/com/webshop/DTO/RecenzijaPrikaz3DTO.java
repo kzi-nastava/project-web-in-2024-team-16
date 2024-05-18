@@ -1,7 +1,5 @@
 package com.webshop.DTO;
 
-import com.webshop.model.Korisnik;
-import com.webshop.model.Prodavac;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,9 +11,11 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecenzijaPrikazDTO {
+public class RecenzijaPrikaz3DTO {
 
-    private ProdavacPrikazRecenzijeDTO prodavacKojemSamDaoRecenziju;
+    private KupacPrikazRecenzijeDTO recenzijuPodneo;
+
+    private ProdavacPrikazRecenzijeDTO recenzijuPrimio;
 
     private String komentar;
 
