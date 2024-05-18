@@ -48,7 +48,7 @@ INSERT INTO Prodavac(id, prosecna_ocena) VALUES(6000, 4.4);
 
 
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,5000, 2000, 'tiganj',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, false, false, false, '2020-06-12 22:03:48', 1000 ,5000, 2000, 'tiganj',
                                                                   'metalac', 'metalac.jpg', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (100000, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'automobil',
@@ -75,6 +75,7 @@ INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (4500, 3
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (4000, 3000, 5000);
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (100000, 4000, 1000);
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (2200, 5000, 5000);
+INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (3000, 1000, 7000);
 
 
 INSERT INTO Kategorija (id, naziv_kategorije) VALUES (1000, 'telefoni');

@@ -551,8 +551,7 @@ public Recenzija updateReview(Long reviewId, RecenzijaPrikaz3DTO updatedReview) 
     // Postavite ostale atribute koje želite da izmenite
 
     return recenzijaRepository.save(existingReview);
-}
-
-
     }
+
+}
 

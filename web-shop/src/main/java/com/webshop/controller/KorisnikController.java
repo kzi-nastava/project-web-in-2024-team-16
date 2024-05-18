@@ -372,5 +372,7 @@ public class KorisnikController {
             Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
             return new ResponseEntity<>(updatedReview, HttpStatus.OK);
         }
+
+
 }
 

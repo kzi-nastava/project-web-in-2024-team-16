@@ -2,6 +2,7 @@ package com.webshop.controller;
 
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.DTO.ProizvodPrekoKategorijeDTO;
+import com.webshop.DTO.ProizvodiNaProdajuDTO;
 import com.webshop.error.*;
 import com.webshop.model.*;
 import com.webshop.repository.KategorijaRepository;
@@ -201,6 +202,25 @@ public class ProizvodController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size) {
         return proizvodService.findAll(page, size);
+    }
+
+    @PutMapping("/endAuction/{proizvodId}")
+    public ResponseEntity<?> endAuction(@PathVariable Long proizvodId, HttpSession session) throws Exception, NoSellerException {
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if(korisnik == null){
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+        }
+
+        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)){
+            throw new NoSellerException("Samo PRODAVAC moze upravlja aukcijama!");
+        }
+
+        try {
+            ProizvodiNaProdajuDTO product = proizvodService.endAuction(proizvodId, korisnik.getId());
+            return new ResponseEntity<>(product, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 

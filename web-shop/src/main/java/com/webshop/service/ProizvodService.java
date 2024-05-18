@@ -51,6 +51,8 @@ public class ProizvodService {
     private KupacRepository kupacRepository;
     @Autowired
     private PonudaRepository ponudaRepository;
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
 
     public ProizvodDTO findOne(Long id){
@@ -398,6 +400,51 @@ public class ProizvodService {
         ponudaDTO.setKupacKojiDajePonudu(kupacDTO);
         return ponudaDTO;
 
+    }
+
+    public ProizvodiNaProdajuDTO endAuction(Long proizvodId, Long prodavacId) throws Exception {
+        Proizvod proizvod = proizvodRepository.findById(proizvodId)
+                .orElseThrow(() -> new Exception("Proizvod not found"));
+
+        Prodavac prodavac = prodavacRepository.findById(prodavacId)
+                .orElseThrow(() -> new Exception("Prodavac not found"));
+
+        if (!prodavac.getProizvodiNaProdaju().contains(proizvod)) {
+            throw new Exception("Prodavac does not have this proizvod for sale");
+        }
+
+        if (proizvod.getTip() != TipProdaje.AUKCIJA) {
+            throw new Exception("Proizvod is not for auction");
+        }
+
+        if (!proizvod.getProdat() && !proizvod.getPonude().isEmpty()) {
+            Ponuda highestPonuda = proizvod.getPonude()
+                    .stream()
+                    .max(Comparator.comparing(Ponuda::getCena))
+                    .orElseThrow(() -> new Exception("No ponude found"));
+
+            Kupac kupac = highestPonuda.getKupacKojiDajePonudu();
+            kupac.getKupljeniProizvodi().add(proizvod);
+
+            prodavac.getProizvodiNaProdaju().remove(proizvod);
+
+            proizvod.setProdat(true);
+            proizvod.setKupac(kupac);
+
+            ProizvodiNaProdajuDTO p = new ProizvodiNaProdajuDTO();
+            p.setOpis(proizvod.getOpis());
+            p.setCena(proizvod.getCena());
+            p.setNaziv(proizvod.getNaziv());
+            p.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+
+            korisnikRepository.save(kupac);
+            korisnikRepository.save(prodavac);
+            proizvodRepository.save(proizvod);
+
+            return p;
+        } else {
+            throw new Exception("Aukcija is not active or there are no ponude");
+        }
     }
 
 }
