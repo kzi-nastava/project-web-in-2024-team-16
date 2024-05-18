@@ -27,8 +27,6 @@ public class KorisnikService {
     @Autowired
     private KupacRepository kupacRepository;
 
-    @Autowired
-    private KupacRepository kupacRepository;
 
 
 
@@ -550,5 +548,3 @@ public Recenzija updateReview(Long reviewId, RecenzijaPrikaz3DTO updatedReview) 
 
     }
 
-
-}
