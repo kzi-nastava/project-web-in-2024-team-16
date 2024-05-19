@@ -37,6 +37,7 @@ import com.sendgrid.helpers.mail.objects.Email;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ProizvodService {
@@ -51,6 +52,8 @@ public class ProizvodService {
     private KupacRepository kupacRepository;
     @Autowired
     private PonudaRepository ponudaRepository;
+    @Autowired
+    private KorisnikRepository korisnikRepository;
 
 
     public ProizvodDTO findOne(Long id){
@@ -563,6 +566,135 @@ public class ProizvodService {
         Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
                 " Vaš proizvod ima novu ponudu: "+novaPonuda+ " ."
                 + " Srdačno,\n"
+                + " Vaš Webshop.");
+        Mail mail = new Mail(from, subject, to, content);
+        String kljuc = System.getenv("SENDGRID_API_KEY");
+
+        SendGrid sg = new SendGrid(kljuc);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+        } catch (IOException ex) {
+            throw ex;
+        }
+    }
+    public ProizvodiNaProdajuDTO endAuction(Long proizvodId, Long prodavacId) throws Exception {
+        Proizvod proizvod = proizvodRepository.findById(proizvodId)
+                .orElseThrow(() -> new Exception("Proizvod ne postoji."));
+
+        Prodavac prodavac = prodavacRepository.findById(prodavacId)
+                .orElseThrow(() -> new Exception("Prodavac ne postoji."));
+
+        if (!prodavac.getProizvodiNaProdaju().contains(proizvod)) {
+            throw new Exception("Prodavac nema traženi proizvod na prodaju.");
+        }
+
+        if (proizvod.getTip() != TipProdaje.AUKCIJA) {
+            throw new Exception("Proizvod nije na aukciji.");
+        }
+
+        if (!proizvod.getProdat() && !proizvod.getPonude().isEmpty()) {
+            Ponuda highestPonuda = proizvod.getPonude()
+                    .stream()
+                    .max(Comparator.comparing(Ponuda::getCena))
+                    .orElseThrow(() -> new Exception("Ne postoje ponude."));
+
+            Kupac kupac = highestPonuda.getKupacKojiDajePonudu();
+            kupac.getKupljeniProizvodi().add(proizvod);
+
+            prodavac.getProizvodiNaProdaju().remove(proizvod);
+
+            proizvod.setProdat(true);
+            proizvod.setKupac(kupac);
+            // Dobavi sve korisnike koji su dali ponude
+            Set<Korisnik> korisniciSaPonudama = proizvod.getPonude().stream()
+                    .map(Ponuda::getKupacKojiDajePonudu)
+                    .collect(Collectors.toSet());
+
+            ProizvodiNaProdajuDTO p = new ProizvodiNaProdajuDTO();
+            p.setOpis(proizvod.getOpis());
+            p.setCena(proizvod.getCena());
+            p.setNaziv(proizvod.getNaziv());
+            p.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+
+            korisnikRepository.save(kupac);
+            korisnikRepository.save(prodavac);
+            proizvodRepository.save(proizvod);
+
+            for (Korisnik korisnik : korisniciSaPonudama) {
+                if (korisnik.equals(kupac)) {
+                    sendEmailAuctionWin(korisnik,proizvod.getNaziv());
+                } else {
+                    // Pošalji email ostalim korisnicima
+                    sendEmailEndOfAuction(korisnik, proizvod.getNaziv());
+                }
+            }
+
+            // Pošalji email prodavcu
+         sendEmailAuctionEndSeller(prodavac,proizvod.getNaziv());
+
+            return p;
+        } else {
+            throw new Exception("Aukcija nije aktivna ili nema ponuda.");
+        }
+    }
+    private void sendEmailEndOfAuction(Korisnik korisnik, String naziv) throws IOException {
+
+        Email from = new Email("webshopjm.in@gmail.com");
+        String subject = "Obaveštenje o aukciji";
+        Email to = new Email(korisnik.getMejl());
+        Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
+                " Vaša ponuda na aukciji nije bila najveća. Nažalost izgubili ste na aukciji za proizvod "+naziv+ " ."
+                + " Srdačno,\n"
+                + " Vaš Webshop.");
+        Mail mail = new Mail(from, subject, to, content);
+        String kljuc = System.getenv("SENDGRID_API_KEY");
+
+        SendGrid sg = new SendGrid(kljuc);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+        } catch (IOException ex) {
+            throw ex;
+        }
+    }
+    private void sendEmailAuctionWin(Korisnik korisnik, String naziv) throws IOException {
+
+        Email from = new Email("webshopjm.in@gmail.com");
+        String subject = "Pobeda na aukciji!";
+        Email to = new Email(korisnik.getMejl());
+        Content content = new Content("text/plain", "Poštovani/na, čestitamo," +
+                " pobdeili ste na aukciji za proizvod "+ naziv
+                + " .Srdačno,\n"
+                + " Vaš Webshop.");
+        Mail mail = new Mail(from, subject, to, content);
+        String kljuc = System.getenv("SENDGRID_API_KEY");
+
+        SendGrid sg = new SendGrid(kljuc);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+        } catch (IOException ex) {
+            throw ex;
+        }
+    }
+    private void sendEmailAuctionEndSeller(Korisnik korisnik, String naziv) throws IOException {
+
+        Email from = new Email("webshopjm.in@gmail.com");
+        String subject = "Kraj aukcije!";
+        Email to = new Email(korisnik.getMejl());
+        Content content = new Content("text/plain", "Poštovani/na čestitamo," +
+                " prodali ste proivod "+ naziv+ " sa Vaše aukcije. "
+                + " .Srdačno,\n"
                 + " Vaš Webshop.");
         Mail mail = new Mail(from, subject, to, content);
         String kljuc = System.getenv("SENDGRID_API_KEY");
