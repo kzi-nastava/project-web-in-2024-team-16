@@ -161,7 +161,7 @@ public class KorisnikController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         if (korisnik == null) {
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da ocenjuju druge korisnike.");
         }
 
         if (!korisnikService.jeKupacKupioOdProdavca(korisnik.getId(), prodavacId)) {
@@ -235,7 +235,17 @@ public class KorisnikController {
 
     }*/
         @GetMapping("/averageRatingSeller/{prodavacId}")
-        public double prosecnaOcena (@PathVariable Long prodavacId){
+        public double prosecnaOcena (@PathVariable Long prodavacId, HttpSession session) throws UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovanik korisnici mogu da vide prosecne ocene drugih prodavaca!");
+            }
+
+            Optional<Korisnik> prodavac = korisnikService.findById(prodavacId);
+            if(prodavac.get().getUloga() != Uloga.PRODAVAC){
+                throw  new NoSellerException("Korisnik sa zeljenim ID-jem nije prodavac!");
+            }
 
             return korisnikService.izracunajProsecnuOcenu(prodavacId);
         }
@@ -247,7 +257,7 @@ public class KorisnikController {
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
             if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da ocenjuju druge korisnike.");
             }
 
             if (!korisnikService.jeProdavacProdaoKupcu(korisnik.getId(), kupacId)) {
@@ -258,7 +268,17 @@ public class KorisnikController {
         }
 
         @GetMapping("/averageRatingBuyer/{kupacId}")
-        public double prosecnaOcenaKupca (@PathVariable Long kupacId){
+        public double prosecnaOcenaKupca (@PathVariable Long kupacId, HttpSession session) throws UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovanik korisnici mogu da vide prosecne ocene drugih prodavaca!");
+            }
+
+            Optional<Korisnik> kupac = korisnikService.findById(kupacId);
+            if(kupac.get().getUloga() != Uloga.KUPAC){
+                throw  new NoSellerException("Korisnik sa zeljenim ID-jem nije kupac!");
+            }
 
             return korisnikService.izracunajProsecnuOcenuKupca(kupacId);
         }
@@ -270,7 +290,7 @@ public class KorisnikController {
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
             if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
             }
 
             if (!korisnik.getUloga().equals(Uloga.KUPAC)) {
@@ -288,7 +308,7 @@ public class KorisnikController {
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
             if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
             }
 
             if (!korisnik.getUloga().equals(Uloga.KUPAC)) {
@@ -306,7 +326,7 @@ public class KorisnikController {
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
             if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
             }
 
             if (!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
@@ -324,11 +344,11 @@ public class KorisnikController {
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
             if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
             }
 
             if (!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
-                throw new NoSellerException("Samo  prodavac može pregleda recenzije.");
+                throw new NoSellerException("Samo prodavac može pregleda recenzije.");
             }
             List<RecenzijaPrikaz2DTO> recenzije = korisnikService.vratiRecenzijeOdKupcaAkoJeProdavacDaoRecenziju(korisnik.getId());
             return new ResponseEntity<>(recenzije, HttpStatus.OK);
@@ -341,7 +361,7 @@ public class KorisnikController {
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
             if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke!");
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije!");
             }
 
             if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
@@ -368,8 +388,17 @@ public class KorisnikController {
         }
 
         @PutMapping("/updateReview/{reviewId}")
-        public ResponseEntity<Recenzija> updateReviewComment (@PathVariable Long reviewId, RecenzijaPrikaz3DTO recenzija) throws
-        ResourceNotFoundException {
+        public ResponseEntity<Recenzija> updateReviewComment (@PathVariable Long reviewId, RecenzijaPrikaz3DTO recenzija, HttpSession session) throws
+                ResourceNotFoundException, UserNotFoundException, NoSellerException {
+            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
+            }
+
+            if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+                throw new NoSellerException("Samo administrator može da modifikuje recenzije.");
+            }
+
             Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
             return new ResponseEntity<>(updatedReview, HttpStatus.OK);
         }
