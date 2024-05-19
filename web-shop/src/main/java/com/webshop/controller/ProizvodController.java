@@ -2,6 +2,7 @@ package com.webshop.controller;
 
 import com.webshop.DTO.ProizvodDTO;
 import com.webshop.DTO.ProizvodPrekoKategorijeDTO;
+import com.webshop.DTO.ProizvodiZaProdajuDTO;
 import com.webshop.DTO.SviProizvodiDTO;
 import com.webshop.error.*;
 import com.webshop.model.*;
@@ -175,7 +176,7 @@ public class ProizvodController {
         return ResponseEntity.ok(proizvodDTO);
     }
 //@PathVariable Long id, @PostMapping("/addForSale/{id}")
-    @PostMapping("/addForSale")
+   /* @PostMapping("/addForSale")
     public ResponseEntity<String> SetProductForSell(@RequestBody ProizvodDTO proizvodDTO,HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
 
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
@@ -200,8 +201,32 @@ public class ProizvodController {
 
         return ResponseEntity.ok().body("Proizvod uspešno postavljen na prodaju.");
     }
+*/
+    @PostMapping("/addForSale")
+    public ResponseEntity<String> SetProductForSell(@RequestBody ProizvodiZaProdajuDTO proizvodDTO, HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
 
+    Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
+    if(korisnik==null){
 
+        throw new UserNotFoundException("Morate biti prijavljeni");
+    }
+    if(!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
+
+        throw new NoSellerException("Samo prodavac može da postavi proizvod na prodaju.");
+    }
+    Set<Kategorija> kategorijeSet = new HashSet<>();
+    for (Kategorija kategorijaDTO : proizvodDTO.getKategorije()) {
+        Kategorija kategorija = kategorijaRepository.findByNazivKategorije(kategorijaDTO.getNazivKategorije());
+        if (kategorija == null) {
+            throw new CategoryExistsException("Kategorija koju želite da unesete ne postoji, morate je dodati.");
+        }
+        kategorijeSet.add(kategorija);
+    }
+
+    proizvodService.dodajProizvod(proizvodDTO, korisnik);
+
+    return ResponseEntity.ok().body("Proizvod uspešno postavljen na prodaju.");
+    }
 
     @GetMapping("/pages")
     public List<ProizvodDTO> getProizvodi(

@@ -234,7 +234,6 @@ public class KorisnikController {
         throw new ProductNotFoundException("Došlo je do greške");
 
     }*/
-
         @GetMapping("/averageRatingSeller/{prodavacId}")
         public double prosecnaOcena (@PathVariable Long prodavacId){
 
@@ -374,5 +373,30 @@ public class KorisnikController {
             Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
             return new ResponseEntity<>(updatedReview, HttpStatus.OK);
         }
-}
+
+    @PostMapping("/shopNowAuction")
+    public ResponseEntity<PonudaDTO>  kupovinaProizvodaAukcija(@RequestParam(required = true) Long id,@RequestParam(required = true)
+        @Positive(message = "Nova ponuda mora biti veća od 0.") Double novaPonuda, HttpSession session) throws Exception, NoCustomerException {
+
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if (korisnik == null) {
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
+
+        }
+        Optional<Proizvod> proizvod=proizvodService.findById(id);
+        Korisnik prodavac=proizvod.get().getProdavac();
+        if (!proizvod.get().getTip().equals(TipProdaje.AUKCIJA)) {
+            throw new ProductNotFoundException("Proizvod nije na aukciji.");
+
+        }
+        if (proizvod.get().getProdat()) {
+            throw new ProductNotFoundException("Proizvod je već prodat.");
+
+        }
+        PonudaDTO ponudaDTO = proizvodService.postavljanjeProizvodaNaAukciju(proizvod.get(), korisnik, novaPonuda, prodavac);
+
+        return new ResponseEntity<>(ponudaDTO, HttpStatus.OK);
+    }
+
+    }
 

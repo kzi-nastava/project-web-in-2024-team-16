@@ -67,6 +67,16 @@ public class ProizvodService {
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setId(proizvod.getId());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             return proizvodDTO;
         }
         return null;
@@ -93,8 +103,7 @@ public class ProizvodService {
                kategorijaDTO.setId(kategorija.getId());
                kategorijeDTO.add(kategorijaDTO);
            }
-            // KategorijaDTO kategorijaDTO= new KategorijaDTO();
-            //  proizvodDTO.setKategorije(proizvod.getKategorija()); OVO VALJA AL JE BESKONACNA
+
             proizvodDTO.setKategorije(kategorijeDTO);
             proizvodiDTO.add(proizvodDTO);
         }
@@ -113,17 +122,6 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
-         /*  Set< Kategorija> kategorije=proizvod.getKategorija();
-           Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
-           for(Kategorija kategorija: kategorije){
-               KategorijaDTO kategorijaDTO= new KategorijaDTO();
-               kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
-               kategorijaDTO.setId(kategorija.getId());
-               kategorijeDTO.add(kategorijaDTO);
-           }*/
-           // KategorijaDTO kategorijaDTO= new KategorijaDTO();
-          //  proizvodDTO.setKategorije(proizvod.getKategorija()); OVO VALJA AL JE BESKONACNA
-           // proizvodDTO.setKategorije(kategorij);
             proizvodiDTO.add(proizvodDTO);
      }
      return proizvodiDTO;
@@ -141,6 +139,18 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             // Postaviti ostale atribute po potrebi
             proizvodiDTO.add(proizvodDTO);
         }
@@ -160,6 +170,18 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             proizvodiDTO.add(proizvodDTO);
         }
         if (proizvodiDTO.isEmpty()) {
@@ -182,6 +204,18 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             proizvodiDTO.add(proizvodDTO);
         }
         if (proizvodiDTO.isEmpty()) {
@@ -202,7 +236,19 @@ public class ProizvodService {
             proizvodDTO.setId(proizvod.getId());
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             proizvodiDTO.add(proizvodDTO);
         }
         if (proizvodiDTO.isEmpty()) {
@@ -224,6 +270,18 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             proizvodiDTO.add(proizvodDTO);
         }
         if (proizvodiDTO.isEmpty()) {
@@ -244,6 +302,18 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             proizvodiDTO.add(proizvodDTO);
         }
         if (proizvodiDTO.isEmpty()) {
@@ -264,6 +334,18 @@ public class ProizvodService {
             proizvodDTO.setNaziv(proizvod.getNaziv());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
+            proizvodDTO.setCena(proizvod.getCena());
+            proizvodDTO.setTipProdaje(proizvod.getTip());
+            Set< Kategorija> kategorije=proizvod.getKategorija();
+            Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+            for(Kategorija kategorija: kategorije){
+                KategorijaDTO kategorijaDTO= new KategorijaDTO();
+                kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+                kategorijaDTO.setId(kategorija.getId());
+                kategorijeDTO.add(kategorijaDTO);
+            }
+
+            proizvodDTO.setKategorije(kategorijeDTO);
             proizvodiDTO.add(proizvodDTO);
         }
         if (proizvodiDTO.isEmpty()) {
@@ -282,7 +364,7 @@ public class ProizvodService {
         proizvod.setPonude(updatedProduct.getPonude());
         proizvod.setOpis(updatedProduct.getOpis());
         proizvod.setSlikaProizvoda(updatedProduct.getSlikaProizvoda());
-        proizvod.setTip(updatedProduct.getTip());
+       proizvod.setTip(updatedProduct.getTip());
         proizvodRepository.save(proizvod);
 
         SviProizvodiDTO updateProduct= new SviProizvodiDTO();
@@ -291,6 +373,19 @@ public class ProizvodService {
         updateProduct.setId(proizvod.getId());
         updateProduct.setSlikaProizvoda(proizvod.getSlikaProizvoda());
         updateProduct.setTipProdaje(proizvod.getTip());
+        updateProduct.setCena(proizvod.getCena());
+        updateProduct.setTipProdaje(proizvod.getTip());
+        Set< Kategorija> kategorije=proizvod.getKategorija();
+        Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
+        for(Kategorija kategorija: kategorije){
+            KategorijaDTO kategorijaDTO= new KategorijaDTO();
+            kategorijaDTO.setNazivKategorije(kategorija.getNazivKategorije());
+            kategorijaDTO.setId(kategorija.getId());
+            kategorijeDTO.add(kategorijaDTO);
+        }
+
+        updateProduct.setKategorije(kategorijeDTO);
+
         return updateProduct;
 
     }
@@ -321,7 +416,7 @@ public class ProizvodService {
         }
     }
 
-    public void dodajProizvod(ProizvodDTO proizvodDTO, Korisnik korisnik) throws CategoryExistsException {
+    public void dodajProizvod(ProizvodiZaProdajuDTO proizvodDTO, Korisnik korisnik) throws CategoryExistsException {
 
         Proizvod proizvod=new Proizvod();
 
@@ -419,7 +514,7 @@ public class ProizvodService {
         }
     }
 
-    public PonudaDTO postavljanjeProizvodaNaAukciju(Proizvod proizvod, Korisnik korisnik, Double novaPonuda) throws NotHighestOfferException {
+    public PonudaDTO postavljanjeProizvodaNaAukciju(Proizvod proizvod, Korisnik korisnik, Double novaPonuda, Korisnik prodavac) throws IOException {
 
         List<Ponuda> postojecePonude = ponudaRepository.findByProizvodId(proizvod.getId());
 
@@ -427,7 +522,7 @@ public class ProizvodService {
 
         for (Ponuda ponuda : postojecePonude) {
             if (novaPonuda <= ponuda.getCena()) {
-                throw new NotHighestOfferException("Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću.)" + ponuda.getCena() + ").");
+                throw new NotHighestOfferException("Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću.(" + ponuda.getCena() + ").");
             }
         }
         Optional<Kupac> kupac = kupacRepository.findById(korisnik.getId());
@@ -456,8 +551,32 @@ public class ProizvodService {
         ponudaDTO.setCena(ponuda.getCena());
         ponudaDTO.setProizvod(proizvodAukcijaDTO);
         ponudaDTO.setKupacKojiDajePonudu(kupacDTO);
+        sendEmailAboutAuction(prodavac, novaPonuda);
         return ponudaDTO;
 
+    }
+    private void sendEmailAboutAuction(Korisnik korisnik, Double novaPonuda) throws IOException {
+
+        Email from = new Email("webshopjm.in@gmail.com");
+        String subject = "Obaveštenje o aukciji";
+        Email to = new Email(korisnik.getMejl());
+        Content content = new Content("text/plain", "Poštovani/na " + korisnik.getIme() + "," +
+                " Vaš proizvod ima novu ponudu: "+novaPonuda+ " ."
+                + " Srdačno,\n"
+                + " Vaš Webshop.");
+        Mail mail = new Mail(from, subject, to, content);
+        String kljuc = System.getenv("SENDGRID_API_KEY");
+
+        SendGrid sg = new SendGrid(kljuc);
+        Request request = new Request();
+        try {
+            request.setMethod(Method.POST);
+            request.setEndpoint("mail/send");
+            request.setBody(mail.build());
+            Response response = sg.api(request);
+        } catch (IOException ex) {
+            throw ex;
+        }
     }
 
 }

@@ -14,8 +14,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProizvodDTO {
-
+public class ProizvodiZaProdajuDTO {
     private Long id;
 
     private String naziv;
@@ -24,7 +23,7 @@ public class ProizvodDTO {
 
     private String slikaProizvoda;
 
-    private Set<KategorijaDTO> kategorije = new HashSet<>();
+    private Set<Kategorija> kategorije = new HashSet<>();
 
     private Double cena;
 
