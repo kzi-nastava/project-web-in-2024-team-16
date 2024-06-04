@@ -64,5 +64,8 @@ button{
   border: 1px solid gray;
   cursor: pointer;
 }
+button:hover {
+  background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
+}
 
 </style>
