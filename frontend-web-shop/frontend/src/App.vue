@@ -10,7 +10,7 @@
 
 <template>
 
-  <nav class="navbar">
+ <!-- <nav class="navbar">
     <div class="search-container">
       <input type="text" placeholder="Pretraga...">
       <button type="submit" class="search-button">
@@ -20,9 +20,22 @@
     <div class="brand">
       <span class="letter">J</span><span class="letter">O</span><span class="letter">M</span><span class="letter">I</span>
     </div>
-  </nav>
+  </nav>-->
 
+  <router-view/>
 </template>
+
+<script>
+// @ is an alias to /src
+import HelloWorld from '@/components/HelloWorld.vue'
+
+export default {
+  name: 'HomeView',
+  components: {
+    HelloWorld
+  }
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -62,6 +75,7 @@ button img {
   font-size: 50px; /* Postavite veličinu fonta */
   display: flex; /* Postavite fleksibilni prikaz */
   align-items: center; /* Centriraj elemente */
+  font-family: "Arial Narrow";
 }
 
 .letter:nth-child(1) {
@@ -77,3 +91,5 @@ button img {
   color: #488871; /* Boja slova I */
 }
 </style>
+<script setup>
+</script>
