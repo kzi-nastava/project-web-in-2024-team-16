@@ -1,7 +1,7 @@
 <template>
   <div class="home">
-    <HelloWorld />
-    <img id="headerimg" src="@/assets/glavna.png">
+    <HelloWorld @search="executeSearch" />
+    <img id="headerimg" src="@/assets/sincerely-media-cuEpo721ACY-unsplash.jpg">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
       <button>Napravite nalog</button>
@@ -58,9 +58,15 @@
     },
     data() {
       return {
-        products: [],
-        categories: []
+        allProducts: [],//novo, search
+        products: [],//paginacija proizvodi
+        categories: []//sve kategorije
       };
+    },
+    computed: {//ako nista nije napisano ispisi sve proizvode
+      displayedProducts() {
+        return this.products.length > 0 ? this.products : this.allProducts;
+      }
     },
     methods: {
       login: function () {
@@ -83,8 +89,47 @@
               this.categories = response.data;
             })
             .catch(error => {
-              console.error("There was an error fetching the categories:", error);
+              console.error("Greska pri dobijanju svih kategorija", error);
             });
+      },
+      executeSearch(searchCriteria) {
+        const { name, description } = searchCriteria;
+        console.log(name);
+        console.log("cao");
+        if(description==''){
+          axios.get("http://localhost:8080/api/product/search?name=" + name)
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                this.fetchProducts();
+                console.error("Greska pri koriscenju search-a", error);
+              });
+        }
+        else if(name==''){
+          axios.get("http://localhost:8080/api/product/search?description=" + description)
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                this.fetchProducts();
+                console.error("Greska pri koriscenju search-a", error);
+              });
+        }else {
+          const params = {
+            name,
+            description
+          };
+
+          axios.get("http://localhost:8080/api/product/search", {params})
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                this.fetchProducts();
+                console.error("Greska pri koriscenju search-a", error);
+              });
+        }
       }
       },
       mounted() {
@@ -102,6 +147,7 @@
     width: 100%;
   }
   .home {
+
     text-align: center;
     font-family: "Bodoni MT";
     width: 100%; /* Make sure the home div is 100% wide */
@@ -117,6 +163,7 @@
     /* z-index: 1;*/
   }
   #headercont {
+    font-family: Arial;
     position: absolute;
     top: 40%;
     left: 65%;/*65*/
@@ -165,6 +212,7 @@
     width: fit-content; /* Prilagođava širinu sadržaju unutar */
     height: fit-content;
     color: white;
+    font-family: Arial;
   }
 
   .category-list {
@@ -183,6 +231,7 @@
     background-color: rgb(72, 136, 113);
   }
   .product-container {
+    font-family: Arial;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
