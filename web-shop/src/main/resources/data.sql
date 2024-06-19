@@ -48,26 +48,26 @@ INSERT INTO Prodavac(id, prosecna_ocena) VALUES(6000, 4.4);
 
 
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,5000, 2000, 'tiganj',
-                                                                  'metalac', 'metalac.jpg', 'AUKCIJA');
+                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,5000, 2000, 'PAPUČE',
+                                                                  'Za po kući', 'https://www.molooco.com/wp-content/uploads/2021/10/Shark-Slippers..jpeg', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (100000, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'automobil',
-                                                                  'ford', 'ford.jpg', 'AUKCIJA');
+                      opis, slika_proizvoda, tip_prodaje) VALUES (300, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'KNJIGA ALGEBRA',
+                                                                  'FTN, prva godina', 'https://imgv2-1-f.scribdassets.com/img/document/429015388/original/a715bda6de/1716624483?v=1', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (4000, false, false, true, '2020-11-28 09:56:24', 3000, 5000, 3000, 'akva busilica',
-                                                                  'bosch', 'bosch.jpg', 'FIKSNA');
+                      opis, slika_proizvoda, tip_prodaje) VALUES (4000, false, false, true, '2020-11-28 09:56:24', 3000, 5000, 3000, 'BUŠILICA',
+                                                                  'bosch', 'https://www.agromarket.rs/files/watermark/files/images/slike_proizvoda/thumbs_w/056361_w_800_800px.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 7000, 2000, 'laptop',
-                                                                  'lenovo', 'lenovo.jpg', 'FIKSNA');
+                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 7000, 2000, 'POLICA ZA OBUĆU',
+                                                                  'Drvena, kupljena u emmezeti', 'https://cdn2.jysk.com/getimage/wd3.medium/226903', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 3000, 'telefon',
-                                                                  'samsung', 'samsung.jpg', 'FIKSNA');
+                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 3000, 'IPHONE 8',
+                                                                  'U odličnom stanju', 'https://cdn.alloallo.media/catalog/product/apple/iphone/iphone-8/iphone-8-gold.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2100, false, true, false, '2020-06-12 22:03:48', 6000, 5000, 2000, 'serpa',
-                                                                  'metalac', 'metalac2.jpg', 'FIKSNA');
+                      opis, slika_proizvoda, tip_prodaje) VALUES (15000, false, true, false, '2020-06-12 22:03:48', 6000, 5000, 2000, 'NIKE AIR FORCE',
+                                                                  'bele, 43 broj', 'https://static.kupindoslike.com/Nike-air-force-bele-patike-NOVO-36-46_slika_O_126768989.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (90000, false, false, true, '2019-01-14 16:11:06', 7000, 1000, 3000, 'telefon samsungA50',
-                                                                  'samsung A50 crni', 'samsung2.jpg', 'FIKSNA');
+                      opis, slika_proizvoda, tip_prodaje) VALUES (90000, false, false, true, '2019-01-14 16:11:06', 7000, 1000, 3000, 'SAMSUNG A50',
+                                                                  'samsung A50 crni', 'https://www.tehnomedia.rs/image/59217.jpg?tip=webp&tip_slike=1', 'FIKSNA');
 
 
 INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (8000, 2000, 1000);
@@ -78,10 +78,10 @@ INSERT INTO Ponuda (cena, proizvod_id, kupac_koji_daje_ponudu_id)VALUES (2200, 5
 
 
 INSERT INTO Kategorija (id, naziv_kategorije) VALUES (1000, 'telefoni');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (2000, 'laptopovi');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3000, 'alat');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4000, 'automobili');
-INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5000, 'kuhinja');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (2000, 'Nameštaj');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (3000, 'Alat');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (4000, 'Knjige');
+INSERT INTO Kategorija (id, naziv_kategorije) VALUES (5000, 'Obuća');
 
 
 INSERT INTO Proizvod_kategorija (proizvod_id, kategorija_id) VALUES (5000, 1000);
