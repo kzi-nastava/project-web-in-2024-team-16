@@ -3,19 +3,42 @@
   <div>
     <HelloWorld />
     <div class="registration-form">
-      <input v-model="korisnik.ime" type="text" placeholder="Ime" /><br />
-      <input v-model="korisnik.prezime" type="text" placeholder="Prezime" /><br />
-      <input v-model="korisnik.korisnickoIme" type="text" placeholder="Korisnicko ime" /><br />
-      <input v-model="korisnik.mejl" type="text" placeholder="Mejl" /><br />
-      <input v-model="korisnik.telefon" type="text" placeholder="Telefon" /><br />
-      <input v-model="korisnik.lozinka" type="password" placeholder="Lozinka" /><br />
-      <input v-model="korisnik.ponovljenaLozinka" type="password" placeholder="Ponovljena lozinka" /><br />
-      <input v-model="korisnik.datumRodjenja" type="date" placeholder="Datum rodjenja" /><br />
-      <label for="uloga">Izaberite ulogu:</label><br />
-      <select v-model="korisnik.uloga" id="uloga" name="uloge" required>
-        <option value="PRODAVAC">Prodavac</option>
-        <option value="KUPAC">Kupac</option>
-      </select><br>
+      <div class="column">
+        <label for="ime">Ime:</label>
+        <input v-model="korisnik.ime" type="text" id="ime" placeholder="Ime" />
+
+        <label for="prezime">Prezime:</label>
+        <input v-model="korisnik.prezime" type="text" id="prezime" placeholder="Prezime" />
+
+        <label for="korisnickoIme">Korisničko ime:</label>
+        <input v-model="korisnik.korisnickoIme" type="text" id="korisnickoIme" placeholder="Korisničko ime" />
+      </div>
+
+      <div class="column">
+        <label for="mejl">Mejl:</label>
+        <input v-model="korisnik.mejl" type="text" id="mejl" placeholder="Mejl" />
+
+        <label for="telefon">Telefon:</label>
+        <input v-model="korisnik.telefon" type="text" id="telefon" placeholder="Telefon" />
+
+        <label for="lozinka">Lozinka:</label>
+        <input v-model="korisnik.lozinka" type="password" id="lozinka" placeholder="Lozinka" />
+      </div>
+
+      <div class="column">
+        <label for="ponovljenaLozinka">Ponovljena lozinka:</label>
+        <input v-model="korisnik.ponovljenaLozinka" type="password" id="ponovljenaLozinka" placeholder="Ponovljena lozinka" />
+
+        <label for="datumRodjenja">Datum rođenja:</label>
+        <input v-model="korisnik.datumRodjenja" type="date" id="datumRodjenja" placeholder="Datum rođenja" />
+
+        <label for="uloga">Izaberite ulogu:</label>
+        <select v-model="korisnik.uloga" id="uloga" name="uloge" required>
+          <option value="PRODAVAC">Prodavac</option>
+          <option value="KUPAC">Kupac</option>
+        </select>
+      </div>
+
       <button v-on:click="registration">Registruj se</button>
     </div>
   </div>
@@ -58,15 +81,26 @@ export default {
 
 .registration-form {
   display: flex;
-  flex-direction: column;
-  width: 300px;
+  justify-content: space-around;
+  align-items: flex-start; /* Polja počinju od vrha */
+  flex-wrap: wrap; /* Omogućava da se redovi prelome ako nema dovoljno širine */
+  width: 100%;
+  max-width: 800px; /* Ograničava širinu formulara */
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  background-color: #f0f0f0; /* Light gray background */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  align-items: center;
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.column {
+  flex: 1; /* Ravnomerno raspoređuje prostor između kolona */
+  margin-right: 20px; /* Razmak između kolona */
+}
+
+.column:last-child {
+  margin-right: 0; /* Poslednja kolona nema desni razmak */
 }
 
 .registration-form label {
@@ -79,27 +113,21 @@ export default {
 .registration-form input[type="password"],
 .registration-form input[type="date"],
 .registration-form select {
-  width: 90%;
+  width: 100%; /* Popunjava celu širinu kolone */
   padding: 10px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
-  margin-bottom: 10px;
-  background-color: #ffffff; /* White background for inputs */
-  box-sizing: border-box; /* Ensure padding and border are included in width */
-}
-
-.registration-form input[type="text"]:focus,
-.registration-form input[type="password"]:focus,
-.registration-form input[type="date"]:focus,
-.registration-form select:focus {
-  outline: none;
-  border-color: #44449d; /* Darker border color on focus */
+  box-sizing: border-box;
+  //background-color: #d8d8f6;
 }
 
 .registration-form button {
-  background-color: #44449d; /* Dark blue button color */
-  color: white;
+  width: 100%; /* Popunjava celu širinu formulara */
   padding: 12px 20px;
+  margin-top: 20px; /* Razmak između polja i dugmeta */
+  background-color: #44449d;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -107,7 +135,7 @@ export default {
 }
 
 .registration-form button:hover {
-  background-color: rgba(68, 68, 157, 0.8); /* Darker blue on hover */
+  background-color: rgba(68, 68, 157, 0.8);
 }
 
 </style>
