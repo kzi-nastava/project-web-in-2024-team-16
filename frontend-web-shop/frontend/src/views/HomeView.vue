@@ -71,13 +71,24 @@
   };
   </script>
   <style scoped>
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
   .home {
     text-align: center;
     font-family: "Bodoni MT";
+    width: 100%; /* Make sure the home div is 100% wide */
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove any default padding */
   }
   #headerimg{
-    width: 60%;  /* Fills 100% of the container width */
+    width: 100%;  /* Fills 100% of the container width */
     height: 60vh;
+    margin: 0;
+    padding: 0;
+
     /* z-index: 1;*/
   }
   #headercont {
