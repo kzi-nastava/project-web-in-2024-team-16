@@ -1,24 +1,22 @@
 <template>
-   <nav class="navbar">
-     <div class="search-container">
-       <input type="text" placeholder="Pretraga...">
-       <button type="submit" class="search-button">
-         <img src="@/assets/pretraga.webp" alt="Pretraga">
-       </button>
-     </div>
-     <div class="brand">
-       <span class="letter">J</span><span class="letter">O</span><span class="letter">M</span><span class="letter">I</span>
-     </div>
-   </nav>
+  <nav class="navbar">
+    <div class="search-container">
+      <input type="text" placeholder="Pretraga...">
+      <button type="submit" class="search-button">
+        <img src="@/assets/pretraga.webp" alt="Pretraga">
+      </button>
+    </div>
+    <div class="brand">
+      <span class="letter">J</span><span class="letter">O</span><span class="letter">M</span><span class="letter">I</span>
+    </div>
+  </nav>
 </template>
-
 <script>
 export default {
   name: 'HelloWorld',
 
 }
 </script>
-
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .navbar {

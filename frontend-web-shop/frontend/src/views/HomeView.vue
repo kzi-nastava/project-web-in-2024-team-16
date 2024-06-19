@@ -10,6 +10,18 @@
    <!-- <h1>Dobrodošli na Početnu Stranicu CAO CAO</h1>
     <p>Ovo je primer jednostavne početne stranice.</p>-->
 
+
+    <div class="category-product-container">
+    <!-- Kategorije -->
+    <div class="categories">
+      <h2>Kategorije</h2>
+      <ul class="category-list">
+        <li v-for="category in categories" :key="category.id">
+          <a href="#" class="category-link">{{ category.nazivKategorije }}</a>
+        </li>
+      </ul>
+    </div>
+
     <!-- Prikaz proizvoda -->
     <div class="product-container">
       <div class="row">
@@ -30,6 +42,7 @@
         </div>
       </div>
     </div>
+  </div>
   </template>
 
   <script>
@@ -45,7 +58,8 @@
     },
     data() {
       return {
-        products: []
+        products: [],
+        categories: []
       };
     },
     methods: {
@@ -61,10 +75,21 @@
             .catch(error => {
               console.error("There was an error fetching the products:", error);
             });
+      },
+      fetchCategories() {
+        axios.get("http://localhost:8080/api/category/categories")
+            .then(response => {
+              console.log(response.data);
+              this.categories = response.data;
+            })
+            .catch(error => {
+              console.error("There was an error fetching the categories:", error);
+            });
       }
-    },
+      },
       mounted() {
         this.fetchProducts();
+        this.fetchCategories();
 
     },
 
@@ -94,7 +119,7 @@
   #headercont {
     position: absolute;
     top: 40%;
-    left: 65%;
+    left: 65%;/*65*/
     transform: translate(-50%, -50%);
     text-align: center;
     z-index: 1;
@@ -118,6 +143,44 @@
   }
   button:hover {
     background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
+  }
+  .category-product-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    width: 100%;
+  }
+  .categories {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    /*width: 20%;  Širina kategorija na levoj strani */
+    margin-top: 20px;
+    margin-left: 60px;
+    padding: 40px; /* Dodajemo padding za uokvirivanje */
+    /*border: 1px solid #2f8066;  Dodajemo ivicu
+    border-radius: 8px;  Zaobljujemo ivicu */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Dodajemo senku */
+    background-color: rgb(47, 128, 102); /* Boja pozadine */
+    width: fit-content; /* Prilagođava širinu sadržaju unutar */
+    height: fit-content;
+    color: white;
+  }
+
+  .category-list {
+    list-style-type: none;
+    padding: 0;
+  }
+
+  .category-link {
+    display: block;
+    padding: 8px 16px; /* Prilagodite padding po potrebi */
+    color: #fff; /* Promenjena boja teksta na belu */
+    text-decoration: none;
+  }
+
+  .category-link:hover {
+    background-color: rgb(72, 136, 113);
   }
   .product-container {
     display: flex;
