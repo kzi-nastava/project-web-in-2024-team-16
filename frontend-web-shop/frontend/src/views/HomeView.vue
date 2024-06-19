@@ -4,7 +4,7 @@
     <img id="headerimg" src="@/assets/glavna.png">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
-      <button>Napravite nalog</button>
+      <button v-on:click="registration">Napravi nalog</button>
       <button v-on:click="login">Prijavite se</button>
     </div>
    <!-- <h1>Dobrodošli na Početnu Stranicu CAO CAO</h1>
@@ -52,6 +52,9 @@
       login: function () {
         this.$router.push("/login");
       },
+      registration: function (){
+        this.$router.push("/registration");
+      },
       fetchProducts() {
         axios.get("http://localhost:8080/api/product/pages")
             .then(response => {
@@ -67,7 +70,6 @@
         this.fetchProducts();
 
     },
-
   };
   </script>
   <style scoped>

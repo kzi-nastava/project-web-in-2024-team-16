@@ -17,7 +17,9 @@ export default {
   components: {HelloWorld},
   data: function () {
     return {
-      korisnik: {},//ovo dobijam prilikom prijave, posto to posle prosledjujem pomocu url mora da bude isto kao polja u
+      korisnik: {
+        //korisnickoIme: ""
+      },//ovo dobijam prilikom prijave, posto to posle prosledjujem pomocu url mora da bude isto kao polja u
       //login dto klasi
     };
   },
