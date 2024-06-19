@@ -44,7 +44,7 @@ public class KategorijaService {
         for(Kategorija k:kategorije){
             KategorijaDTO kategorijaDTO=new KategorijaDTO();
             kategorijaDTO.setNazivKategorije(k.getNazivKategorije());
-            kategorijaDTO.setId(k.getId());
+           // kategorijaDTO.setId(k.getId());
             kategorijeDTO.add(kategorijaDTO);
         }
 

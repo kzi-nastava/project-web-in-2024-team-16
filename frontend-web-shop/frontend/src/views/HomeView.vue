@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld @search="executeSearch" />
-    <img id="headerimg" src="@/assets/sincerely-media-cuEpo721ACY-unsplash.jpg">
+    <img id="headerimg" src="@/assets/logo.png">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
       <button>Napravite nalog</button>
@@ -35,7 +35,8 @@
                <p class="card-text">Cena: {{ product.cena }} RSD</p>
                <!--  <p class="card-text">Tip prodaje: {{ product.tipProdaje }}</p>-->
               <!--  <p class="card-text">Kategorije: {{ product.kategorije.join(', ') }}</p>-->
-                <a href="#" class="btn btn-primary">Vidi više...</a>
+              <!--  <a href="#" class="btn btn-primary">Vidi više...</a>-->
+              <router-link :to="'/product/' + product.id" class="btn btn-primary">Vidi više...</router-link>
               </div>
             </div>
           </div>
@@ -94,8 +95,6 @@
       },
       executeSearch(searchCriteria) {
         const { name, description } = searchCriteria;
-        console.log(name);
-        console.log("cao");
         if(description==''){
           axios.get("http://localhost:8080/api/product/search?name=" + name)
               .then(response => {
