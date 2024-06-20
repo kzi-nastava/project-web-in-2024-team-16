@@ -1,23 +1,50 @@
 <template>
   <div class="home">
-    <HelloWorld />
-    <img id="headerimg" src="@/assets/glavna.png">
+    <HelloWorld @search="executeSearch" />
+    <img id="headerimg" src="@/assets/nordwood-themes-EZSm8xRjnX0-unsplash.jpg">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
       <button v-on:click="registration">Napravi nalog</button>
       <button v-on:click="login">Prijavite se</button>
     </div>
-   <!-- <h1>Dobrodošli na Početnu Stranicu CAO CAO</h1>
-    <p>Ovo je primer jednostavne početne stranice.</p>-->
+    <div class="filters-container">
 
+    <div class="filter-type-container">
+      <h2>Tip proizvoda</h2>
+      <label>
+        <input type="radio" name="productType" @click="fetchProducts"> Svi proizvodi
+      </label>
+      <br>
+      <label>
+        <input type="radio" name="productType" @click="filterByType('FIKSNA')"> Fiksna cena
+      </label>
+      <br>
+      <label>
+        <input type="radio" name="productType" @click="filterByType('AUKCIJA')"> Aukcija
+      </label>
+    </div>
 
-    <div class="category-product-container">
-    <!-- Kategorije -->
+      <div class="filter-price-container">
+        <h2>Filter po ceni</h2>
+        <label for="priceFrom">Od:</label>
+        <input type="number" id="priceFrom" v-model="priceFrom" placeholder="Minimalna cena">
+        <label for="priceTo">Do:</label>
+        <input type="number" id="priceTo" v-model="priceTo" placeholder="Maksimalna cena">
+        <button @click="filterByPrice">Filtriraj</button>
+      </div>
+    </div>
+
+      <div class="category-product-container">
+      <!-- Kategorije -->
     <div class="categories">
       <h2>Kategorije</h2>
+      <br>
       <ul class="category-list">
+        <li  class="category-link" @click="fetchProducts">Svi proizvodi</li>
+        <br>
         <li v-for="category in categories" :key="category.id">
-          <a href="#" class="category-link">{{ category.nazivKategorije }}</a>
+         <!-- <a href="#" class="category-link"  @click="filterByCategory(category.id)>{{ category.nazivKategorije }}</a>-->
+          <span class="category-link" @click="filterByCategory(category.nazivKategorije)">{{ category.nazivKategorije }}</span>
         </li>
       </ul>
     </div>
@@ -35,12 +62,17 @@
                <p class="card-text">Cena: {{ product.cena }} RSD</p>
                <!--  <p class="card-text">Tip prodaje: {{ product.tipProdaje }}</p>-->
               <!--  <p class="card-text">Kategorije: {{ product.kategorije.join(', ') }}</p>-->
-                <a href="#" class="btn btn-primary">Vidi više...</a>
+              <!--  <a href="#" class="btn btn-primary">Vidi više...</a>-->
+              <router-link :to="'/product/' + product.id" class="btn btn-primary">Vidi više...</router-link>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="pagination">
+      <button @click="previousPage" :disabled="currentPage === 0">Prethodna stranica</button>
+      <button @click="nextPage">Sledeća stranica</button>
     </div>
   </div>
   </template>
@@ -58,9 +90,17 @@
     },
     data() {
       return {
-        products: [],
-        categories: []
+        allProducts: [],//novo, search
+        products: [],//paginacija proizvodi
+        categories: [],//sve kategorije
+        currentPage: 0,
+        pageSize: 6
       };
+    },
+    computed: {//ako nista nije napisano ispisi sve proizvode
+      displayedProducts() {
+        return this.products.length > 0 ? this.products : this.allProducts;
+      }
     },
     methods: {
       login: function () {
@@ -70,14 +110,29 @@
         this.$router.push("/registration");
       },
       fetchProducts() {
-        axios.get("http://localhost:8080/api/product/pages")
+        axios.get("http://localhost:8080/api/product/pages", {
+          params: {
+            page: this.currentPage,
+            size: this.pageSize
+          }
+        })
             .then(response => {
-              console.log(response.data)
+              console.log(response.data);
               this.products = response.data;
             })
             .catch(error => {
               console.error("There was an error fetching the products:", error);
             });
+      },
+      previousPage() {
+        if (this.currentPage > 0) {
+          this.currentPage--;
+          this.fetchProducts();
+        }
+      },
+      nextPage() {
+        this.currentPage++;
+        this.fetchProducts();
       },
       fetchCategories() {
         axios.get("http://localhost:8080/api/category/categories")
@@ -86,7 +141,85 @@
               this.categories = response.data;
             })
             .catch(error => {
-              console.error("There was an error fetching the categories:", error);
+              console.error("Greska pri dobijanju svih kategorija", error);
+            });
+      },
+      filterByPrice() {
+        if (this.priceFrom !== null && this.priceTo !== null) {
+          axios
+              .get("http://localhost:8080/api/product/filterByPrice", {
+                params: {
+                  priceFrom: this.priceFrom,
+                  priceTo: this.priceTo
+                }
+              })
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                console.error("Greska pri filtriranju proizvoda po ceni:", error);
+              });
+        } else {
+          this.fetchProducts(); // ili neki drugi fallback ako korisnik nije uneo oba polja
+        }
+      },
+      filterByType(type) {
+        axios.get("http://localhost:8080/api/product/filterByType", {
+          params: {type: type}
+        })
+            .then(response => {
+              this.products = response.data;
+            })
+            .catch(error => {
+              console.error("Greška pri filtriranju proizvoda po tipu:", error);
+            });
+      },
+      executeSearch(searchCriteria) {
+        const { name, description } = searchCriteria;
+        if(description==''){
+          axios.get("http://localhost:8080/api/product/search?name=" + name)
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                this.fetchProducts();
+                console.error("Greska pri koriscenju search-a", error);
+              });
+        }
+        else if(name==''){
+          axios.get("http://localhost:8080/api/product/search?description=" + description)
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                this.fetchProducts();
+                console.error("Greska pri koriscenju search-a", error);
+              });
+        }else {
+          const params = {
+            name,
+            description
+          };
+
+          axios.get("http://localhost:8080/api/product/search", {params})
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                this.fetchProducts();
+                console.error("Greska pri koriscenju search-a", error);
+              });
+        }
+      },
+      filterByCategory(categoryName) {
+        axios.get("http://localhost:8080/api/product/filterByCategory", {
+          params: {category: categoryName}
+        })
+            .then(response => {
+              this.products = response.data;
+            })
+            .catch(error => {
+              console.error("Greska pri filtriranju proizvoda po kategoriji:", error);
             });
       }
       },
@@ -104,6 +237,7 @@
     width: 100%;
   }
   .home {
+
     text-align: center;
     font-family: "Bodoni MT";
     width: 100%; /* Make sure the home div is 100% wide */
@@ -119,6 +253,7 @@
     /* z-index: 1;*/
   }
   #headercont {
+    font-family: Arial;
     position: absolute;
     top: 40%;
     left: 65%;/*65*/
@@ -146,6 +281,33 @@
   button:hover {
     background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
   }
+  .filter-type-container {
+    float: left; /* Postavlja kontejner na levu stranu */
+   /* background-color: rgba(93, 187, 155, 0.88);   Zelena pozadina */
+    padding: 10px;/*  Razmak unutar kontejnera */
+    color: white; /* Boja teksta */
+    font-family: Arial, sans-serif; /* Font */
+    margin-left: 60px;
+    width: 500px;
+    height: 120px;
+    color:#44449d ;
+    text-align: center;
+  }
+  .filter-type-container h2 {
+    margin-top: 0; /* tip proizvoda */
+    font-size: 20px;
+  }
+  .filter-price-container {
+    font-family: Arial, sans-serif; /* Font */
+    color: #44449d; /* Zelena boja teksta */
+  }
+  .filter-price-container input {
+    margin-right: 10px; /* Dodavanje desne margine između input polja */
+  }
+  .filter-price-container button {
+    width: 200px;
+    border-radius: 30px;
+  }
   .category-product-container {
     display: flex;
     justify-content: center;
@@ -155,7 +317,7 @@
   .categories {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     /*width: 20%;  Širina kategorija na levoj strani */
     margin-top: 20px;
     margin-left: 60px;
@@ -163,10 +325,12 @@
     /*border: 1px solid #2f8066;  Dodajemo ivicu
     border-radius: 8px;  Zaobljujemo ivicu */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Dodajemo senku */
-    background-color: rgb(47, 128, 102); /* Boja pozadine */
-    width: fit-content; /* Prilagođava širinu sadržaju unutar */
+    background-color: rgba(93, 187, 155, 0.88); /* Boja pozadine */
+    /*width: fit-content; rilagođava širinu sadržaju unutar */
+    width: 200px;
     height: fit-content;
     color: white;
+    font-family: Arial;
   }
 
   .category-list {
@@ -182,9 +346,11 @@
   }
 
   .category-link:hover {
-    background-color: rgb(72, 136, 113);
+    background-color: rgb(72, 162, 131);
+    cursor: pointer;
   }
   .product-container {
+    font-family: Arial;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -242,5 +408,16 @@
 
   .card-body a.btn-primary:hover {
     background-color: lavender; /* Promenite boju pozadine na svetliju ljubičastu kad je link u hover stanju */
+  }
+  .pagination {
+    margin-bottom: 20px; /* Prilagodite vrednost margine po želji */
+  }
+  .pagination button {
+    margin-right: 5px; /* Prilagodite ovu vrednost prema potrebi */
+    width: 200px;
+    border-radius: 30px;
+    height: 10px;
+    font-size: 15px;
+    text-align: center;
   }
   </style>

@@ -39,7 +39,7 @@ export default {
 <style>
 
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Arial Black";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -69,13 +69,12 @@ input[type="text"] {
 button {
   padding: 6px 12px;
   border-radius: 200px;
-  background-color: #f0f0f0;
+  background-color:#44449d;
   color: white;
   border: none;
 }
-button img {
-  width: 15px; /* Postavite željenu širinu slike */
-  height: 14px; /* Postavite željenu visinu slike */
+button:hover {
+  background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
 }
 .brand {
   font-size: 50px; /* Postavite veličinu fonta */
