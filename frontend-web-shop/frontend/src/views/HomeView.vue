@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld @search="executeSearch" />
-    <img id="headerimg" src="@/assets/glavna.png">
+    <img id="headerimg" src="@/assets/nordwood-themes-EZSm8xRjnX0-unsplash.jpg">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
       <button>Napravite nalog</button>
