@@ -1,21 +1,48 @@
-<!--<template>-->
+<template>
+  <div>
+    <div class="user-profile">
+      <h2>Profil korisnika</h2>
+      <div v-if="loading">Učitavanje...</div>
+      <div v-else>
+        <p>Ime: {{ currentUser.ime }}</p>
+        <p>Prezime: {{ currentUser.prezime }}</p>
+        <p>Email: {{ currentUser.email }}</p>
+        <!-- Dodajte ostale informacije koje želite prikazati -->
+      </div>
+    </div>
+  </div>
+</template>
 
-<!--  <div>-->
-<!--    <HelloWorld />-->
-<!--    <div class="login-form">-->
-<!--      <input v-model="korisnik.korisnickoIme" type="text" placeholder="Korisničko ime" /><br />-->
-<!--      <input v-model="korisnik.lozinka" type="password" placeholder="Lozinka" /><br />-->
-<!--      <button v-on:click="login">Prijavi se</button>-->
-<!--    </div>-->
-<!--  </div>-->
+<script>
+import axios from 'axios';
 
-<!--</template>-->
+export default {
+  data() {
+    return {
+      currentUser: {}, // Objekat za čuvanje podataka o korisniku
+      loading: true // Prikazivanje loadera dok se podaci učitavaju
+    };
+  },
+  mounted() {
+    // Pozivamo metodu za dobavljanje trenutnog korisnika kada se komponenta montira
+    this.fetchCurrentUser();
+  },
+  methods: {
+    fetchCurrentUser() {
+      axios.get('http://localhost:8080/api/currentUser', {withCredentials: true})
+          .then(response => {
+            this.currentUser = response.data;
+            this.loading = false;
+          })
+          .catch(error => {
+            console.error('Greška pri dobavljanju podataka korisnika:', error);
+            this.loading = false;
+          });
+    }
+  }
+};
+</script>
 
-<!--<script setup>-->
+<style scoped>
 
-<!--import HelloWorld from "@/components/HelloWorld.vue";-->
-<!--</script>-->
-
-<!--<style scoped>-->
-
-<!--</style>-->
+</style>

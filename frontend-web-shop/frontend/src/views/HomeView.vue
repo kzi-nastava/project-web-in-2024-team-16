@@ -4,8 +4,12 @@
     <img id="headerimg" src="@/assets/nordwood-themes-EZSm8xRjnX0-unsplash.jpg">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
-      <button v-on:click="registration">Napravi nalog</button>
-      <button v-on:click="login">Prijavite se</button>
+     <!-- <button v-on:click="registration">Napravi nalog</button>
+      <button v-on:click="login">Prijavite se</button>-->
+      <button v-if="!isLoggedIn" @click="registration">Napravite nalog</button>
+      <button v-if="!isLoggedIn" @click="login">Prijavite se</button>
+      <button v-if="isLoggedIn" @click="goToProfile">Moj profil</button>
+      <button v-if="isLoggedIn" @click="logout">Odjavite se</button>
     </div>
     <div class="filters-container">
 
@@ -94,7 +98,8 @@
         products: [],//paginacija proizvodi
         categories: [],//sve kategorije
         currentPage: 0,
-        pageSize: 6
+        pageSize: 6,
+        isLoggedIn: false
       };
     },
     computed: {//ako nista nije napisano ispisi sve proizvode
@@ -105,6 +110,14 @@
     methods: {
       login: function () {
         this.$router.push("/login");
+      },
+      logout() {
+        // Logika za odjavu (brisanje localStorage i preusmeravanje)
+        localStorage.removeItem('user');
+        this.isLoggedIn = false;
+      },
+      goToProfile() {
+        this.$router.push("/profile");
       },
       registration: function (){
         this.$router.push("/registration");
@@ -226,6 +239,10 @@
       mounted() {
         this.fetchProducts();
         this.fetchCategories();
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+          this.isLoggedIn = true;
+        }
 
     },
   };

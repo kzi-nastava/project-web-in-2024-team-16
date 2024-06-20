@@ -30,8 +30,9 @@ export default {
           .then((res) => {
             console.log(res);//javlja da je dobro i stavlja me na home stranicu
             console.log("Prijavljen korisnik:", this.korisnik.korisnickoIme);
-
-            this.$router.push("/home");
+            localStorage.setItem("user", JSON.stringify(res.data.id));
+            this.$router.push("/");
+            this.$emit("userLoggedIn");
           })
           .catch((err) => {
             console.log(err);
