@@ -7,6 +7,7 @@
       <button>Napravite nalog</button>
       <button v-on:click="login">Prijavite se</button>
     </div>
+    <div class="filters-container">
 
     <div class="filter-type-container">
       <h2>Tip proizvoda</h2>
@@ -21,6 +22,16 @@
       <label>
         <input type="radio" name="productType" @click="filterByType('AUKCIJA')"> Aukcija
       </label>
+    </div>
+
+      <div class="filter-price-container">
+        <h2>Filter po ceni</h2>
+        <label for="priceFrom">Od:</label>
+        <input type="number" id="priceFrom" v-model="priceFrom" placeholder="Minimalna cena">
+        <label for="priceTo">Do:</label>
+        <input type="number" id="priceTo" v-model="priceTo" placeholder="Maksimalna cena">
+        <button @click="filterByPrice">Filtriraj</button>
+      </div>
     </div>
 
       <div class="category-product-container">
@@ -108,6 +119,25 @@
             .catch(error => {
               console.error("Greska pri dobijanju svih kategorija", error);
             });
+      },
+      filterByPrice() {
+        if (this.priceFrom !== null && this.priceTo !== null) {
+          axios
+              .get("http://localhost:8080/api/product/filterByPrice", {
+                params: {
+                  priceFrom: this.priceFrom,
+                  priceTo: this.priceTo
+                }
+              })
+              .then(response => {
+                this.products = response.data;
+              })
+              .catch(error => {
+                console.error("Greska pri filtriranju proizvoda po ceni:", error);
+              });
+        } else {
+          this.fetchProducts(); // ili neki drugi fallback ako korisnik nije uneo oba polja
+        }
       },
       filterByType(type) {
         axios.get("http://localhost:8080/api/product/filterByType", {
@@ -237,12 +267,22 @@
     margin-left: 60px;
     width: 500px;
     height: 120px;
-    color:rgba(93, 187, 155, 0.88) ;
+    color:#44449d ;
     text-align: center;
   }
   .filter-type-container h2 {
     margin-top: 0; /* tip proizvoda */
     font-size: 20px;
+  }
+  .filter-price-container {
+    font-family: Arial, sans-serif; /* Font */
+    color: #44449d; /* Zelena boja teksta */
+  }
+  .filter-price-container input {
+    margin-right: 10px; /* Dodavanje desne margine između input polja */
+  }
+  .filter-price-container button {
+    width: 200px;
   }
   .category-product-container {
     display: flex;
