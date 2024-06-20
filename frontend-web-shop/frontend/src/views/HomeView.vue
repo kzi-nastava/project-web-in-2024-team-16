@@ -7,12 +7,24 @@
       <button>Napravite nalog</button>
       <button v-on:click="login">Prijavite se</button>
     </div>
-   <!-- <h1>Dobrodošli na Početnu Stranicu CAO CAO</h1>
-    <p>Ovo je primer jednostavne početne stranice.</p>-->
 
+    <div class="filter-type-container">
+      <h2>Tip proizvoda</h2>
+      <label>
+        <input type="radio" name="productType" @click="fetchProducts"> Svi proizvodi
+      </label>
+      <br>
+      <label>
+        <input type="radio" name="productType" @click="filterByType('FIKSNA')"> Fiksna cena
+      </label>
+      <br>
+      <label>
+        <input type="radio" name="productType" @click="filterByType('AUKCIJA')"> Aukcija
+      </label>
+    </div>
 
-    <div class="category-product-container">
-    <!-- Kategorije -->
+      <div class="category-product-container">
+      <!-- Kategorije -->
     <div class="categories">
       <h2>Kategorije</h2>
       <br>
@@ -95,6 +107,17 @@
             })
             .catch(error => {
               console.error("Greska pri dobijanju svih kategorija", error);
+            });
+      },
+      filterByType(type) {
+        axios.get("http://localhost:8080/api/product/filterByType", {
+          params: {type: type}
+        })
+            .then(response => {
+              this.products = response.data;
+            })
+            .catch(error => {
+              console.error("Greška pri filtriranju proizvoda po tipu:", error);
             });
       },
       executeSearch(searchCriteria) {
@@ -205,6 +228,22 @@
   button:hover {
     background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
   }
+  .filter-type-container {
+    float: left; /* Postavlja kontejner na levu stranu */
+   /* background-color: rgba(93, 187, 155, 0.88);   Zelena pozadina */
+    padding: 10px;/*  Razmak unutar kontejnera */
+    color: white; /* Boja teksta */
+    font-family: Arial, sans-serif; /* Font */
+    margin-left: 60px;
+    width: 500px;
+    height: 120px;
+    color:rgba(93, 187, 155, 0.88) ;
+    text-align: center;
+  }
+  .filter-type-container h2 {
+    margin-top: 0; /* tip proizvoda */
+    font-size: 20px;
+  }
   .category-product-container {
     display: flex;
     justify-content: center;
@@ -222,7 +261,7 @@
     /*border: 1px solid #2f8066;  Dodajemo ivicu
     border-radius: 8px;  Zaobljujemo ivicu */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Dodajemo senku */
-    background-color: rgb(47, 128, 102); /* Boja pozadine */
+    background-color: rgba(93, 187, 155, 0.88); /* Boja pozadine */
     /*width: fit-content; rilagođava širinu sadržaju unutar */
     width: 200px;
     height: fit-content;
@@ -243,7 +282,7 @@
   }
 
   .category-link:hover {
-    background-color: rgb(72, 136, 113);
+    background-color: rgb(72, 162, 131);
     cursor: pointer;
   }
   .product-container {
