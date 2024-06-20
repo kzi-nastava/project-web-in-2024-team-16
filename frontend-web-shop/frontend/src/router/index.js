@@ -2,6 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import LoginView from "@/views/LoginView.vue";
+import RegistrationView from "@/views/RegistrationView.vue";
+import HomePageView from "@/views/HomePageView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 
 Vue.use(VueRouter)
 
@@ -16,6 +19,22 @@ const routes = [
     name: 'login',
     component: LoginView
   },
+  {
+    path: '/registration',
+    name: 'registration',
+    component: RegistrationView
+  },
+  {
+    path: '/homepage',
+    name: 'homepage',
+    component: HomePageView
+  },
+  // {
+  //   path: '/profile/:id', // Definicija dinamičke rute za detalje proizvoda
+  //   name: 'profile',
+  //   component: ProfileView,
+  //   props: true // Prosleđivanje parametara kao propertija komponenti
+  // },
   {
     path: '/about',
     name: 'about',

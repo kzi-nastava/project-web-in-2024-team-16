@@ -29,6 +29,9 @@ export default {
           })
           .then((res) => {
             console.log(res);//javlja da je dobro i stavlja me na home stranicu
+            console.log("CAO CAO CAO CAO");
+            console.log("Prijavljen korisnik:", this.korisnik.korisnickoIme);
+            console.log("ID korisnika:", res.data.id);
             this.$router.push("/home");
           })
           .catch((err) => {
