@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld @search="executeSearch" />
-    <img id="headerimg" src="@/assets/logo.png">
+    <img id="headerimg" src="@/assets/glavna.png">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
       <button>Napravite nalog</button>
@@ -70,6 +70,10 @@
         </div>
       </div>
     </div>
+    <div class="pagination">
+      <button @click="previousPage" :disabled="currentPage === 0">Prethodna stranica</button>
+      <button @click="nextPage">Sledeća stranica</button>
+    </div>
   </div>
   </template>
 
@@ -88,7 +92,9 @@
       return {
         allProducts: [],//novo, search
         products: [],//paginacija proizvodi
-        categories: []//sve kategorije
+        categories: [],//sve kategorije
+        currentPage: 0,
+        pageSize: 6
       };
     },
     computed: {//ako nista nije napisano ispisi sve proizvode
@@ -101,14 +107,29 @@
         this.$router.push("/login");
       },
       fetchProducts() {
-        axios.get("http://localhost:8080/api/product/pages")
+        axios.get("http://localhost:8080/api/product/pages", {
+          params: {
+            page: this.currentPage,
+            size: this.pageSize
+          }
+        })
             .then(response => {
-              console.log(response.data)
+              console.log(response.data);
               this.products = response.data;
             })
             .catch(error => {
               console.error("There was an error fetching the products:", error);
             });
+      },
+      previousPage() {
+        if (this.currentPage > 0) {
+          this.currentPage--;
+          this.fetchProducts();
+        }
+      },
+      nextPage() {
+        this.currentPage++;
+        this.fetchProducts();
       },
       fetchCategories() {
         axios.get("http://localhost:8080/api/category/categories")
@@ -283,6 +304,7 @@
   }
   .filter-price-container button {
     width: 200px;
+    border-radius: 30px;
   }
   .category-product-container {
     display: flex;
@@ -384,5 +406,16 @@
 
   .card-body a.btn-primary:hover {
     background-color: lavender; /* Promenite boju pozadine na svetliju ljubičastu kad je link u hover stanju */
+  }
+  .pagination {
+    margin-bottom: 20px; /* Prilagodite vrednost margine po želji */
+  }
+  .pagination button {
+    margin-right: 5px; /* Prilagodite ovu vrednost prema potrebi */
+    width: 200px;
+    border-radius: 30px;
+    height: 10px;
+    font-size: 15px;
+    text-align: center;
   }
   </style>
