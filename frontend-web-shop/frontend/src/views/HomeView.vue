@@ -15,9 +15,13 @@
     <!-- Kategorije -->
     <div class="categories">
       <h2>Kategorije</h2>
+      <br>
       <ul class="category-list">
+        <li  class="category-link" @click="fetchProducts">Svi proizvodi</li>
+        <br>
         <li v-for="category in categories" :key="category.id">
-          <a href="#" class="category-link">{{ category.nazivKategorije }}</a>
+         <!-- <a href="#" class="category-link"  @click="filterByCategory(category.id)>{{ category.nazivKategorije }}</a>-->
+          <span class="category-link" @click="filterByCategory(category.nazivKategorije)">{{ category.nazivKategorije }}</span>
         </li>
       </ul>
     </div>
@@ -129,6 +133,17 @@
                 console.error("Greska pri koriscenju search-a", error);
               });
         }
+      },
+      filterByCategory(categoryName) {
+        axios.get("http://localhost:8080/api/product/filterByCategory", {
+          params: {category: categoryName}
+        })
+            .then(response => {
+              this.products = response.data;
+            })
+            .catch(error => {
+              console.error("Greska pri filtriranju proizvoda po kategoriji:", error);
+            });
       }
       },
       mounted() {
@@ -199,7 +214,7 @@
   .categories {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     /*width: 20%;  Širina kategorija na levoj strani */
     margin-top: 20px;
     margin-left: 60px;
@@ -208,7 +223,8 @@
     border-radius: 8px;  Zaobljujemo ivicu */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Dodajemo senku */
     background-color: rgb(47, 128, 102); /* Boja pozadine */
-    width: fit-content; /* Prilagođava širinu sadržaju unutar */
+    /*width: fit-content; rilagođava širinu sadržaju unutar */
+    width: 200px;
     height: fit-content;
     color: white;
     font-family: Arial;
@@ -228,6 +244,7 @@
 
   .category-link:hover {
     background-color: rgb(72, 136, 113);
+    cursor: pointer;
   }
   .product-container {
     font-family: Arial;
