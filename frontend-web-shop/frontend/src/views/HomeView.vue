@@ -4,7 +4,7 @@
     <img id="headerimg" src="@/assets/nordwood-themes-EZSm8xRjnX0-unsplash.jpg">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
-      <button>Napravite nalog</button>
+      <button v-on:click="registration">Napravi nalog</button>
       <button v-on:click="login">Prijavite se</button>
     </div>
     <div class="filters-container">
@@ -105,6 +105,9 @@
     methods: {
       login: function () {
         this.$router.push("/login");
+      },
+      registration: function (){
+        this.$router.push("/registration");
       },
       fetchProducts() {
         axios.get("http://localhost:8080/api/product/pages", {
@@ -225,7 +228,6 @@
         this.fetchCategories();
 
     },
-
   };
   </script>
   <style scoped>
