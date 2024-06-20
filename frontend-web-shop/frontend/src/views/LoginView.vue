@@ -17,9 +17,7 @@ export default {
   components: {HelloWorld},
   data: function () {
     return {
-      korisnik: {
-        //korisnickoIme: ""
-      },//ovo dobijam prilikom prijave, posto to posle prosledjujem pomocu url mora da bude isto kao polja u
+      korisnik: {},//ovo dobijam prilikom prijave, posto to posle prosledjujem pomocu url mora da bude isto kao polja u
       //login dto klasi
     };
   },
@@ -31,6 +29,9 @@ export default {
           })
           .then((res) => {
             console.log(res);//javlja da je dobro i stavlja me na home stranicu
+            console.log("CAO CAO CAO CAO");
+            console.log("Prijavljen korisnik:", this.korisnik.korisnickoIme);
+            console.log("ID korisnika:", res.data.id);
             this.$router.push("/home");
           })
           .catch((err) => {

@@ -15,6 +15,7 @@ import com.webshop.service.KorisnikService;
 import com.webshop.service.ProizvodService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.Positive;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -44,17 +46,22 @@ public class KorisnikController {
         return new ResponseEntity<>(registrovaniKorisnik, HttpStatus.CREATED);
     }
     @PostMapping("/login")
-    public ResponseEntity<String> prijava(@RequestBody PrijavaKorisnikaDTO prijavaDto, HttpSession session){
+    public ResponseEntity<Object> prijava(@RequestBody PrijavaKorisnikaDTO prijavaDto, HttpSession session){
 
         if(prijavaDto.getKorisnickoIme().isEmpty() || prijavaDto.getLozinka().isEmpty())
-            return new ResponseEntity("Neispravni podaci, molim Vas pokušajte ponovo.", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Neispravni podaci, molim Vas pokušajte ponovo.", HttpStatus.BAD_REQUEST);
 
         Korisnik loginovaniKorisnik = korisnikService.prijava(prijavaDto.getKorisnickoIme(), prijavaDto.getLozinka());
         if (loginovaniKorisnik == null)
             return new ResponseEntity<>("Korisnik ne postoji.", HttpStatus.NOT_FOUND);
 
         session.setAttribute("korisnik", loginovaniKorisnik);
-        return ResponseEntity.ok("Prijava uspešna.");
+
+        // Dodajte ID korisnika u odgovor
+        return ResponseEntity.ok().body(Map.of(
+                "message", "Prijava uspešna.",
+                "id", loginovaniKorisnik.getId()
+        ));
     }
     @PostMapping("/logout")
     public ResponseEntity Odjava(HttpSession session){
@@ -427,5 +434,19 @@ public class KorisnikController {
         return new ResponseEntity<>(ponudaDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/currentUser")
+    public ResponseEntity<?> getCurrentUser(HttpSession session) throws UserNotFoundException{
+
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+
+        Optional<Korisnik> trenutniKorisnik = korisnikService.findById(korisnik.getId());
+
+        if (trenutniKorisnik == null) {
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
+        }
+
+        return ResponseEntity.ok(trenutniKorisnik);
     }
+
+}
 

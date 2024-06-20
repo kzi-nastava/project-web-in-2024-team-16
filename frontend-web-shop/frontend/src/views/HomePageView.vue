@@ -6,7 +6,9 @@
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
       <button v-on:click="registration">Registracija</button>
-      <button v-on:click="update">Vas profil</button>
+      <button @click="profile(korisnik.id)">Ažuriraj autora</button>
+<!--      <router-link v-if="korisnik.id" :to="'/profile/' + korisnik.id" class="btn btn-primary">Vaš profil</router-link>-->
+<!--      <router-link :to="'/profileView/' + korisnik.id" class="btn btn-primary">Vaš profil</router-link>-->
     </div>
     <!-- <h1>Dobrodošli na Početnu Stranicu CAO CAO</h1>
      <p>Ovo je primer jednostavne početne stranice.</p>-->
@@ -52,18 +54,31 @@ export default {
       korisnik: {}
     };
   },
+  // mounted(){
+  //   this.profile();
+  //   this.fetchProducts();
+  // },
   methods: {
-    async update() {
-      console.log('Uloga korisnika:', this.korisnik.uloga); // Loguje vrednost uloge
-      const KUPAC = 'KUPAC'; // Enum vrednost kao string
-      if (this.korisnik.uloga === KUPAC) {
-        this.$router.push("/updateCustomer");
-      } else if (this.korisnik.uloga === 'PRODAVAC') {
-        this.$router.push("/updateSeller");
-      } else {
-        console.error('Unknown role:', this.korisnik.uloga);
-        // Dodajte logiku za nepoznatu ulogu ako je potrebno
-      }
+    async profile(korisnikId) {
+      // console.log('Uloga korisnika:', this.korisnik.uloga); // Loguje vrednost uloge
+      // const KUPAC = 'KUPAC'; // Enum vrednost kao string
+      // if (this.korisnik.uloga === KUPAC) {
+      //   this.$router.push("/updateCustomer");
+      // } else if (this.korisnik.uloga === 'PRODAVAC') {
+      //   this.$router.push("/updateSeller");
+      // } else {
+      //   console.error('Unknown role:', this.korisnik.uloga);
+      //   // Dodajte logiku za nepoznatu ulogu ako je potrebno
+      // }
+      this.$router.push("/home");
+      //this.$router.push("/profileView/${korisnikId}");
+      // try {
+      //   const response = await axios.get('http://localhost:8080/api/user/currentUser'); // API endpoint za dobijanje podataka o trenutno prijavljenom korisniku
+      //   this.korisnik = response.data;
+      // } catch (error) {
+      //   console.error('Greška pri dobijanju podataka o korisniku:', error);
+      // }
+
     },
     registration: function () {
       this.$router.push("/registration");
@@ -79,10 +94,13 @@ export default {
           });
     }
   },
-  mounted() {
-    this.fetchProducts();
-
-  },
+  // mounted() {
+  //   this.fetchProducts();
+  //
+  // },
+  created() {
+    this.profile(); // Učitaj podatke o korisniku pri kreiranju komponente
+  }
 };
 </script>
 
