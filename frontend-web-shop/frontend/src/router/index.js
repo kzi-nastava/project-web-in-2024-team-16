@@ -5,6 +5,7 @@ import LoginView from "@/views/LoginView.vue";
 import ProductView from "@/views/ProductView.vue";
 import RegistrationView from "@/views/RegistrationView.vue";
 import HomePageView from "@/views/HomePageView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 
 
 
@@ -31,6 +32,11 @@ const routes = [
     path: '/homepage',
     name: 'homepage',
     component: HomePageView
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: ProfileView
   },
   // {
   //   path: '/profile/:id', // Definicija dinamičke rute za detalje proizvoda
