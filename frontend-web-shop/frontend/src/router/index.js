@@ -25,6 +25,7 @@ const routes = [
     path: '/registration',
     name: 'registration',
     component: RegistrationView
+    //neibtno
   },
   {
     path: '/homepage',
