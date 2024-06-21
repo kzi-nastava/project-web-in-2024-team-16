@@ -43,6 +43,7 @@
           </div>
         </div>
         <button v-on:click="update">Update</button>
+        <button v-on:click="recenzije">Recenzije</button>
       </div>
     </div>
   </div>
@@ -100,6 +101,23 @@ export default {
       console.log('Trenutni podaci o korisniku pre slanja:', this.currentUser);
       axios
           .put(`http://localhost:8080/api/user/updateSeller/${this.currentUser.id}`, this.currentUser, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            this.currentUser = response.data;
+            this.loading = false;
+          })
+          .catch(error => {
+            console.error('Greška pri dobavljanju podataka korisnika:', error);
+            this.loading = false;
+          });
+    },
+    recenzije(){
+      axios
+          .get('http://localhost:8080/api/user/reviewedSellers/received',  {
             withCredentials: true,
             headers: {
               'Content-Type': 'application/json'
