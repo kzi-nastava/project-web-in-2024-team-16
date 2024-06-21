@@ -11,6 +11,10 @@
       <button v-if="isLoggedIn" @click="goToProfile">Moj profil</button>
       <button v-if="isLoggedIn" @click="logout">Odjavite se</button>
     </div>
+    <div id="post-new-product">
+      <button v-if="isLoggedIn && userRole === 'PRODAVAC'" @click="postNewProduct">Postavite oglas</button>
+    </div>
+
     <div class="filters-container">
 
     <div class="filter-type-container">
@@ -101,7 +105,8 @@
         pageSize: 6,
         isLoggedIn: false,
         priceTo: 0,
-        priceFrom: 0
+        priceFrom: 0,
+        userRole: "",
       };
     },
     computed: {//ako nista nije napisano ispisi sve proizvode
@@ -236,7 +241,10 @@
             .catch(error => {
               console.error("Greska pri filtriranju proizvoda po kategoriji:", error);
             });
-      }
+      },
+      postNewProduct() {
+        // Method logic
+      },
       },
       mounted() {
         this.fetchProducts();
@@ -244,6 +252,10 @@
         const user = JSON.parse(localStorage.getItem('user'));
         if (user) {
           this.isLoggedIn = true;
+          const userRole = localStorage.getItem("userRole");
+          if (userRole) {
+            this.userRole = userRole;
+          }
         }
 
     },
@@ -299,6 +311,26 @@
   }
   button:hover {
     background-color: rgb(72, 136, 113); /* menja boju pri stavljanju misa na prijavu */
+  }
+  #post-new-product {
+    display: flex; /* Koristi fleksibilni prikaz */
+    justify-content: center; /* Centriraj sadržaj po horizontalnoj osi */
+    align-items: center; /* Centriraj sadržaj po vertikalnoj osi */
+  }
+  #post-new-product button {
+    display: block; /* Podešava dugme da bude blok element */
+    width: 200px; /* Širina dugmeta */
+    padding: 10px; /* Unutrašnji padding */
+    border: none; /* Uklanja ivice */
+    border-radius: 50px; /* Zaobljeni rubovi */
+    background-color: rgba(47, 128, 102, 0.76); /* Boja pozadine */
+    color: white; /* Boja teksta */
+    font-size: 16px; /* Veličina fonta */
+    cursor: pointer; /* Promena kursora na pokazivač */
+    margin-top: 10px; /* Margin na vrhu */
+  }
+  #post-new-product button:hover {
+    background-color: #488871; /* Promena boje pozadine prilikom prelaska mišem */
   }
   .filter-type-container {
     float: left; /* Postavlja kontejner na levu stranu */
@@ -438,5 +470,6 @@
     height: 10px;
     font-size: 15px;
     text-align: center;
+
   }
   </style>

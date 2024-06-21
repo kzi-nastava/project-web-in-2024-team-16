@@ -9,16 +9,18 @@
     <img :src="product.slikaProizvoda" alt="Product Image">
     </div>
     <div class="product-info">
-      <hr color="#44449d">
+      <hr>
       <h1>{{ product.naziv }}</h1>
-      <hr color="#44449d">
+      <hr >
       <br>
       <br>
       <p>Opis proizvoda: {{ product.opis }}</p>
       <p>Tip prodaje: {{ product.tipProdaje}}</p>
      <!-- <p>Kategorije: {{ product.kategorije}}</p>-->
-    <p>Cena: {{ product.cena }} RSD</p>
+    <!--<p>Cena: {{ product.cena }} RSD</p>-->
+      <p v-if="product.tipProdaje !== 'AUKCIJA'">Cena: {{ product.cena }} RSD</p>
       <div v-if="product.tipProdaje === 'AUKCIJA'">
+        <hr>
         <p>Unesite vašu ponudu:</p>
         <input type="number" v-model="novaPonuda" />
       </div>
