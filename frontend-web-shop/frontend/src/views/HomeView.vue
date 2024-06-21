@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld @search="executeSearch" />
-    <img id="headerimg" src="@/assets/nordwood-themes-EZSm8xRjnX0-unsplash.jpg">
+    <img id="headerimg" src="/kutija.JPG">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
      <!-- <button v-on:click="registration">Napravi nalog</button>
@@ -99,7 +99,9 @@
         categories: [],//sve kategorije
         currentPage: 0,
         pageSize: 6,
-        isLoggedIn: false
+        isLoggedIn: false,
+        priceTo: 0,
+        priceFrom: 0
       };
     },
     computed: {//ako nista nije napisano ispisi sve proizvode
@@ -273,11 +275,11 @@
     font-family: Arial;
     position: absolute;
     top: 40%;
-    left: 65%;/*65*/
+    left: 30%;/*65*/
     transform: translate(-50%, -50%);
     text-align: center;
     z-index: 1;
-    color: #44449d;
+    color: rgba(47, 128, 102, 0.76);
   }
   #headercont button { /*podesavanje da dugad budu jedno ispod drugog*/
     display: flex; /* Uključite fleksbox za dugmeta */
@@ -289,14 +291,14 @@
   }
   button{
     color: white;
-    background-color: rgba(68, 68, 157, 0.9);
+    background-color: rgba(47, 128, 102, 0.76);
     padding: 15px 25px;/*da bude oko teksta toliko praznog*/
     border-radius: 5px;/*zaobli ivice*/
     border: 1px solid gray;
     cursor: pointer;
   }
   button:hover {
-    background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
+    background-color: rgb(72, 136, 113); /* menja boju pri stavljanju misa na prijavu */
   }
   .filter-type-container {
     float: left; /* Postavlja kontejner na levu stranu */
@@ -307,7 +309,7 @@
     margin-left: 60px;
     width: 500px;
     height: 120px;
-    color:#44449d ;
+    color: #966396;
     text-align: center;
   }
   .filter-type-container h2 {
@@ -316,7 +318,7 @@
   }
   .filter-price-container {
     font-family: Arial, sans-serif; /* Font */
-    color: #44449d; /* Zelena boja teksta */
+    color: #966396; /* Zelena boja teksta */
   }
   .filter-price-container input {
     margin-right: 10px; /* Dodavanje desne margine između input polja */
@@ -342,7 +344,7 @@
     /*border: 1px solid #2f8066;  Dodajemo ivicu
     border-radius: 8px;  Zaobljujemo ivicu */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Dodajemo senku */
-    background-color: rgba(93, 187, 155, 0.88); /* Boja pozadine */
+    background-color: rgba(47, 128, 102, 0.76); /* Boja pozadine */
     /*width: fit-content; rilagođava širinu sadržaju unutar */
     width: 200px;
     height: fit-content;

@@ -18,4 +18,5 @@ public class PonudaDTO {
     private PrijavaKorisnikDTO kupacKojiDajePonudu;
 
     private ProizvodAukcijaDTO proizvod;
+
 }

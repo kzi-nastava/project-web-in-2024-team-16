@@ -471,7 +471,7 @@ public class ProizvodService {
         return proizvodiNaProdajuDTO;
     }
     private void sendVerificationEmailCustomer(Korisnik korisnik) throws IOException {
-
+        System.out.println("Usao u slanje mejla");
         Email from = new Email("webshopjm.in@gmail.com");
         String subject = "Kupljen proizvod";
         Email to = new Email(korisnik.getMejl());
@@ -523,9 +523,10 @@ public class ProizvodService {
 
         boolean najvecaPonuda = true;
 
+
         for (Ponuda ponuda : postojecePonude) {
             if (novaPonuda <= ponuda.getCena()) {
-                throw new NotHighestOfferException("Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću.(" + ponuda.getCena() + ").");
+                throw new NotHighestOfferException("Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću: " + ponuda.getCena() + ".");
             }
         }
         Optional<Kupac> kupac = kupacRepository.findById(korisnik.getId());

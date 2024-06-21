@@ -43,7 +43,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: rgba(47, 128, 102, 0.76);
 }
 body, html {
   margin: 0;
@@ -69,12 +69,12 @@ input[type="text"] {
 button {
   padding: 6px 12px;
   border-radius: 200px;
-  background-color:#44449d;
+  background-color: rgba(47, 128, 102, 0.76);
   color: white;
   border: none;
 }
 button:hover {
-  background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
+  background-color: rgb(72, 136, 113); /* menja boju pri stavljanju misa na prijavu */
 }
 .brand {
   font-size: 50px; /* Postavite veličinu fonta */
