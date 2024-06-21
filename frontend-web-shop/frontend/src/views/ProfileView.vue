@@ -4,17 +4,7 @@
       <h2>Vasi podaci</h2>
       <div v-if="loading">Učitavanje...</div>
       <div v-else>
-        <p>Slika:</p>
-        <img :src="currentUser.slika" alt="Slika korisnika"/><br>
-<!--        <p>Ime: {{ currentUser.ime }}</p>-->
-<!--        <p>Prezime: {{ currentUser.prezime }}</p>-->
-<!--        <p>Korisnicko ime: {{currentUser.korisnickoIme}}</p>-->
-<!--        <p>Lozinka: {{ currentUser.lozinka }}</p>-->
-<!--        <p>Telefon: {{currentUser.telefon}}</p>-->
-<!--        <p>Mejl: {{currentUser.mejl}}</p>-->
-<!--        <p>Datum rodjenja: {{currentUser.datumRodjenja}}</p>-->
-<!--        <p>Uloga: {{currentUser.uloga}}</p>-->
-<!--        <p>Nesto bzvz xx</p>-->
+        <img :src="currentUser.slika" alt="Slika korisnika" class="slika"/><br>
         <label for="ime">Ime:</label>
         <input v-model="currentUser.ime" type="text" id="ime" placeholder="Unesite novo ime" /><br>
         <label for="prezime">Prezime:</label>
@@ -32,7 +22,7 @@
         <label for="datumRodjenja">Datum rodjenja:</label>
         <input v-model="currentUser.datumRodjenja" type="date" id="datumRodjenja" placeholder="Unesite novi datum rodjenja" /><br>
         <label for="slika">Slika:</label>
-        <input :src="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
+        <input v-model="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
         <label for="opisKorisnika">Opis:</label>
         <input v-model="currentUser.opisKorisnika" type="text" id="opisKorisnika" placeholder="Unesite nov opis" /><br>
         <label for="uloga">Uloga:</label>
@@ -182,6 +172,12 @@ export default {
 
 .registration-form button:hover {
   background-color: rgba(68, 68, 157, 0.8);
+}
+.slika{
+  width: 150px;
+  height: 150px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
 }
 
 </style>
