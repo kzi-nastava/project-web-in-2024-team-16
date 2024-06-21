@@ -1,18 +1,18 @@
 <template>
   <div>
     <div class="user-profile">
-      <h2>Profil korisnika</h2>
+      <h2>Vasi podaci</h2>
       <div v-if="loading">Učitavanje...</div>
       <div v-else>
-        <p>Ime: {{ currentUser.ime }}</p>
-        <p>Prezime: {{ currentUser.prezime }}</p>
-        <p>Korisnicko ime: {{currentUser.korisnickoIme}}</p>
-        <p>Lozinka: {{ currentUser.lozinka }}</p>
-        <p>Telefon: {{currentUser.telefon}}</p>
-        <p>Mejl: {{currentUser.mejl}}</p>
-        <p>Datum rodjenja: {{currentUser.datumRodjenja}}</p>
-        <p>Uloga: {{currentUser.uloga}}</p>
-        <p>Nesto bzvz xx</p>
+<!--        <p>Ime: {{ currentUser.ime }}</p>-->
+<!--        <p>Prezime: {{ currentUser.prezime }}</p>-->
+<!--        <p>Korisnicko ime: {{currentUser.korisnickoIme}}</p>-->
+<!--        <p>Lozinka: {{ currentUser.lozinka }}</p>-->
+<!--        <p>Telefon: {{currentUser.telefon}}</p>-->
+<!--        <p>Mejl: {{currentUser.mejl}}</p>-->
+<!--        <p>Datum rodjenja: {{currentUser.datumRodjenja}}</p>-->
+<!--        <p>Uloga: {{currentUser.uloga}}</p>-->
+<!--        <p>Nesto bzvz xx</p>-->
         <label for="ime">Ime:</label>
         <input v-model="currentUser.ime" type="text" id="ime" placeholder="Unesite novo ime" /><br>
         <label for="prezime">Prezime:</label>
@@ -24,7 +24,7 @@
         <label for="telefon">Telefon:</label>
         <input v-model="currentUser.telefon" type="text" id="telefon" placeholder="Unesite novi telefon" /><br>
         <label for="staraLozinka">Stara lozinka:</label>
-        <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozniku" /><br>
+        <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozinku" /><br>
         <label for="novaLozinka">Nova lozinka:</label>
         <input v-model="currentUser.novaLozinka" type="password" id="novaLozinka" placeholder="Unesite novu lozinku" /><br>
         <label for="datumRodjenja">Datum rodjenja:</label>
