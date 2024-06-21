@@ -4,6 +4,8 @@
       <h2>Vasi podaci</h2>
       <div v-if="loading">Učitavanje...</div>
       <div v-else>
+        <p>Slika:</p>
+        <img :src="currentUser.slika" alt="Slika korisnika"/><br>
 <!--        <p>Ime: {{ currentUser.ime }}</p>-->
 <!--        <p>Prezime: {{ currentUser.prezime }}</p>-->
 <!--        <p>Korisnicko ime: {{currentUser.korisnickoIme}}</p>-->
@@ -30,7 +32,7 @@
         <label for="datumRodjenja">Datum rodjenja:</label>
         <input v-model="currentUser.datumRodjenja" type="date" id="datumRodjenja" placeholder="Unesite novi datum rodjenja" /><br>
         <label for="slika">Slika:</label>
-        <input v-model="currentUser.slika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
+        <input :src="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
         <label for="opisKorisnika">Opis:</label>
         <input v-model="currentUser.opisKorisnika" type="text" id="opisKorisnika" placeholder="Unesite nov opis" /><br>
         <label for="uloga">Uloga:</label>
@@ -106,5 +108,80 @@ export default {
 </script>
 
 <style scoped>
+
+.user-profile {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+.loading {
+  text-align: center;
+  font-size: 18px;
+  color: #333;
+}
+
+.registration-form {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  width: 100%;
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f0f0f0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.column {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.column:last-child {
+  margin-right: 0;
+}
+
+.registration-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.registration-form input[type="text"],
+.registration-form input[type="password"],
+.registration-form input[type="date"],
+.registration-form select {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+  background-color: #d8d8f6;
+}
+
+.registration-form button {
+  width: 100%;
+  padding: 12px 20px;
+  margin-top: 20px;
+  background-color: #44449d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.registration-form button:hover {
+  background-color: rgba(68, 68, 157, 0.8);
+}
 
 </style>
