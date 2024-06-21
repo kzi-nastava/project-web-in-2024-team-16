@@ -1,35 +1,47 @@
 <template>
   <div>
     <div class="user-profile">
-      <h2>Vasi podaci</h2>
+      <h2>Vaši podaci</h2>
       <div v-if="loading">Učitavanje...</div>
       <div v-else>
         <img :src="currentUser.slika" alt="Slika korisnika" class="slika"/><br>
-        <label for="ime">Ime:</label>
-        <input v-model="currentUser.ime" type="text" id="ime" placeholder="Unesite novo ime" /><br>
-        <label for="prezime">Prezime:</label>
-        <input v-model="currentUser.prezime" type="text" id="prezime" placeholder="Unesite novo prezime" /><br>
-        <label for="korisnickoIme">Korisnicko ime:</label>
-        <input v-model="currentUser.korisnickoIme" type="text" id="korisnickoIme" placeholder="Unesite novo korisnicko ime" /><br>
-        <label for="mejl">Mejl:</label>
-        <input v-model="currentUser.mejl" type="text" id="mejl" placeholder="Unesite novi mejl" /><br>
-        <label for="telefon">Telefon:</label>
-        <input v-model="currentUser.telefon" type="text" id="telefon" placeholder="Unesite novi telefon" /><br>
-        <label for="staraLozinka">Stara lozinka:</label>
-        <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozinku" required /><br>
-        <label for="novaLozinka">Nova lozinka:</label>
-        <input v-model="currentUser.novaLozinka" type="password" id="novaLozinka" placeholder="Unesite novu lozinku" /><br>
-        <label for="datumRodjenja">Datum rodjenja:</label>
-        <input v-model="currentUser.datumRodjenja" type="date" id="datumRodjenja" placeholder="Unesite novi datum rodjenja" /><br>
-        <label for="slika">Slika:</label>
-        <input v-model="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
-        <label for="opisKorisnika">Opis:</label>
-        <input v-model="currentUser.opisKorisnika" type="text" id="opisKorisnika" placeholder="Unesite nov opis" /><br>
-        <label for="uloga">Uloga:</label>
-        <select v-model="currentUser.uloga" id="uloga" name="uloge" required>
-          <option value="PRODAVAC">Prodavac</option>
-          <option value="KUPAC">Kupac</option>
-        </select>
+        <div class="form-container">
+          <div class="column">
+            <label for="ime">Ime:</label>
+            <input v-model="currentUser.ime" type="text" id="ime" placeholder="Unesite novo ime" /><br>
+            <label for="prezime">Prezime:</label>
+            <input v-model="currentUser.prezime" type="text" id="prezime" placeholder="Unesite novo prezime" /><br>
+            <label for="korisnickoIme">Korisničko ime:</label>
+            <input v-model="currentUser.korisnickoIme" type="text" id="korisnickoIme" placeholder="Unesite novo korisničko ime" /><br>
+          </div>
+          <div class="column">
+            <label for="mejl">Mejl:</label>
+            <input v-model="currentUser.mejl" type="text" id="mejl" placeholder="Unesite novi mejl" /><br>
+            <label for="telefon">Telefon:</label>
+            <input v-model="currentUser.telefon" type="text" id="telefon" placeholder="Unesite novi telefon" /><br>
+            <label for="datumRodjenja">Datum rođenja:</label>
+            <input v-model="currentUser.datumRodjenja" type="date" id="datumRodjenja" placeholder="Unesite novi datum rođenja" /><br>
+          </div>
+          <div class="column">
+            <label for="opisKorisnika">Opis:</label>
+            <input v-model="currentUser.opisKorisnika" type="text" id="opisKorisnika" placeholder="Unesite nov opis" /><br>
+            <label for="slika">Slika:</label>
+            <input v-model="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
+          </div>
+          <div class="column password-role-container">
+            <label for="staraLozinka">Stara lozinka:</label>
+            <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozinku" required /><br>
+            <div class="novaLozinka">
+              <label for="novaLozinka">Nova lozinka:</label>
+              <input v-model="currentUser.novaLozinka" type="password" id="novaLozinka" placeholder="Unesite novu lozinku" /><br>
+            </div>
+            <label for="uloga">Uloga:</label>
+            <select v-model="currentUser.uloga" id="uloga" name="uloge" required>
+              <option value="PRODAVAC">Prodavac</option>
+              <option value="KUPAC">Kupac</option>
+            </select>
+          </div>
+        </div>
         <button v-on:click="update">Update</button>
       </div>
     </div>
@@ -109,69 +121,74 @@ export default {
 <style scoped>
 
 .user-profile {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.loading {
-  text-align: center;
-  font-size: 18px;
-  color: #333;
-}
-
-.registration-form {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 800px;
+  max-width: 1200px; /* Povećana maksimalna širina da bi se smestile tri kolone */
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f0f0f0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative; /* Potrebno za relativno pozicioniranje slike */
+}
+
+.user-profile h2 {
+  text-align: center;
+}
+
+.slika {
+  position: absolute; /* Apsolutno pozicioniranje slike */
+  top: 20px; /* Prilagodite ovu vrednost za željeni vertikalni pomak */
+  left: 20px; /* Prilagodite ovu vrednost za željeni horizontalni pomak */
+  width: 150px; /* Prilagodite veličinu slike po želji */
+  height: auto;
+  border-radius: 50%;
+  //margin-top: 70px;
+}
+
+.novaLozinka {
+  margin-top: -18px;
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 200px; /* Pomera formu udesno da ne prekriva sliku */
 }
 
 .column {
-  flex: 1;
-  margin-right: 20px;
+  flex: 1; /* Ravnomerno raspoređuje prostor između kolona */
+  margin: 0 10px; /* Razmak između kolona */
 }
 
-.column:last-child {
-  margin-right: 0;
+.password-role-container {
+  margin-top: 0px; /* Dodatni razmak između forme i polja stara lozinka, nova lozinka, uloga */
+  display: flex;
+  flex-direction: column;
 }
 
-.registration-form label {
+.user-profile label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.registration-form input[type="text"],
-.registration-form input[type="password"],
-.registration-form input[type="date"],
-.registration-form select {
-  width: 100%;
+.user-profile input[type="text"],
+.user-profile input[type="password"],
+.user-profile input[type="date"],
+.user-profile select {
+  width: 100%; /* Popunjava celu širinu sa dodatnim prostorom */
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
   box-sizing: border-box;
-  background-color: #d8d8f6;
 }
 
-.registration-form button {
-  width: 100%;
+.user-profile button {
+  width: calc(100% - 20px); /* Popunjava celu širinu sa dodatnim prostorom */
   padding: 12px 20px;
   margin-top: 20px;
-  background-color: #44449d;
+  background-color: rgba(47, 128, 102, 0.76);
   color: white;
   border: none;
   border-radius: 5px;
@@ -179,14 +196,8 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.registration-form button:hover {
-  background-color: rgba(68, 68, 157, 0.8);
-}
-.slika{
-  width: 150px;
-  height: 150px;
-  border: 1px solid #ccc;
-  border-radius: 50%;
+.user-profile button:hover {
+  background-color: rgb(72, 136, 113);
 }
 
 </style>
