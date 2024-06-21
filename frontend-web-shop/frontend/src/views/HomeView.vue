@@ -14,6 +14,7 @@
     <div id="post-new-product">
       <button v-if="isLoggedIn && userRole === 'PRODAVAC'" @click="postNewProduct">Postavite oglas</button>
     </div>
+    <NewProductModal :visible="showModal" @close="showModal = false" />
 
     <div class="filters-container">
 
@@ -88,13 +89,15 @@
   <script>
   // Uvoz HelloWorld komponente
   import HelloWorld from "@/components/HelloWorld.vue";
+  import NewProductModal from "@/components/NewProductModal.vue";
   import axios from "axios";
 
   export default {
     name: "HomeView",
     // Registrovanje komponente
     components: {
-      HelloWorld
+      HelloWorld,
+      NewProductModal
     },
     data() {
       return {
@@ -107,6 +110,7 @@
         priceTo: 0,
         priceFrom: 0,
         userRole: "",
+        showModal: false
       };
     },
     computed: {//ako nista nije napisano ispisi sve proizvode
@@ -242,9 +246,12 @@
               console.error("Greska pri filtriranju proizvoda po kategoriji:", error);
             });
       },
+     /* postNewProduct() {
+        this.$router.push("/newProduct");
+      },*/
       postNewProduct() {
-        // Method logic
-      },
+        this.showModal = true; // Prikazivanje modala kada se klikne na "Postavite oglas"
+      }
       },
       mounted() {
         this.fetchProducts();

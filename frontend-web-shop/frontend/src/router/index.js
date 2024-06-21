@@ -9,6 +9,7 @@ import ProfileView from "@/views/ProfileView.vue";
 
 
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -57,7 +58,8 @@ const routes = [
     name: 'product',
     component: ProductView,
     props: true // Prosleđivanje parametara kao propertija komponenti
-  }
+  },
+
 ]
 
 const router = new VueRouter({
