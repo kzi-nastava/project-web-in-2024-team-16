@@ -126,7 +126,7 @@ export default {
   width: 100%; /* Popunjava celu širinu formulara */
   padding: 12px 20px;
   margin-top: 20px; /* Razmak između polja i dugmeta */
-  background-color: #44449d;
+  background-color: rgba(47, 128, 102, 0.76);
   color: white;
   border: none;
   border-radius: 5px;
@@ -135,7 +135,7 @@ export default {
 }
 
 .registration-form button:hover {
-  background-color: rgba(68, 68, 157, 0.8);
+  background-color: rgb(72, 136, 113);
 }
 
 </style>

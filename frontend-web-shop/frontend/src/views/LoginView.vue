@@ -31,6 +31,7 @@ export default {
             console.log(res);//javlja da je dobro i stavlja me na home stranicu
             console.log("Prijavljen korisnik:", this.korisnik.korisnickoIme);
             localStorage.setItem("user", JSON.stringify(res.data.id));
+            localStorage.setItem("userRole", res.data.uloga); // Čuvanje uloge korisnik
             this.$router.push("/");
             this.$emit("userLoggedIn");
           })
@@ -77,11 +78,11 @@ export default {
 .login-form input[type="text"]:focus,
 .login-form input[type="password"]:focus {
   outline: none;
-  border: 1px solid #44449d; /* menja boju pri pritisku za unos */
+  border: 1px solid rgba(47, 128, 102, 0.76); /* menja boju pri pritisku za unos */
 }
 
 .login-form button {
-  background-color: #44449d; /* Green button color */
+  background-color: rgba(47, 128, 102, 0.76); /* Green button color */
   color: white;
   padding: 12px 20px;
   border: none;
@@ -91,7 +92,7 @@ export default {
 }
 
 .login-form button:hover {
-  background-color: rgba(68, 68, 157, 0.76); /* menja boju pri stavljanju misa na prijavu */
+  background-color: rgb(72, 136, 113); /* menja boju pri stavljanju misa na prijavu */
 }
 </style>
 

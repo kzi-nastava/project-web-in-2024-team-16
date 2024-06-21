@@ -60,7 +60,8 @@ public class KorisnikController {
         // Dodajte ID korisnika u odgovor
         return ResponseEntity.ok().body(Map.of(
                 "message", "Prijava uspešna.",
-                "id", loginovaniKorisnik.getId()
+                "id", loginovaniKorisnik.getId(),
+                "uloga", loginovaniKorisnik.getUloga()
         ));
     }
     @PostMapping("/logout")
