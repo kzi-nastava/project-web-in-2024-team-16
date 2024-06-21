@@ -16,7 +16,7 @@
         <label for="telefon">Telefon:</label>
         <input v-model="currentUser.telefon" type="text" id="telefon" placeholder="Unesite novi telefon" /><br>
         <label for="staraLozinka">Stara lozinka:</label>
-        <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozinku" /><br>
+        <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozinku" required /><br>
         <label for="novaLozinka">Nova lozinka:</label>
         <input v-model="currentUser.novaLozinka" type="password" id="novaLozinka" placeholder="Unesite novu lozinku" /><br>
         <label for="datumRodjenja">Datum rodjenja:</label>
@@ -76,6 +76,15 @@ export default {
           });
     },
     update(){
+      if(this.currentUser.staraLozinka != this.currentUser.novaLozinka){
+        alert('Lozinke se ne poklapaju');
+      }
+      if(this.currentUser.staraLozinka == null){
+        alert('Morate uneti trenutnu lozinku');
+      }
+      if(this.currentUser.uloga == null){
+        alert('Morate izabrati ulogu');
+      }
       console.log('Trenutni podaci o korisniku pre slanja:', this.currentUser);
       axios
           .put(`http://localhost:8080/api/user/updateSeller/${this.currentUser.id}`, this.currentUser, {
