@@ -115,7 +115,7 @@ export default {
 
       const prodavacId = this.$route.params.id;
       console.log(prodavacId);
-      console.log(ocenaData);
+
       axios.post('http://localhost:8080/api/user/rateSeller/'+ prodavacId + '?ocena=' + this.ocenaKupca +'&komentar=' + this.komentarKupca, {}, {withCredentials: true})
           .then(response => {
            // this.prodavac = response.data.prodavac;
