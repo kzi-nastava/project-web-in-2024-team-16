@@ -9,8 +9,8 @@
         <p>Komentar: {{ review.komentar }}</p>
         <p>Datum podnošenja recenzije: {{ formatDate(review.datumPodnosenjaRecenzije) }}</p>
         <div class="button-container">
-          <button @click="updateReview(review.id)">Ažuriraj</button>
-          <button @click="deleteReview(review.id)">Obriši</button>
+          <button class="review-button update" @click="updateReview(review.id)">Ažuriraj</button>
+          <button class="review-button delete" @click="deleteReview(review.id)">Obriši</button>
         </div>
       </div>
     </div>
@@ -104,21 +104,21 @@ export default {
   margin-top: 20px;
 }
 
-button {
+.review-button {
   padding: 10px 20px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-button:first-child {
-  background-color: #4caf50;
-  color: white;
+.review-button.update {
+  background-color: #4caf50; /* Zelena boja za Ažuriraj */
+  color: white; /* Bela boja teksta */
 }
 
-button:last-child {
-  background-color: #f44336;
-  color: white;
+.review-button.delete {
+  background-color: #f44336; /* Crvena boja za Obriši */
+  color: white; /* Bela boja teksta */
 }
 
 .pagination {
@@ -134,6 +134,7 @@ button:last-child {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  background-color: #488871;
 }
 
 .pagination span {
