@@ -59,6 +59,16 @@
         </form>
       </div>
     </div>
+
+
+    <!-- Modalni prozor za grešku -->
+    <div v-if="showErrorModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeErrorModal">&times;</span>
+        <h2>Greška</h2>
+        <p>Ne možete oceniti prodavca od kog niste kupili proizvod.</p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -85,7 +95,8 @@ export default {
       canRateSeller: false,
       showRateSellerModal: false,
       ocenaKupca: 1,
-      komentarKupca: ''
+      komentarKupca: '',
+      showErrorModal: false,
     };
   },
   mounted() {
@@ -111,6 +122,9 @@ export default {
       this.ocenaKupca = 1;
       this.komentarKupca = '';
     },
+    closeErrorModal() {
+      this.showErrorModal = false; // Zatvaranje grešnog modalnog prozora
+    },
     submitRating() {
 
       const prodavacId = this.$route.params.id;
@@ -125,7 +139,7 @@ export default {
           .catch(error => {
             if (error.response && error.response.data === 'Kupac može da oceni prodavca samo ako je kupio proizvod od tog prodavca.') {
               // Prikaži modalski dijalog ili skočni prozor
-              alert('Morate kupiti proizvod od prodavca pre nego što možete oceniti.');
+              this.showErrorModal = true;
             } else {
               // U slučaju ostalih grešaka, implementirajte odgovarajuću logiku
               console.error('Nepoznata greška:', error);
@@ -139,29 +153,31 @@ export default {
 <style scoped>
 .seller-profile {
   font-family: Arial, sans-serif;
-  margin: 20px auto; /* Centralizacija i prilagođavanje margina */
+  margin: 20px auto;
   padding: 20px;
-  max-width: 600px; /* Maksimalna širina diva */
+  max-width: 600px;
   border: 2px solid #488871;
   border-radius: 5px;
-  background-color: #ffffff; /* Default pozadina */
+  background-color: #f9f9f9;
 }
 
 .brand {
   font-size: 2em;
   margin-bottom: 10px;
-  text-align: center; /* Centralizacija branda */
+  text-align: center;
+  color: #488871;
 }
 
 .seller-image {
-  text-align: center; /* Centralizacija slike */
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .seller-image img {
-  width: 150px; /* Prilagodite širinu slike po potrebi */
-  height: 150px; /* Prilagodite visinu slike po potrebi */
-  border-radius: 10px; /* Zaobljeni rubovi slike */
-  object-fit: cover; /* Da bi se slika proporcionalno prikazala */
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+  object-fit: cover;
   margin-bottom: 10px;
 }
 
@@ -175,7 +191,9 @@ export default {
 
 .reviews {
   margin-bottom: 20px;
-  background-color: #ffffff; /* Pozadina recenzija */
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .reviews li {
@@ -187,8 +205,82 @@ export default {
 }
 
 .username {
-  text-align: center; /* Centralizacija korisničkog imena */
+  text-align: center;
   font-weight: bold;
   font-size: 1.2em;
+}
+
+button.rate-button, button.submit-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: rgba(47, 128, 102, 0.76);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button.rate-button:hover, button.submit-button:hover {
+  background-color: #357a61;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 1.5em;
+  color: #aaa;
+}
+
+.modal-content .close:hover {
+  color: #000;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form label {
+  margin-top: 10px;
+  text-align: left;
+}
+
+form input, form textarea {
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+form button {
+  margin-top: 20px;
+  background-color: rgba(47, 128, 102, 0.76);
+  border-radius: 50px;
 }
 </style>
