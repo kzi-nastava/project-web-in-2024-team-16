@@ -27,6 +27,11 @@
             <input v-model="currentUser.opisKorisnika" type="text" id="opisKorisnika" placeholder="Unesite nov opis" /><br>
             <label for="slika">Slika:</label>
             <input v-model="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
+            <label for="uloga">Uloga:</label>
+            <select v-model="currentUser.uloga" id="uloga" name="uloge" required>
+              <option value="PRODAVAC">Prodavac</option>
+              <option value="KUPAC">Kupac</option>
+            </select>
           </div>
           <div class="column password-role-container">
             <label for="staraLozinka">Stara lozinka:</label>
@@ -35,14 +40,11 @@
               <label for="novaLozinka">Nova lozinka:</label>
               <input v-model="currentUser.novaLozinka" type="password" id="novaLozinka" placeholder="Unesite novu lozinku" /><br>
             </div>
-            <label for="uloga">Uloga:</label>
-            <select v-model="currentUser.uloga" id="uloga" name="uloge" required>
-              <option value="PRODAVAC">Prodavac</option>
-              <option value="KUPAC">Kupac</option>
-            </select>
+            <div class="updateDugme">
+            <button v-on:click="update">Update</button>
+            </div>
           </div>
         </div>
-        <button v-on:click="update">Update</button>
         <button @click="recenzije">Recenzije</button>
         <div v-if="showReviews">
           <div v-for="review in reviews" :key="review.id" class="review">
@@ -274,6 +276,10 @@ export default {
 
 .review p {
   margin: 5px 0;
+}
+
+.updateDugme {
+  margin-left: 20px;
 }
 
 </style>
