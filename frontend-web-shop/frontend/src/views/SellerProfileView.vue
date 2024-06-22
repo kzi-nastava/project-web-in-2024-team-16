@@ -43,7 +43,7 @@
       <p v-else>Nema recenzija za ovog prodavca.</p>
     </div>
     <!-- Dugme za ostavljanje ocene -->
-    <button v-if="checkUserType" @click="showRateSellerModal = true">Ostavi ocenu</button>
+    <button v-if="checkUserType" @click="showRateSellerModal = true" class="rate-button">Ostavi ocenu</button>
 
     <!-- Modalni dijalog za ocenjivanje prodavca -->
     <div v-if="showRateSellerModal" class="modal">
@@ -59,14 +59,25 @@
         </form>
       </div>
     </div>
-
-
+    <button v-if="checkUserType" @click="showComplaintModal = true" class="submit-button">Prijavi prodavca</button>
+    <!-- Modalni dijalog za prijavu prodavca -->
+    <div v-if="showComplaintModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeComplaintModal">&times;</span>
+        <h2>Prijavi prodavca</h2>
+        <form @submit.prevent="submitComplaint">
+          <label for="prijava">Prijava:</label>
+          <textarea id="prijava" v-model="prijavaText" required></textarea>
+          <button type="submit">Pošalji prijavu</button>
+        </form>
+      </div>
+    </div>
     <!-- Modalni prozor za grešku -->
     <div v-if="showErrorModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeErrorModal">&times;</span>
         <h2>Greška</h2>
-        <p>Ne možete oceniti prodavca od kog niste kupili proizvod.</p>
+        <p>{{successMessage }}</p>
       </div>
     </div>
   </div>
@@ -97,6 +108,9 @@ export default {
       ocenaKupca: 1,
       komentarKupca: '',
       showErrorModal: false,
+      showComplaintModal: false,
+      prijavaText: '',
+      successMessage: ''
     };
   },
   mounted() {
@@ -125,6 +139,10 @@ export default {
     closeErrorModal() {
       this.showErrorModal = false; // Zatvaranje grešnog modalnog prozora
     },
+    closeComplaintModal() {
+      this.showComplaintModal = false;
+      this.prijavaText = '';
+    },
     submitRating() {
 
       const prodavacId = this.$route.params.id;
@@ -139,9 +157,30 @@ export default {
           .catch(error => {
             if (error.response && error.response.data === 'Kupac može da oceni prodavca samo ako je kupio proizvod od tog prodavca.') {
               // Prikaži modalski dijalog ili skočni prozor
+              this.successMessage= "Ne možete oceniti prodavca od kog niste kupili proizvod.";
               this.showErrorModal = true;
             } else {
               // U slučaju ostalih grešaka, implementirajte odgovarajuću logiku
+              console.error('Nepoznata greška:', error);
+            }
+          });
+    },
+    submitComplaint() {
+      const prodavacId = this.$route.params.id;
+      const prijavaRequestDTO = {
+        razlogPrijave: this.prijavaText
+      };
+      axios.post(`http://localhost:8080/api/report/customerRequest/${prodavacId}`, prijavaRequestDTO, { withCredentials: true })
+          .then(response => {
+            console.log('Prijava uspešno poslata:', response.data);
+            this.closeComplaintModal();
+          })
+          .catch(error => {
+            if (error.response && error.response.data==="Kupac može da prijavi onog prodavca od kog je kupio proizvod") {
+              console.error('Ne moze da prijavi jer on nije kupio proizvod od tog prodavca', error.response.data);
+              this.successMessage= "Ne možete da prijavite prodavca od kog niste kupili proizvod.";
+              this.showErrorModal = true;
+            } else {
               console.error('Nepoznata greška:', error);
             }
           });
@@ -283,4 +322,21 @@ form button {
   background-color: rgba(47, 128, 102, 0.76);
   border-radius: 50px;
 }
+button.rate-button, button.submit-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: rgba(47, 128, 102, 0.76); /* Zelena boja */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+button.rate-button:hover, button.submit-button:hover {
+  background-color: #357a61; /* Tamnija nijansa zelene boje prilikom hovera */
+}
+
 </style>

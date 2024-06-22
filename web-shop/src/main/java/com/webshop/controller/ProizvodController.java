@@ -81,6 +81,7 @@ public class ProizvodController {
         if(nadjenProizvod==null){
             throw new ProductNotFoundException("Traženi proizvod ne postoji.");
         }
+        System.out.println("CAO"+nadjenProizvod.getId());
         return proizvodService.findProduct(id);
     }
     @GetMapping("/search")

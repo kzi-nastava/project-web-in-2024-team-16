@@ -76,7 +76,7 @@ input[type="text"] {
 button {
   padding: 6px 12px;
   border-radius: 200px;
-  background-color: rgba(47, 128, 102, 0.76);
+  background-color: rgba(225, 224, 224, 0.59);
   color: #000000;
   border: none;
   cursor: pointer;

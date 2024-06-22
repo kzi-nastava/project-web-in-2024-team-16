@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -447,6 +445,16 @@ public class KorisnikController {
 //        }
 
         return ResponseEntity.ok(trenutniKorisnik);
+    }
+    @GetMapping("/products/{id}")
+    public Set<?> getProizvodiKorisnika(@PathVariable Long id) {
+        try {
+            return korisnikService.getProizvodiKorisnika(id);
+        } catch (UserNotFoundException e) {
+            // Handle exception if user not found
+            e.printStackTrace();
+            return null; // or return appropriate response
+        }
     }
 
 }

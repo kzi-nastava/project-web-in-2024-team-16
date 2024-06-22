@@ -59,6 +59,40 @@
         </div>
       </div>
     </div>
+    <div v-if="this.currentUser.uloga === 'KUPAC'" class="product-section" @click="prikaziDetaljeProizvoda(proizvod.id)">
+      <h2>Kupljeni proizvodi</h2>
+      <ul>
+        <li v-for="proizvod in kupljeniProizvodi" :key="proizvod.id">
+          <div>
+            <p>Naziv: {{ proizvod.naziv }}</p>
+            <p>ID: {{ proizvod.id }}</p>
+            <!-- Dodajte ostale informacije o proizvodu kako je potrebno -->
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <div v-else-if="currentUser.uloga === 'PRODAVAC'" class="product-section">
+      <h2>Proizvodi na prodaju</h2>
+      <ul>
+        <li v-for="proizvod in proizvodiNaProdaju" :key="proizvod.id" @click="prikaziDetaljeProizvoda(proizvod.id)">
+          <div>
+            <p>Naziv: {{ proizvod.naziv }}</p>
+            <p>ID: {{ proizvod.id }}</p>
+            <!-- Dodajte ostale informacije o proizvodu kako je potrebno -->
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- Dodajte ovo za prikaz detalja proizvoda -->
+    <div v-if="selectedProduct">
+      <h3>Detalji proizvoda:</h3>
+      <p>Naziv: {{ selectedProduct.naziv }}</p>
+      <p>Cena: {{ selectedProduct.cena }}</p>
+      <p>Opis: {{ selectedProduct.opis }}</p>
+      <!-- Dodajte ostale informacije koje želite prikazati -->
+    </div>
+
   </div>
 </template>
 
@@ -83,12 +117,17 @@ export default {
       }, // Objekat za čuvanje podataka o korisniku
       loading: true, // Prikazivanje loadera dok se podaci učitavaju
       showReviews: false,
-      reviews: []
+      reviews: [],
+      proizvodiNaProdaju: [],
+      kupljeniProizvodi:[],
+      user: null,
+      selectedProduct: null
     };
   },
   mounted() {
     // Pozivamo metodu za dobavljanje trenutnog korisnika kada se komponenta montira
     this.fetchCurrentUser();
+    this.fetchProducts();
     //this.fetchReviews();
   },
   methods: {
@@ -140,20 +179,6 @@ export default {
       if (this.showReviews && this.reviews.length === 0) {
         this.fetchReviews();
       }
-      // axios
-      //     .get('http://localhost:8080/api/user/reviewedSellers/received',  {
-      //       withCredentials: true,
-      //       headers: {
-      //         'Content-Type': 'application/json'
-      //       }
-      //     })
-      //     .then(response => {
-      //       this.currentUser = response.data;
-      //       console.log(this.reviews);
-      //     })
-      //     .catch(error => {
-      //       console.error('Greška pri dobavljanju podataka o recenzijama:', error);
-      //     });
     },
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -184,6 +209,52 @@ export default {
           })
           .catch(error => {
             console.error('Greška pri dobavljanju podataka o recenzijama:', error);
+          });
+    },
+    fetchProducts() {
+      /*const userId = localStorage.getItem("userId");
+      const userRole = localStorage.getItem("userRole");
+      console.log(userId);
+      console.log("ULOGA",userRole);*/
+      console.log("NJANJA");
+      const user = JSON.parse(localStorage.getItem('user'));
+      console.log(user);
+      const userRole = localStorage.getItem("userRole");
+      console.log("ULOGA",userRole);
+      let endpoint;
+      if (userRole === 'KUPAC') {
+        endpoint = `http://localhost:8080/api/user/products/${user}`;
+      } else if (userRole === 'PRODAVAC') {
+        endpoint = `http://localhost:8080/api/user/products/${user}`;
+      } else {
+        console.error('Nepoznata uloga korisnika:',userRole   );
+        return;
+      }
+
+      axios.get(endpoint, { withCredentials: true })
+          .then(response => {
+            console.log(response);
+            if (userRole   === 'KUPAC') {
+              this.kupljeniProizvodi = response.data;
+            } else if (userRole === 'PRODAVAC') {
+              this.proizvodiNaProdaju = response.data; // Update proizvodiNaProdaju here
+            }
+          })
+          .catch(error => {
+            console.error('Greška pri dobavljanju podataka o proizvodima:', error);
+          });
+    },
+    prikaziDetaljeProizvoda(id) {
+      console.log("OVO JE PROIZVOD",id);
+      axios.get(`http://localhost:8080/api/product/${id}`, { withCredentials: true })
+          .then(response => {
+            // Ovde možete upravljati prikazom detalja proizvoda, na primer, čuvanjem u data objektu ili prikazom u modalu
+            console.log('Detalji proizvoda:', response.data);
+            // Primer kako biste mogli da prikažete detalje u modalu ili nekom drugom delu komponente
+            this.selectedProduct = response.data;
+          })
+          .catch(error => {
+            console.error('Greška pri dobavljanju detalja proizvoda:', error);
           });
     }
   }
@@ -291,6 +362,41 @@ export default {
 
 .updateDugme {
   margin-left: 20px;
+}
+.product-section {
+  margin-top: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(47, 128, 102, 0.76);
+  color: rgba(47, 128, 102, 0.76);
+}
+
+.product-section h2 {
+  text-align: center;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.product-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.product-list li {
+
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.product-list li:last-child {
+  border-bottom: none;
+}
+
+.product-list li:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
 }
 
 </style>

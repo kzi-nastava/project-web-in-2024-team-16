@@ -5,6 +5,8 @@ import com.webshop.model.Korisnik;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
 
@@ -14,6 +16,8 @@ public interface KorisnikRepository extends JpaRepository<Korisnik, Long> {
     boolean existsByKorisnickoIme(String korisnickoIme);
 
     boolean existsByMejlAndIdNot(String mejl, Long id);
+
+    Optional<Korisnik> findByKorisnickoIme(String korisnickoIme);
 
 
     //boolean existsByKorisnickoImeAndIdNot(String korisnickoIme, Long id);
