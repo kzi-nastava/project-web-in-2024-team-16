@@ -2,7 +2,7 @@
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (1000,'Aleksandar', 'Aleksić', 'aleksa92', 'aleksandar@gmail.com', '060123456', 'lozinka123', '1992-05-20 12:56:12', 'https://cdn.britannica.com/38/188638-050-08A5704E/Tom-Hardy-British-2014.jpg', 'ljubazan', 'KUPAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (2000,'Mila', 'Milic', 'mila12', 'milicasalajic13@gmail.com', '0664444', 'milalala', '2003-05-20 21:01:48', 'slika2.jpg', 'iskusan', 'PRODAVAC', false);
+    VALUES (2000,'Mila', 'Milic', 'mila12', 'milicasalajic13@gmail.com', '0664444', 'milalala', '2003-05-20 21:01:48', 'https://i.pinimg.com/564x/3e/63/40/3e634064f267e355659d0eb6e7d28c61.jpg', 'iskusan', 'PRODAVAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (3000,'Petar', 'Markovic', 'peki001', 'milicasalajic13@gmail.com', '062335514', 'password', '2000-08-15 10:17:29', 'slika3.jpg', 'neiskusan', 'PRODAVAC', true);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)

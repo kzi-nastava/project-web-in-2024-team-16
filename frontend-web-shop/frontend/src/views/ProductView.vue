@@ -16,6 +16,11 @@
       <br>
       <p>Opis proizvoda: {{ product.opis }}</p>
       <p>Tip prodaje: {{ product.tipProdaje}}</p>
+      <div v-if="product && product.prodavac">
+        <!-- Ostatak vašeg HTML-a -->
+        <p @click="goToSellerProfile(product.prodavac.id)"  class="seller-name">Prodavac: {{ product.prodavac.korisnickoIme }}</p>
+        <!-- Ostatak HTML-a -->
+      </div>
      <!-- <p>Kategorije: {{ product.kategorije}}</p>-->
     <!--<p>Cena: {{ product.cena }} RSD</p>-->
       <p v-if="product.tipProdaje !== 'AUKCIJA'">Cena: {{ product.cena }} RSD</p>
@@ -33,7 +38,7 @@
     <div v-if="showLoginModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeLoginModal">&times;</span>
-        <p>Morate biti prijavljeni da biste kupili proizvod.</p>
+        <p>{{ successMessage }}</p>
         <button @click="redirectToLogin">Prijavi se</button>
       </div>
     </div>
@@ -71,7 +76,9 @@ export default {
   name: 'ProductDetails',
   data() {
     return {
-      product: {},
+      product: {
+        prodavac: {} // Inicijalizovanje kao prazan objekat
+      },
       showLoginModal: false,
       showSuccessModal: false,
       showAlreadyPurchasedModal: false,
@@ -98,6 +105,7 @@ export default {
     buyProduct() {
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
+        this.successMessage="Morate biti prijavljeni da bi ste kupili proizvod.";
         this.showLoginModal = true;
       } else {
         console.log("Korisnik je ulogovan. Nastavlja se sa kupovinom...");
@@ -168,7 +176,16 @@ export default {
     },
     closeLowBidModal() {
       this.showLowBidModal = false;
-    }
+    },
+    goToSellerProfile(prodavacId) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        this.$router.push(`/sellerProfile/${prodavacId}`);
+      } else {
+        this.successMessage="Morate biti prijavljeni da bi ste mogli da vidite profil prodavca."
+        this.showLoginModal = true;
+      }
+    },
   }
 };
 </script>
@@ -276,6 +293,10 @@ export default {
   max-width: 300px;
   text-align: center;
   border-radius: 20px;
+}
+.seller-name {
+  color: #c963c9; /* Boja teksta */
+  cursor: pointer; /* Promena kursora na pokazivač */
 }
 
 .close {

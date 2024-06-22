@@ -59,7 +59,7 @@ public class ProizvodController {
         List<ProizvodDTO> proizvodiDTO = proizvodService.findAllProducts();
         return ResponseEntity.ok(proizvodiDTO);
     }*/
-
+/*
     @GetMapping("/{id}")
     public ProizvodDTO getEmployee(@PathVariable(name = "id") Long id, HttpSession session) throws ProductNotFoundException {
 
@@ -71,7 +71,18 @@ public class ProizvodController {
         }
         return proizvodService.findOne(id);
     }
+*/
+    @GetMapping("/{id}")
+    public SviProizvodiDTO getEmployee(@PathVariable(name = "id") Long id, HttpSession session) throws ProductNotFoundException {
 
+        Proizvod proizvod = (Proizvod) session.getAttribute("proizvod");
+        session.invalidate();
+        SviProizvodiDTO nadjenProizvod=proizvodService.findProduct(id);
+        if(nadjenProizvod==null){
+            throw new ProductNotFoundException("Traženi proizvod ne postoji.");
+        }
+        return proizvodService.findProduct(id);
+    }
     @GetMapping("/search")
     public ResponseEntity<List<ProizvodDTO>> searchProducts(@RequestParam(required = false) String name, @RequestParam(required = false) String description) throws ProductNotFoundException, PasswordMismatchException {
 
