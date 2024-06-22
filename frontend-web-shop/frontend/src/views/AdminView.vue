@@ -1,6 +1,7 @@
 <template>
 
   <div>
+    <div class="naslov"><h1>Pregled svih recenzija</h1></div>
     <div class="review-container">
       <div v-for="review in paginatedReviews()" :key="review.id" class="review-card">
         <p>Recenziju podneo: {{review.recenzijuPodneo.ime}} {{review.recenzijuPodneo.prezime}} "{{review.recenzijuPodneo.korisnickoIme}}"</p>
@@ -77,6 +78,13 @@ export default {
 </script>
 
 <style>
+
+.naslov {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: -50px;
+}
 
 .review-container {
   display: flex;
