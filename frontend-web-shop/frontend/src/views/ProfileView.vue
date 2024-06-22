@@ -43,7 +43,12 @@
           </div>
         </div>
         <button v-on:click="update">Update</button>
-        <button v-on:click="recenzije">Recenzije</button>
+        <button v-on:click="recenzije" @click="showFields = !showFields">Recenzije</button>
+        <div v-if="showFields">
+          <input type="text" placeholder="Polje 1" />
+          <input type="text" placeholder="Polje 2" />
+          <!-- Dodajte dodatna polja po potrebi -->
+        </div>
       </div>
     </div>
   </div>
@@ -68,7 +73,8 @@ export default {
         slika: '',
         opisKorisnika: ''
       }, // Objekat za čuvanje podataka o korisniku
-      loading: true // Prikazivanje loadera dok se podaci učitavaju
+      loading: true, // Prikazivanje loadera dok se podaci učitavaju
+      showFields: false
     };
   },
   mounted() {
@@ -115,6 +121,9 @@ export default {
             this.loading = false;
           });
     },
+    // recenzije() {
+    //   this.$router.push("http://localhost:8080/api/user/reviewedSellers/received");
+    // },
     recenzije(){
       axios
           .get('http://localhost:8080/api/user/reviewedSellers/received',  {
