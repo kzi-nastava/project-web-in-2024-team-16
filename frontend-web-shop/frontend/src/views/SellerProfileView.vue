@@ -42,6 +42,23 @@
       </ul>
       <p v-else>Nema recenzija za ovog prodavca.</p>
     </div>
+    <!-- Dugme za ostavljanje ocene -->
+    <button v-if="checkUserType" @click="showRateSellerModal = true">Ostavi ocenu</button>
+
+    <!-- Modalni dijalog za ocenjivanje prodavca -->
+    <div v-if="showRateSellerModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeRateSellerModal">&times;</span>
+        <h2>Oceni prodavca</h2>
+        <form @submit.prevent="submitRating">
+          <label for="ocena">Ocena:</label>
+          <input type="number" id="ocena" v-model="ocenaKupca" min="1" max="5" required>
+          <label for="komentar">Komentar:</label>
+          <textarea id="komentar" v-model="komentarKupca"></textarea>
+          <button type="submit">Pošalji ocenu</button>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -62,7 +79,13 @@ export default {
         proizvodiNaProdaju: [],
         dobijeneRecenzije: [],
         prosecnaOcena: 0
-      }
+      },
+      user: null,
+      isBuyer: false,
+      canRateSeller: false,
+      showRateSellerModal: false,
+      ocenaKupca: 1,
+      komentarKupca: ''
     };
   },
   mounted() {
@@ -74,8 +97,43 @@ export default {
         .catch(error => {
           console.error('Greška pri dobijanju profila prodavca:', error);
         });
+
+  },
+  methods: {
+    checkUserType() {
+      this.user = JSON.parse(localStorage.getItem('user'));
+      if (this.user && this.user.uloga === 'KUPAC') {
+        this.isBuyer = true;
+      }
+    },
+    closeRateSellerModal() {
+      this.showRateSellerModal = false;
+      this.ocenaKupca = 1;
+      this.komentarKupca = '';
+    },
+    submitRating() {
+
+      const prodavacId = this.$route.params.id;
+      console.log(prodavacId);
+      console.log(ocenaData);
+      axios.post('http://localhost:8080/api/user/rateSeller/'+ prodavacId + '?ocena=' + this.ocenaKupca +'&komentar=' + this.komentarKupca, {}, {withCredentials: true})
+          .then(response => {
+           // this.prodavac = response.data.prodavac;
+            console.log('Ocena uspešno poslata:', response.data);
+            this.closeRateSellerModal();
+          })
+          .catch(error => {
+            if (error.response && error.response.data === 'Kupac može da oceni prodavca samo ako je kupio proizvod od tog prodavca.') {
+              // Prikaži modalski dijalog ili skočni prozor
+              alert('Morate kupiti proizvod od prodavca pre nego što možete oceniti.');
+            } else {
+              // U slučaju ostalih grešaka, implementirajte odgovarajuću logiku
+              console.error('Nepoznata greška:', error);
+            }
+          });
+    }
   }
-};
+  };
 </script>
 
 <style scoped>
