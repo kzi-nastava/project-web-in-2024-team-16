@@ -59,13 +59,13 @@
         </div>
       </div>
     </div>
-    <div v-if="this.currentUser.uloga === 'KUPAC'" class="product-section" @click="prikaziDetaljeProizvoda(proizvod.id)">
+    <div v-if="currentUser.uloga === 'KUPAC'" class="product-section">
       <h2>Kupljeni proizvodi</h2>
       <ul>
-        <li v-for="proizvod in kupljeniProizvodi" :key="proizvod.id">
+        <li v-for="proizvod in kupljeniProizvodi" :key="proizvod.id"  @click="prikaziDetaljeProizvoda(proizvod.id)">
           <div>
             <p>Naziv: {{ proizvod.naziv }}</p>
-            <p>ID: {{ proizvod.id }}</p>
+
             <!-- Dodajte ostale informacije o proizvodu kako je potrebno -->
           </div>
         </li>
@@ -78,19 +78,27 @@
         <li v-for="proizvod in proizvodiNaProdaju" :key="proizvod.id" @click="prikaziDetaljeProizvoda(proizvod.id)">
           <div>
             <p>Naziv: {{ proizvod.naziv }}</p>
-            <p>ID: {{ proizvod.id }}</p>
+
             <!-- Dodajte ostale informacije o proizvodu kako je potrebno -->
           </div>
         </li>
       </ul>
     </div>
     <!-- Dodajte ovo za prikaz detalja proizvoda -->
-    <div v-if="selectedProduct">
-      <h3>Detalji proizvoda:</h3>
-      <p>Naziv: {{ selectedProduct.naziv }}</p>
-      <p>Cena: {{ selectedProduct.cena }}</p>
-      <p>Opis: {{ selectedProduct.opis }}</p>
-      <!-- Dodajte ostale informacije koje želite prikazati -->
+    <!-- Modal za detalje proizvoda -->
+    <div v-if="showModal" class="modal" @click.self="closeModal">
+      <div class="modal-content">
+        <span class="close" @click="closeModal">&times;</span>
+        <div v-if="selectedProduct">
+          <h3>Detalji proizvoda:</h3>
+          <img :src="selectedProduct.slikaProizvoda" alt="Slika proizvoda" class="product-image">
+          <p>Naziv: {{ selectedProduct.naziv }}</p>
+          <p>Cena: {{ selectedProduct.cena }}</p>
+          <p>Opis: {{ selectedProduct.opis }}</p>
+          <p>Tip prodaje: {{ selectedProduct.tipProdaje }}</p>
+          <!-- Dodajte ostale informacije koje želite prikazati -->
+        </div>
+      </div>
     </div>
 
   </div>
@@ -121,7 +129,8 @@ export default {
       proizvodiNaProdaju: [],
       kupljeniProizvodi:[],
       user: null,
-      selectedProduct: null
+      selectedProduct: null,
+      showModal: false,
     };
   },
   mounted() {
@@ -251,11 +260,16 @@ export default {
             // Ovde možete upravljati prikazom detalja proizvoda, na primer, čuvanjem u data objektu ili prikazom u modalu
             console.log('Detalji proizvoda:', response.data);
             // Primer kako biste mogli da prikažete detalje u modalu ili nekom drugom delu komponente
+            this.showModal = true;
             this.selectedProduct = response.data;
           })
           .catch(error => {
             console.error('Greška pri dobavljanju detalja proizvoda:', error);
           });
+    },
+    closeModal() {
+      this.showModal = false;
+      this.selectedProduct = null;
     }
   }
 };
@@ -397,6 +411,48 @@ export default {
 .product-list li:hover {
   background-color: #f0f0f0;
   cursor: pointer;
+}
+.modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(255, 255, 255, 0.26);
+  color: rgb(119, 53, 119);
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 50%;
+  max-width: 600px;
+  box-shadow: 0 5px 15px rgba(47, 128, 102, 0.76);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+.product-image {
+  max-width: 100%;
+  height: auto;
+  margin-bottom: 20px;
 }
 
 </style>
