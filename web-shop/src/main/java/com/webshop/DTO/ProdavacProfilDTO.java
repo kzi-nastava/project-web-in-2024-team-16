@@ -20,6 +20,8 @@ import java.util.Set;
 @AllArgsConstructor
 public class ProdavacProfilDTO {
 
+    private Long id;
+
     private String ime;
 
     private String prezime;

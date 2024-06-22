@@ -1,6 +1,7 @@
 package com.webshop.DTO;
 
 import com.webshop.model.Kategorija;
+import com.webshop.model.Prodavac;
 import com.webshop.model.TipProdaje;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,4 +29,6 @@ public class SviProizvodiDTO {
     private Double cena;
 
     private TipProdaje tipProdaje;
+
+    private ProdavacProfilDTO prodavac;
 }

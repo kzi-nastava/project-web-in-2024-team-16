@@ -2,17 +2,17 @@
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (1000,'Aleksandar', 'Aleksić', 'aleksa92', 'aleksandar@gmail.com', '060123456', 'lozinka123', '1992-05-20 12:56:12', 'https://cdn.britannica.com/38/188638-050-08A5704E/Tom-Hardy-British-2014.jpg', 'ljubazan', 'KUPAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (2000,'Mila', 'Milic', 'mila12', 'milicasalajic13@gmail.com', '0664444', 'milalala', '2003-05-20 21:01:48', 'slika2.jpg', 'iskusan', 'PRODAVAC', false);
+    VALUES (2000,'Mila', 'Milic', 'mila12', 'milicasalajic13@gmail.com', '0664444', 'milalala', '2003-05-20 21:01:48', 'https://i.pinimg.com/564x/3e/63/40/3e634064f267e355659d0eb6e7d28c61.jpg', 'iskusan', 'PRODAVAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (3000,'Petar', 'Markovic', 'peki001', 'milicasalajic13@gmail.com', '062335514', 'password', '2000-08-15 10:17:29', 'slika3.jpg', 'neiskusan', 'PRODAVAC', true);
+    VALUES (3000,'Petar', 'Markovic', 'peki001', 'milicasalajic13@gmail.com', '062335514', 'password', '2000-08-15 10:17:29', 'https://www.narodnopozoriste.rs/media/images/artists/523/thumb/300x400/sif_0359.jpg', 'neiskusan', 'PRODAVAC', true);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
     VALUES (4000,'Stefan', 'Nikolic', 'Stefa3', 'stefan@gmail.com', '063588966', 'Lozinka1', '2003-11-29 19:39:56', 'slika4.jpg', 'profesionalan', 'ADMINISTRATOR', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (5000,'Sinisa', 'Vucic', 'snisa', 'sinisa@gmail.com', '065822326', 'snile', '1990-05-17 16:23:47', 'slika5.jpg', 'pouzdan', 'KUPAC', false);
+    VALUES (5000,'Aleksandar', 'Radojicic', 'aleksandar', 'acara@gmail.com', '065822326', 'snile', '1990-05-17 16:23:47', 'https://luftika.rs/media/2024/04/aleksandar-radojicic.jpg', 'pouzdan', 'KUPAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (6000,'Darko', 'Lazic', 'dare99', 'darko@gmail.com', '066698235', 'bivsa121', '1991-10-19 08:59:00', 'slika6.jpg', 'iskusan', 'PRODAVAC', false);
+    VALUES (6000,'Darko', 'Lazic', 'dare99', 'darko@gmail.com', '066698235', 'bivsa121', '1991-10-19 08:59:00', 'https://hitfm.rs/wp-content/uploads/sites/3/2022/08/da.jpg', 'iskusan', 'PRODAVAC', false);
 INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, datum_rodjenja, slika, opis_korisnika, uloga, blokiran)
-    VALUES (7000,'Sasa', 'Vuksanovic', 'cale', 'salajicm3@gmail.com', '062359487', 'cale123', '1986-03-28 02:21:22', 'slika7.jpg', 'proveren', 'KUPAC', false);
+    VALUES (7000,'Sasa', 'Vuksanovic', 'cale', 'salajicm3@gmail.com', '062359487', 'cale123', '1986-03-28 02:21:22', 'https://mmediamreza.com/_pu/0/73540538.png', 'proveren', 'KUPAC', false);
 
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
     VALUES (4, 'zadovoljan', '2021-02-10 19:54:03',7000, 2000);
@@ -60,7 +60,7 @@ INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_o
                       opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 7000, 2000, 'POLICA ZA OBUĆU',
                                                                   'Polica je metalna. Kupljena je u emmezeeti. Visokog kvalitetea i veoma ocuvana. Sklopiva je i ne zauzima puno mesta. Idealna za male hodnike. Koriscena godinu dana.', 'https://c.cdnmp.net/920979014/p/l/3/polica-za-obucu-loft-3-nivoa~4293.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 3000, 'IPHONE 8',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 6000, 'IPHONE 8',
                                                                   'U odličnom stanju', 'https://cdn.alloallo.media/catalog/product/apple/iphone/iphone-8/iphone-8-gold.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (15000, false, true, false, '2020-06-12 22:03:48', 6000, 5000, 2000, 'NIKE AIR FORCE',
