@@ -1,46 +1,62 @@
 <template>
   <div>
     <div class="user-profile">
-      <h2>Vasi podaci</h2>
+      <h2>Vaši podaci</h2>
       <div v-if="loading">Učitavanje...</div>
       <div v-else>
-        <p>Slika:</p>
-        <img :src="currentUser.slika" alt="Slika korisnika"/><br>
-<!--        <p>Ime: {{ currentUser.ime }}</p>-->
-<!--        <p>Prezime: {{ currentUser.prezime }}</p>-->
-<!--        <p>Korisnicko ime: {{currentUser.korisnickoIme}}</p>-->
-<!--        <p>Lozinka: {{ currentUser.lozinka }}</p>-->
-<!--        <p>Telefon: {{currentUser.telefon}}</p>-->
-<!--        <p>Mejl: {{currentUser.mejl}}</p>-->
-<!--        <p>Datum rodjenja: {{currentUser.datumRodjenja}}</p>-->
-<!--        <p>Uloga: {{currentUser.uloga}}</p>-->
-<!--        <p>Nesto bzvz xx</p>-->
-        <label for="ime">Ime:</label>
-        <input v-model="currentUser.ime" type="text" id="ime" placeholder="Unesite novo ime" /><br>
-        <label for="prezime">Prezime:</label>
-        <input v-model="currentUser.prezime" type="text" id="prezime" placeholder="Unesite novo prezime" /><br>
-        <label for="korisnickoIme">Korisnicko ime:</label>
-        <input v-model="currentUser.korisnickoIme" type="text" id="korisnickoIme" placeholder="Unesite novo korisnicko ime" /><br>
-        <label for="mejl">Mejl:</label>
-        <input v-model="currentUser.mejl" type="text" id="mejl" placeholder="Unesite novi mejl" /><br>
-        <label for="telefon">Telefon:</label>
-        <input v-model="currentUser.telefon" type="text" id="telefon" placeholder="Unesite novi telefon" /><br>
-        <label for="staraLozinka">Stara lozinka:</label>
-        <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozinku" /><br>
-        <label for="novaLozinka">Nova lozinka:</label>
-        <input v-model="currentUser.novaLozinka" type="password" id="novaLozinka" placeholder="Unesite novu lozinku" /><br>
-        <label for="datumRodjenja">Datum rodjenja:</label>
-        <input v-model="currentUser.datumRodjenja" type="date" id="datumRodjenja" placeholder="Unesite novi datum rodjenja" /><br>
-        <label for="slika">Slika:</label>
-        <input :src="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
-        <label for="opisKorisnika">Opis:</label>
-        <input v-model="currentUser.opisKorisnika" type="text" id="opisKorisnika" placeholder="Unesite nov opis" /><br>
-        <label for="uloga">Uloga:</label>
-        <select v-model="currentUser.uloga" id="uloga" name="uloge" required>
-          <option value="PRODAVAC">Prodavac</option>
-          <option value="KUPAC">Kupac</option>
-        </select>
-        <button v-on:click="update">Update</button>
+        <img :src="currentUser.slika" alt="Slika korisnika" class="slika"/><br>
+        <div class="form-container">
+          <div class="column">
+            <label for="ime">Ime:</label>
+            <input v-model="currentUser.ime" type="text" id="ime" placeholder="Unesite novo ime" /><br>
+            <label for="prezime">Prezime:</label>
+            <input v-model="currentUser.prezime" type="text" id="prezime" placeholder="Unesite novo prezime" /><br>
+            <label for="korisnickoIme">Korisničko ime:</label>
+            <input v-model="currentUser.korisnickoIme" type="text" id="korisnickoIme" placeholder="Unesite novo korisničko ime" /><br>
+          </div>
+          <div class="column">
+            <label for="mejl">Mejl:</label>
+            <input v-model="currentUser.mejl" type="text" id="mejl" placeholder="Unesite novi mejl" /><br>
+            <label for="telefon">Telefon:</label>
+            <input v-model="currentUser.telefon" type="text" id="telefon" placeholder="Unesite novi telefon" /><br>
+            <label for="datumRodjenja">Datum rođenja:</label>
+            <input v-model="currentUser.datumRodjenja" type="date" id="datumRodjenja" placeholder="Unesite novi datum rođenja" /><br>
+          </div>
+          <div class="column">
+            <label for="opisKorisnika">Opis:</label>
+            <input v-model="currentUser.opisKorisnika" type="text" id="opisKorisnika" placeholder="Unesite nov opis" /><br>
+            <label for="slika">Slika:</label>
+            <input v-model="currentUser.slika" alt="Slika korisnika" type="text" id="slika" placeholder="Unesite novu sliku" /><br>
+            <label for="uloga">Uloga:</label>
+            <select v-model="currentUser.uloga" id="uloga" name="uloge" required>
+              <option value="PRODAVAC">Prodavac</option>
+              <option value="KUPAC">Kupac</option>
+            </select>
+          </div>
+          <div class="column password-role-container">
+            <label for="staraLozinka">Stara lozinka:</label>
+            <input v-model="currentUser.staraLozinka" type="password" id="staraLozinka" placeholder="Unesite staru lozinku" required /><br>
+            <div class="novaLozinka">
+              <label for="novaLozinka">Nova lozinka:</label>
+              <input v-model="currentUser.novaLozinka" type="password" id="novaLozinka" placeholder="Unesite novu lozinku" /><br>
+            </div>
+            <div class="updateDugme">
+            <button v-on:click="update">Update</button>
+            </div>
+          </div>
+        </div>
+        <button @click="recenzije">Recenzije</button>
+        <div v-if="showReviews">
+          <div v-for="review in reviews" :key="review.id" class="review">
+            <h3>Prodavac kojem sam dao recenziju:</h3>
+            <p>Ime: {{ review.prodavacKojemSamDaoRecenziju.ime }}</p>
+            <p>Prezime: {{ review.prodavacKojemSamDaoRecenziju.prezime }}</p>
+            <p>Korisničko ime: {{ review.prodavacKojemSamDaoRecenziju.korisnickoIme }}</p>
+            <p>Datum podnošenja recenzije: {{ formatDate(review.datumPodnosenjaRecenzije) }}</p>
+            <p>Ocena: {{ review.ocena }}</p>
+            <p>Komentar: {{ review.komentar }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -65,12 +81,15 @@ export default {
         slika: '',
         opisKorisnika: ''
       }, // Objekat za čuvanje podataka o korisniku
-      loading: true // Prikazivanje loadera dok se podaci učitavaju
+      loading: true, // Prikazivanje loadera dok se podaci učitavaju
+      showReviews: false,
+      reviews: []
     };
   },
   mounted() {
     // Pozivamo metodu za dobavljanje trenutnog korisnika kada se komponenta montira
     this.fetchCurrentUser();
+    //this.fetchReviews();
   },
   methods: {
     fetchCurrentUser() {
@@ -86,6 +105,15 @@ export default {
           });
     },
     update(){
+      if(this.currentUser.staraLozinka != this.currentUser.novaLozinka){
+        alert('Lozinke se ne poklapaju');
+      }
+      if(this.currentUser.staraLozinka == null){
+        alert('Morate uneti trenutnu lozinku');
+      }
+      if(this.currentUser.uloga == null){
+        alert('Morate izabrati ulogu');
+      }
       console.log('Trenutni podaci o korisniku pre slanja:', this.currentUser);
       axios
           .put(`http://localhost:8080/api/user/updateSeller/${this.currentUser.id}`, this.currentUser, {
@@ -102,6 +130,50 @@ export default {
             console.error('Greška pri dobavljanju podataka korisnika:', error);
             this.loading = false;
           });
+    },
+    // recenzije() {
+    //   this.$router.push("http://localhost:8080/api/user/reviewedSellers/received");
+    // },
+    recenzije(){
+      this.showReviews = !this.showReviews;
+      console.log('Toggle Reviews:', this.showReviews); // Dodajte konzolni izlaz za praćenje stanja
+      if (this.showReviews && this.reviews.length === 0) {
+        this.fetchReviews();
+      }
+      // axios
+      //     .get('http://localhost:8080/api/user/reviewedSellers/received',  {
+      //       withCredentials: true,
+      //       headers: {
+      //         'Content-Type': 'application/json'
+      //       }
+      //     })
+      //     .then(response => {
+      //       this.currentUser = response.data;
+      //       console.log(this.reviews);
+      //     })
+      //     .catch(error => {
+      //       console.error('Greška pri dobavljanju podataka o recenzijama:', error);
+      //     });
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    },
+    fetchReviews(){
+      axios
+          .get('http://localhost:8080/api/user/reviewedSellers/received', {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            console.log('Fetched Reviews:', response.data);
+            this.reviews = response.data;
+          })
+          .catch(error => {
+            console.error('Greška pri dobavljanju podataka o recenzijama:', error);
+          });
     }
   }
 };
@@ -110,69 +182,73 @@ export default {
 <style scoped>
 
 .user-profile {
-  width: 100%;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-}
-
-.loading {
-  text-align: center;
-  font-size: 18px;
-  color: #333;
-}
-
-.registration-form {
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  width: 100%;
-  max-width: 800px;
+  max-width: 1200px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f0f0f0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.user-profile h2 {
+  text-align: center;
+}
+
+.slika {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 150px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.novaLozinka {
+  margin-top: -18px;
+}
+
+.form-container {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 200px;
 }
 
 .column {
   flex: 1;
-  margin-right: 20px;
+  margin: 0 10px;
 }
 
-.column:last-child {
-  margin-right: 0;
+.password-role-container {
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
 }
 
-.registration-form label {
+.user-profile label {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.registration-form input[type="text"],
-.registration-form input[type="password"],
-.registration-form input[type="date"],
-.registration-form select {
+.user-profile input[type="text"],
+.user-profile input[type="password"],
+.user-profile input[type="date"],
+.user-profile select {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 3px;
   box-sizing: border-box;
-  background-color: #d8d8f6;
 }
 
-.registration-form button {
-  width: 100%;
+.user-profile button {
+  width: calc(100% - 20px);
   padding: 12px 20px;
   margin-top: 20px;
-  background-color: #44449d;
+  background-color: rgba(47, 128, 102, 0.76);
   color: white;
   border: none;
   border-radius: 5px;
@@ -180,8 +256,30 @@ export default {
   transition: background-color 0.3s ease;
 }
 
-.registration-form button:hover {
-  background-color: rgba(68, 68, 157, 0.8);
+.user-profile button:hover {
+  background-color: rgb(72, 136, 113);
+}
+
+/* Dodati stilovi za sekciju recenzija */
+.review {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.review h3 {
+  margin-top: 0;
+}
+
+.review p {
+  margin: 5px 0;
+}
+
+.updateDugme {
+  margin-left: 20px;
 }
 
 </style>

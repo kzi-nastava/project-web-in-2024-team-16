@@ -94,9 +94,9 @@ public class KorisnikController {
             throw new NoSellerException("Ne možete menjati podatke drugima.");
         }
 
-        if(existingUser.get().getUloga() != Uloga.KUPAC){
-            throw new NoSellerException("Samo kupac može da menja podatke.");
-        }
+//        if(existingUser.get().getUloga() != Uloga.KUPAC){
+//            throw new NoSellerException("Samo kupac može da menja podatke.");
+//        }
 
         korisnikService.updateSeller(existingUser.get(), updatedSeller);
         return ResponseEntity.ok().build();
@@ -153,9 +153,9 @@ public class KorisnikController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        if(existingUser.get().getUloga() != Uloga.PRODAVAC){
-            throw new NoCustomerException("Samo PRODAVAC moze da menja podatke.");
-        }
+//        if(existingUser.get().getUloga() != Uloga.PRODAVAC){
+//            throw new NoCustomerException("Samo PRODAVAC moze da menja podatke.");
+//        }
 
         korisnikService.updateCustomer(existingUser.get(), updatedCustomer);
         return ResponseEntity.ok().build();
@@ -315,9 +315,9 @@ public class KorisnikController {
 
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-            if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
-            }
+//            if (korisnik == null) {
+//                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
+//            }
 
             if (!korisnik.getUloga().equals(Uloga.KUPAC)) {
                 throw new NoSellerException("Samo kupac može da pregleda recenzije.");
