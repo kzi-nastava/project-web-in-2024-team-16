@@ -180,14 +180,14 @@ export default {
 <style scoped>
 
 .user-profile {
-  max-width: 1200px; /* Povećana maksimalna širina da bi se smestile tri kolone */
+  max-width: 1200px;
   margin: 50px auto;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f0f0f0;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  position: relative; /* Potrebno za relativno pozicioniranje slike */
+  position: relative;
 }
 
 .user-profile h2 {
@@ -195,13 +195,12 @@ export default {
 }
 
 .slika {
-  position: absolute; /* Apsolutno pozicioniranje slike */
-  top: 20px; /* Prilagodite ovu vrednost za željeni vertikalni pomak */
-  left: 20px; /* Prilagodite ovu vrednost za željeni horizontalni pomak */
-  width: 150px; /* Prilagodite veličinu slike po želji */
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 150px;
   height: auto;
   border-radius: 50%;
-  //margin-top: 70px;
 }
 
 .novaLozinka {
@@ -211,16 +210,16 @@ export default {
 .form-container {
   display: flex;
   justify-content: space-between;
-  margin-left: 200px; /* Pomera formu udesno da ne prekriva sliku */
+  margin-left: 200px;
 }
 
 .column {
-  flex: 1; /* Ravnomerno raspoređuje prostor između kolona */
-  margin: 0 10px; /* Razmak između kolona */
+  flex: 1;
+  margin: 0 10px;
 }
 
 .password-role-container {
-  margin-top: 0px; /* Dodatni razmak između forme i polja stara lozinka, nova lozinka, uloga */
+  margin-top: 0px;
   display: flex;
   flex-direction: column;
 }
@@ -235,7 +234,7 @@ export default {
 .user-profile input[type="password"],
 .user-profile input[type="date"],
 .user-profile select {
-  width: 100%; /* Popunjava celu širinu sa dodatnim prostorom */
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border: 1px solid #ccc;
@@ -244,7 +243,7 @@ export default {
 }
 
 .user-profile button {
-  width: calc(100% - 20px); /* Popunjava celu širinu sa dodatnim prostorom */
+  width: calc(100% - 20px);
   padding: 12px 20px;
   margin-top: 20px;
   background-color: rgba(47, 128, 102, 0.76);
@@ -257,6 +256,24 @@ export default {
 
 .user-profile button:hover {
   background-color: rgb(72, 136, 113);
+}
+
+/* Dodati stilovi za sekciju recenzija */
+.review {
+  background-color: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.review h3 {
+  margin-top: 0;
+}
+
+.review p {
+  margin: 5px 0;
 }
 
 </style>
