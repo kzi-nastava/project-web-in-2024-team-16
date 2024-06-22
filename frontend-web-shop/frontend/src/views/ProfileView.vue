@@ -48,10 +48,10 @@
         <button @click="recenzije">Recenzije</button>
         <div v-if="showReviews">
           <div v-for="review in reviews" :key="review.id" class="review">
-            <h3>Prodavac kojem sam dao recenziju:</h3>
-            <p>Ime: {{ review.prodavacKojemSamDaoRecenziju.ime }}</p>
-            <p>Prezime: {{ review.prodavacKojemSamDaoRecenziju.prezime }}</p>
-            <p>Korisničko ime: {{ review.prodavacKojemSamDaoRecenziju.korisnickoIme }}</p>
+            <h3>{{ currentUser.uloga === 'PRODAVAC' ? 'Kupac kojem sam dao recenziju:' : 'Prodavac kojem sam dao recenziju:' }}</h3>
+            <p>Ime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.ime : review.prodavacKojemSamDaoRecenziju.ime }}</p>
+            <p>Prezime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.prezime : review.prodavacKojemSamDaoRecenziju.prezime }}</p>
+            <p>Korisničko ime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.korisnickoIme : review.prodavacKojemSamDaoRecenziju.korisnickoIme }}</p>
             <p>Datum podnošenja recenzije: {{ formatDate(review.datumPodnosenjaRecenzije) }}</p>
             <p>Ocena: {{ review.ocena }}</p>
             <p>Komentar: {{ review.komentar }}</p>
@@ -160,8 +160,19 @@ export default {
       return new Date(dateString).toLocaleDateString(undefined, options);
     },
     fetchReviews(){
+      let endpoint;
+      console.log(this.currentUser.uloga);
+      if(this.currentUser.uloga === 'KUPAC'){
+        endpoint = 'http://localhost:8080/api/user/reviewedSellers/received';
+      } else if(this.currentUser.uloga === 'PRODAVAC'){
+        endpoint = 'http://localhost:8080/api/user/reviewedBuyer/received';
+      }else{
+        console.error('Nepoznata uloga korisnika', this.currentUser);
+        return;
+      }
+
       axios
-          .get('http://localhost:8080/api/user/reviewedSellers/received', {
+          .get(endpoint, {
             withCredentials: true,
             headers: {
               'Content-Type': 'application/json'

@@ -442,9 +442,9 @@ public class KorisnikController {
 
         Optional<Korisnik> trenutniKorisnik = korisnikService.findById(korisnik.getId());
 
-        if (trenutniKorisnik == null) {
-            throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
-        }
+//        if (trenutniKorisnik == null) {
+//            throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
+//        }
 
         return ResponseEntity.ok(trenutniKorisnik);
     }
