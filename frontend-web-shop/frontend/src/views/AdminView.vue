@@ -54,6 +54,20 @@ export default {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
       return new Date(dateString).toLocaleDateString(undefined, options);
     },
+    deleteReview(reviewId) {
+      console.log('ID recenzije za brisanje:', reviewId);
+      axios
+          .delete(`http://localhost:8080/api/user/deleteReview/${reviewId}`, { withCredentials: true })
+          .then(response => {
+            console.log('Recenzija obrisana:', response);
+            // Uklonite obrisanu recenziju iz lokalne liste
+            this.reviews = this.reviews.filter(review => review.id !== reviewId);
+          })
+          .catch(error => {
+            console.error('Greška pri brisanju recenzije:', error.response.data);
+            alert('Greška pri brisanju recenzije: ' + error.response.data.message);
+          });
+    },
     // Vraća recenzije za trenutnu stranicu
     paginatedReviews() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -83,14 +97,13 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: -50px;
+  margin-bottom: 20px; /* Promenjeno na margin-bottom */
 }
 
 .review-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  justify-content: space-between;
   padding: 30px;
 }
 
@@ -102,8 +115,6 @@ export default {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-  width: 300px;
-  margin-top: 100px;
 }
 
 .button-container {
