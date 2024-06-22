@@ -46,7 +46,10 @@
         <button @click="recenzije">Recenzije</button>
         <div v-if="showReviews">
           <div v-for="review in reviews" :key="review.id" class="review">
-            <h3>Prodavac kojem sam dao recenziju: {{ review.prodavacKojemSamDaoRecenziju }}</h3>
+            <h3>Prodavac kojem sam dao recenziju:</h3>
+            <p>Ime: {{ review.prodavacKojemSamDaoRecenziju.ime }}</p>
+            <p>Prezime: {{ review.prodavacKojemSamDaoRecenziju.prezime }}</p>
+            <p>Korisničko ime: {{ review.prodavacKojemSamDaoRecenziju.korisnickoIme }}</p>
             <p>Datum podnošenja recenzije: {{ formatDate(review.datumPodnosenjaRecenzije) }}</p>
             <p>Ocena: {{ review.ocena }}</p>
             <p>Komentar: {{ review.komentar }}</p>
