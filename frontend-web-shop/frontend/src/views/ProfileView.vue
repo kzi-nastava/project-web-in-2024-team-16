@@ -43,11 +43,14 @@
           </div>
         </div>
         <button v-on:click="update">Update</button>
-        <button v-on:click="recenzije" @click="showFields = !showFields">Recenzije</button>
-        <div v-if="showFields">
-          <input type="text" placeholder="Polje 1" />
-          <input type="text" placeholder="Polje 2" />
-          <!-- Dodajte dodatna polja po potrebi -->
+        <button @click="recenzije">Recenzije</button>
+        <div v-if="showReviews">
+          <div v-for="review in reviews" :key="review.id" class="review">
+            <h3>Prodavac kojem sam dao recenziju: {{ review.prodavacKojemSamDaoRecenziju }}</h3>
+            <p>Datum podnošenja recenzije: {{ formatDate(review.datumPodnosenjaRecenzije) }}</p>
+            <p>Ocena: {{ review.ocena }}</p>
+            <p>Komentar: {{ review.komentar }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -74,12 +77,14 @@ export default {
         opisKorisnika: ''
       }, // Objekat za čuvanje podataka o korisniku
       loading: true, // Prikazivanje loadera dok se podaci učitavaju
-      showFields: false
+      showReviews: false,
+      reviews: []
     };
   },
   mounted() {
     // Pozivamo metodu za dobavljanje trenutnog korisnika kada se komponenta montira
     this.fetchCurrentUser();
+    //this.fetchReviews();
   },
   methods: {
     fetchCurrentUser() {
@@ -125,20 +130,44 @@ export default {
     //   this.$router.push("http://localhost:8080/api/user/reviewedSellers/received");
     // },
     recenzije(){
+      this.showReviews = !this.showReviews;
+      console.log('Toggle Reviews:', this.showReviews); // Dodajte konzolni izlaz za praćenje stanja
+      if (this.showReviews && this.reviews.length === 0) {
+        this.fetchReviews();
+      }
+      // axios
+      //     .get('http://localhost:8080/api/user/reviewedSellers/received',  {
+      //       withCredentials: true,
+      //       headers: {
+      //         'Content-Type': 'application/json'
+      //       }
+      //     })
+      //     .then(response => {
+      //       this.currentUser = response.data;
+      //       console.log(this.reviews);
+      //     })
+      //     .catch(error => {
+      //       console.error('Greška pri dobavljanju podataka o recenzijama:', error);
+      //     });
+    },
+    formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    },
+    fetchReviews(){
       axios
-          .get('http://localhost:8080/api/user/reviewedSellers/received',  {
+          .get('http://localhost:8080/api/user/reviewedSellers/received', {
             withCredentials: true,
             headers: {
               'Content-Type': 'application/json'
             }
           })
           .then(response => {
-            this.currentUser = response.data;
-            this.loading = false;
+            console.log('Fetched Reviews:', response.data);
+            this.reviews = response.data;
           })
           .catch(error => {
-            console.error('Greška pri dobavljanju podataka korisnika:', error);
-            this.loading = false;
+            console.error('Greška pri dobavljanju podataka o recenzijama:', error);
           });
     }
   }
