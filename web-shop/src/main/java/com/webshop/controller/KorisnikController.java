@@ -315,9 +315,9 @@ public class KorisnikController {
 
             Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-//            if (korisnik == null) {
-//                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
-//            }
+            if (korisnik == null) {
+                throw new UserNotFoundException("Samo ulogovani korisnici mogu da pregledaju recenzije.");
+            }
 
             if (!korisnik.getUloga().equals(Uloga.KUPAC)) {
                 throw new NoSellerException("Samo kupac može da pregleda recenzije.");
@@ -442,9 +442,9 @@ public class KorisnikController {
 
         Optional<Korisnik> trenutniKorisnik = korisnikService.findById(korisnik.getId());
 
-//        if (trenutniKorisnik == null) {
-//            throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
-//        }
+        if (trenutniKorisnik == null) {
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
+        }
 
         return ResponseEntity.ok(trenutniKorisnik);
     }

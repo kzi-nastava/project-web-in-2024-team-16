@@ -10,8 +10,15 @@
         <p>Komentar: {{ review.komentar }}</p>
         <p>Datum podnošenja recenzije: {{ formatDate(review.datumPodnosenjaRecenzije) }}</p>
         <div class="button-container">
-          <button class="review-button update" @click="updateReview(review.id)">Ažuriraj</button>
+          <button class="review-button update" @click="toggleUpdateForm(review.id)">Ažuriraj</button>
           <button class="review-button delete" @click="deleteReview(review.id)">Obriši</button>
+        </div>
+        <div v-if="review.showUpdateForm" class="update-form">
+          <label for="newRating">Nova ocena:</label><br>
+          <input type="number" v-model="review.newRating" min="1" max="5"><br>
+          <label for="newComment">Novi komentar:</label><br>
+          <textarea v-model="review.newComment"></textarea>
+          <button class="review-button save" @click="saveReview(review.id)">Sačuvaj</button>
         </div>
       </div>
     </div>
@@ -33,7 +40,7 @@ export default {
     return {
       reviews: [],
       currentPage: 1, // Trenutna stranica
-      itemsPerPage: 4 // Broj kartica po stranici
+      itemsPerPage: 4, // Broj kartica po stranici
     };
   },
   mounted() {
@@ -85,7 +92,49 @@ export default {
       if (this.currentPage > 1) {
         this.currentPage--;
       }
+    },
+    toggleUpdateForm(reviewId) {
+      this.reviews = this.reviews.map(review => {
+        if (review.id === reviewId) {
+          review.showUpdateForm = !review.showUpdateForm;
+        }
+        return review;
+      });
+    },
+    saveReview(reviewId) {
+      // Implementacija logike za čuvanje recenzije
+      axios
+          .put(`http://localhost:8080/api/user/updateReview/${reviewId}`, {
+            withCredentials: true,
+          })
+          .then(response => {
+                    this.reviews = response.data;
+                    this.loading = false;
+                  })
+                  .catch(error => {
+                    console.error('Greška pri dobavljanju podataka korisnika:', error);
+                    this.loading = false;
+                  });
+      console.log('ID recenzije za čuvanje:', reviewId);
     }
+    // updateReview(){
+    //   console.log('Trenutni podaci o recenziji pre slanja:', this.reviews);
+    //   axios
+    //       .put(`http://localhost:8080/api/user/updateReview/${this.reviews.id}`, this.reviews, {
+    //         withCredentials: true,
+    //         headers: {
+    //           'Content-Type': 'application/json'
+    //         }
+    //       })
+    //       .then(response => {
+    //         this.reviews = response.data;
+    //         this.loading = false;
+    //       })
+    //       .catch(error => {
+    //         console.error('Greška pri dobavljanju podataka korisnika:', error);
+    //         this.loading = false;
+    //       });
+    // }
   }
 }
 
@@ -138,6 +187,18 @@ export default {
 .review-button.delete {
   background-color: #f44336; /* Crvena boja za Obriši */
   color: white; /* Bela boja teksta */
+}
+
+.review-button.save {
+  background-color: #007bff;
+  color: white;
+  margin-top: 0;
+  margin-left: 50px;
+  margin-bottom: 10px;
+}
+
+.update-form {
+  margin-top: 40px;
 }
 
 .pagination {
