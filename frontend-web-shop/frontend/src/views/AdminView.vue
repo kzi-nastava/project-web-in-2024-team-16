@@ -97,24 +97,46 @@ export default {
       this.reviews = this.reviews.map(review => {
         if (review.id === reviewId) {
           review.showUpdateForm = !review.showUpdateForm;
+          // Postavljanje trenutnih vrednosti kao podrazumevane vrednosti
+          if (review.showUpdateForm) {
+            review.newRating = review.ocena;
+            review.newComment = review.komentar;
+          }
         }
         return review;
       });
     },
     saveReview(reviewId) {
-      // Implementacija logike za čuvanje recenzije
+      // Pronađite recenziju koju želite da ažurirate
+      const reviewToUpdate = this.reviews.find(review => review.id === reviewId);
+
+      // Pripremite podatke za slanje
+      const updateData = {
+        id: reviewId,
+        ocena: reviewToUpdate.newRating,
+        komentar: reviewToUpdate.newComment
+      };
+
+      // Pošaljite axios PUT zahtev sa potrebnim podacima
       axios
-          .put(`http://localhost:8080/api/user/updateReview/${reviewId}`, {
+          .put(`http://localhost:8080/api/user/updateReview/${reviewId}`, updateData, {
             withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
           })
           .then(response => {
-                    this.reviews = response.data;
-                    this.loading = false;
-                  })
-                  .catch(error => {
-                    console.error('Greška pri dobavljanju podataka korisnika:', error);
-                    this.loading = false;
-                  });
+            // Osvježite listu recenzija sa ažuriranim podacima
+            this.reviews = this.reviews.map(review =>
+                review.id === reviewId ? { ...review, ocena: reviewToUpdate.newRating, komentar: reviewToUpdate.newComment, showUpdateForm: false } : review
+            );
+            console.log('Recenzija ažurirana:', response.data);
+          })
+          .catch(error => {
+            console.error('Greška pri ažuriranju recenzije:', error);
+            alert('Greška pri ažuriranju recenzije: ' + error.response.data.message);
+          });
+
       console.log('ID recenzije za čuvanje:', reviewId);
     }
     // updateReview(){

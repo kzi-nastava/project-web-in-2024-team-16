@@ -395,21 +395,24 @@ public class KorisnikController {
             return new ResponseEntity<>(HttpStatus.OK);
         }
 
-        @PutMapping("/updateReview/{reviewId}")
-        public ResponseEntity<Recenzija> updateReviewComment (@PathVariable Long reviewId, RecenzijaPrikaz3DTO recenzija, HttpSession session) throws
-                ResourceNotFoundException, UserNotFoundException, NoSellerException {
-            Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
-            if (korisnik == null) {
-                throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
-            }
+    @PutMapping("/updateReview/{reviewId}")
+    public ResponseEntity<Recenzija> updateReviewComment(
+            @PathVariable Long reviewId,
+            @RequestBody RecenzijaPrikaz3DTO recenzija,
+            HttpSession session) throws ResourceNotFoundException, UserNotFoundException, NoSellerException {
 
-            if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
-                throw new NoSellerException("Samo administrator može da modifikuje recenzije.");
-            }
-
-            Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
-            return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+        if (korisnik == null) {
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da menjaju podatke.");
         }
+
+        if (!korisnik.getUloga().equals(Uloga.ADMINISTRATOR)) {
+            throw new NoSellerException("Samo administrator može da modifikuje recenzije.");
+        }
+
+        Recenzija updatedReview = korisnikService.updateReview(reviewId, recenzija);
+        return new ResponseEntity<>(updatedReview, HttpStatus.OK);
+    }
 
     @PostMapping("/shopNowAuction")
     public ResponseEntity<PonudaDTO>  kupovinaProizvodaAukcija(@RequestParam(required = true) Long id,@RequestParam(required = true)
