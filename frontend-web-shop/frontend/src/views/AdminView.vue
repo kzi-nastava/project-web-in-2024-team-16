@@ -27,6 +27,9 @@
       <span>Stranica {{ currentPage }}</span>
       <button @click="nextPage" :disabled="currentPage * itemsPerPage >= reviews.length">Sledeća</button>
     </div>
+    <div class="test">
+      <h1>Pregled svih prijava</h1>
+    </div>
   </div>
 
 </template>
@@ -225,9 +228,10 @@ export default {
 
 .pagination {
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
   margin-top: 20px;
+  margin-right: 50px;
 }
 
 .pagination button {
@@ -241,6 +245,14 @@ export default {
 
 .pagination span {
   font-size: 18px;
+}
+
+.test {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 10px;
 }
 
 </style>
