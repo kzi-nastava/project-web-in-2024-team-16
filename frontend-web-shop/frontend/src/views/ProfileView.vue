@@ -104,9 +104,6 @@ export default {
           });
     },
     update(){
-      if(this.currentUser.staraLozinka != this.currentUser.novaLozinka){
-        alert('Lozinke se ne poklapaju');
-      }
       if(this.currentUser.staraLozinka == null){
         alert('Morate uneti trenutnu lozinku');
       }
