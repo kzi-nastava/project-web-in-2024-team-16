@@ -38,8 +38,8 @@
         <p>Status: {{ report.statusPrijave }}</p>
         <p>Datum podnošenja prijave: {{ formatDate(report.datumPodnosenjaPrijave) }}</p>
         <div class="button-container">
-          <button class="review-button update" @click="toggleUpdateForm(review.id)">Ažuriraj</button>
-          <button class="review-button delete" @click="deleteReview(review.id)">Obriši</button>
+          <button class="review-button update" @click="accept(report.id)">Prihvati</button>
+          <button class="review-button delete" @click="deleteReview(report.id)">Odbij</button>
         </div>
 <!--        <div v-if="review.showUpdateForm" class="update-form">-->
 <!--          <label for="newRating">Nova ocena:</label><br>-->
@@ -162,6 +162,25 @@ export default {
         }
         return review;
       });
+    },
+    accept(reportId) {
+      axios.post(`http://localhost:8080/api/report/adminAcceptReport/${reportId}`, {}, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+          .then(response => {
+            console.log('Prijava prihvaćena:', response.data);
+            // Ažurirajte status prijave na lokalnoj listi
+            this.reports = this.reports.map(report =>
+                report.id === reportId ? { ...report, statusPrijave: 'PRIHVACENA' } : report
+            );
+          })
+          .catch(error => {
+            console.error('Greška pri prihvatanju prijave:', error);
+            alert('Greška pri prihvatanju prijave: ' + error.response.data.message);
+          });
     },
     saveReview(reviewId) {
       // Pronađite recenziju koju želite da ažurirate

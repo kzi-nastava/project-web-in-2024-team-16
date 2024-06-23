@@ -223,6 +223,7 @@ public class PrijavaProfilaService {
 
     }
 
+    @Transactional
     public void prihvatiPrijavu(Long prijavaId, String razlogPrihvatanja) throws IOException {
 
         Optional<PrijavaProfila> prijava = prijavaProfilaRepository.findById(prijavaId);
