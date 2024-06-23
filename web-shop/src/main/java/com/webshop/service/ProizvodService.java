@@ -737,6 +737,7 @@ public class ProizvodService {
             prodavacProfilDTO.setDobijeneRecenzije(p.getDobijeneRecenzije());
             prodavacProfilDTO.setOpisKorisnika(p.getOpisKorisnika());
             prodavacProfilDTO.setProsecnaOcena(p.getProsecnaOcena());
+            prodavacProfilDTO.setUloga(p.getUloga());
 
             Set<ProizvodiNaProdajuDTO> proizvodiNaProdajuDTO = new HashSet<>();
             for (Proizvod prodNaProdaju : p.getProizvodiNaProdaju()) {

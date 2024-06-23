@@ -54,10 +54,10 @@ public class KorisnikController {
             return new ResponseEntity<>("Korisnik ne postoji.", HttpStatus.NOT_FOUND);
 
         session.setAttribute("korisnik", loginovaniKorisnik);
-
         // Dodajte ID korisnika u odgovor
         return ResponseEntity.ok().body(Map.of(
                 "message", "Prijava uspešna.",
+                "korisnik", loginovaniKorisnik,
                 "id", loginovaniKorisnik.getId(),
                 "uloga", loginovaniKorisnik.getUloga()
         ));
@@ -439,12 +439,11 @@ public class KorisnikController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         Optional<Korisnik> trenutniKorisnik = korisnikService.findById(korisnik.getId());
+        if (trenutniKorisnik.get() == null) {
+            throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
+       }
 
-//        if (trenutniKorisnik == null) {
-//            throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
-//        }
-
-        return ResponseEntity.ok(trenutniKorisnik);
+        return ResponseEntity.ok(trenutniKorisnik.get());
     }
     @GetMapping("/products/{id}")
     public Set<?> getProizvodiKorisnika(@PathVariable Long id) {

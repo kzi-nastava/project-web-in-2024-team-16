@@ -31,6 +31,7 @@ export default {
             console.log(res);//javlja da je dobro i stavlja me na home stranicu
             console.log("Prijavljen korisnik:", this.korisnik.korisnickoIme);
             localStorage.setItem("user", JSON.stringify(res.data.id));
+            localStorage.setItem("userUSER", JSON.stringify(res.data));
             localStorage.setItem("userRole", res.data.uloga); // Čuvanje uloge korisnik
             this.$router.push("/");
             this.$emit("userLoggedIn");

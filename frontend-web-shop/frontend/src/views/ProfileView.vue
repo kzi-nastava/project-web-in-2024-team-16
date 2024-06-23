@@ -97,6 +97,42 @@
           <p>Opis: {{ selectedProduct.opis }}</p>
           <p>Tip prodaje: {{ selectedProduct.tipProdaje }}</p>
           <!-- Dodajte ostale informacije koje želite prikazati -->
+          <button v-if="selectedProduct.prodavac.uloga === 'PRODAVAC'" @click="editProduct">Ažuriraj proizvod</button>
+        </div>
+      </div>
+    </div>
+    <!-- Modal za ažuriranje proizvoda -->
+    <div v-if="showEditModal" class="modal" @click.self="closeEditModal">
+      <div class="modal-content">
+        <span class="close" @click="closeEditModal">&times;</span>
+        <div v-if="selectedProduct">
+          <h3>Ažuriraj proizvod:</h3>
+          <form @submit.prevent="updateProduct">
+            <div>
+              <label for="naziv">Naziv:</label>
+              <input type="text" v-model="selectedProduct.naziv" id="naziv" required>
+            </div>
+            <div>
+              <label for="cena">Cena:</label>
+              <input type="number" v-model="selectedProduct.cena" id="cena" required>
+            </div>
+            <div>
+              <label for="opis">Opis:</label>
+              <textarea v-model="selectedProduct.opis" id="opis" required></textarea>
+            </div>
+            <div>
+              <label for="slikaProizvoda">Slika proizvoda (URL):</label>
+              <input type="text" v-model="selectedProduct.slikaProizvoda" id="slikaProizvoda" required>
+            </div>
+            <div>
+              <label for="tipProdaje">Tip prodaje:</label>
+              <select v-model="selectedProduct.tipProdaje" id="tipProdaje" required>
+                <option value="PRODAJA">Prodaja</option>
+                <option value="AUKCIJA">Aukcija</option>
+              </select>
+            </div>
+            <button type="submit">Sačuvaj izmene</button>
+          </form>
         </div>
       </div>
     </div>
@@ -129,8 +165,11 @@ export default {
       proizvodiNaProdaju: [],
       kupljeniProizvodi:[],
       user: null,
+      userRole: '',
       selectedProduct: null,
       showModal: false,
+      showEditModal: false,
+      userUSER:null
     };
   },
   mounted() {
@@ -145,6 +184,7 @@ export default {
           .get('http://localhost:8080/api/user/currentUser', {withCredentials: true})
           .then(response => {
             this.currentUser = response.data;
+            console.log("JOVANOVA METODA",this.currentUser);
             this.loading = false;
           })
           .catch(error => {
@@ -179,9 +219,7 @@ export default {
             this.loading = false;
           });
     },
-    // recenzije() {
-    //   this.$router.push("http://localhost:8080/api/user/reviewedSellers/received");
-    // },
+
     recenzije(){
       this.showReviews = !this.showReviews;
       console.log('Toggle Reviews:', this.showReviews); // Dodajte konzolni izlaz za praćenje stanja
@@ -270,6 +308,43 @@ export default {
     closeModal() {
       this.showModal = false;
       this.selectedProduct = null;
+    },
+    editProduct() {
+      this.showEditModal = true;
+      this.showModal = false;
+    },
+    closeEditModal() {
+      this.showEditModal = false;
+    },
+    updateProduct() {
+      /*const user = JSON.parse(localStorage.getItem('user'));
+      console.log("TRENUTNI KORISNIK",user);
+      const userUSER = JSON.parse(localStorage.getItem('userUSER'));
+      console.log("USER USER",userUSER); */
+      const id = this.selectedProduct.id;
+
+      axios
+          .put(`http://localhost:8080/api/product/update/${id}`, this.selectedProduct, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            alert('Proizvod uspešno ažuriran.');
+            this.closeEditModal();
+            this.fetchProducts();
+          })
+          .catch(error => {
+            if (error.response && error.response.data === "Proizvod je prodat.") {
+              alert('Proizvod je prodat.');
+            } else if (error.response && error.response.data === "Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.") {
+              alert('Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.');
+            } else {
+              console.error('Greška pri ažuriranju proizvoda:', error);
+              alert('Greška pri ažuriranju proizvoda.');
+            }
+          });
     }
   }
 };
