@@ -48,7 +48,7 @@
         <button @click="recenzije">Recenzije</button>
         <div v-if="showReviews">
           <div v-for="review in reviews" :key="review.id" class="review">
-            <h3>{{ currentUser.uloga === 'PRODAVAC' ? 'Kupac kojem sam dao recenziju:' : 'Prodavac kojem sam dao recenziju:' }}</h3>
+            <h3>{{ currentUser.uloga === 'PRODAVAC' ? 'Recenzije koje sam dao/dala:' : 'Recenzije koje sam dao/dala:' }}</h3>
             <p>Ime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.ime : review.prodavacKojemSamDaoRecenziju.ime }}</p>
             <p>Prezime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.prezime : review.prodavacKojemSamDaoRecenziju.prezime }}</p>
             <p>Korisničko ime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.korisnickoIme : review.prodavacKojemSamDaoRecenziju.korisnickoIme }}</p>
@@ -107,7 +107,7 @@
             <!-- Ostatak HTML-a -->
           </div>
           <!-- Dodajte ostale informacije koje želite prikazati -->
-          <button v-if="currentUser.uloga === 'PRODAVAC'" @click="editProduct" class="button-accept">Ažuriraj proizvod</button>
+          <button v-if="currentUser.uloga === 'PRODAVAC' && selectedProduct.kupac===null" @click="editProduct" class="button-accept">Ažuriraj proizvod</button>
           <button v-if="currentUser.uloga === 'PRODAVAC' && selectedProduct.tipProdaje === 'AUKCIJA'"
                   @click="endAuction(selectedProduct.id)" class="button-accept" >
             Završi aukciju
@@ -365,10 +365,13 @@ export default {
             if (error.response && error.response.data === "Proizvod je prodat.") {
               this.successMessage = "Prodat proizvod ne može da se menja.";
               this.showSuccessModal = true;
+              console.log(error);
             } else if (error.response && error.response.data === "Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.") {
               this.successMessage = "Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.";
               this.showSuccessModal = true;
+              console.log(error);
             } else {
+              console.log(error);
               this.successMessage = "Došlo je do greške.";
               this.showSuccessModal = true;
             }

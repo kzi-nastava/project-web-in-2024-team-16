@@ -151,7 +151,6 @@ export default {
 
       axios.post('http://localhost:8080/api/user/rateBuyer/'+ kupacId + '?ocena=' + this.ocenaProdavca +'&komentar=' + this.komentarProdavca, {}, {withCredentials: true})
           .then(response => {
-            // this.prodavac = response.data.prodavac;
             console.log('Ocena uspešno poslata:', response.data);
             this.closeRateCustomerModal();
           })

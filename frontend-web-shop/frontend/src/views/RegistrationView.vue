@@ -41,6 +41,13 @@
 
       <button v-on:click="registration">Registruj se</button>
     </div>
+    <div v-if="showErrorModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeErrorModal">&times;</span>
+        <h2>Greška</h2>
+        <p>{{successMessage }}</p>
+      </div>
+    </div>
   </div>
 
 </template>
@@ -55,6 +62,8 @@ export default {
     return {
       korisnik: {},//ovo dobijam prilikom prijave, posto to posle prosledjujem pomocu url mora da bude isto kao polja u
       //login dto klasi
+      showErrorModal: false,
+      successMessage: ''
     };
   },
   methods: {
@@ -65,13 +74,26 @@ export default {
           })
           .then((res) => {
             console.log(res);//javlja da je dobro i stavlja me na home stranicu
-            this.$router.push("/home");
+            this.$router.push("/");
           })
-          .catch((err) => {
-            console.log(err);
-            alert("Došlo je do greške");
+          .catch((error) => {
+            if (error.response && error.response.data === "Korisnik sa ovim email-om već postoji.") {
+              this.successMessage= "Korisnik sa ovim email-om već postoji.";
+              this.showErrorModal = true;
+            }else if(error.response && error.response.data === "Korisnik sa ovim korisnickim imenom vec postoji."){
+              this.successMessage= "Korisnik sa ovim korisnickim imenom vec postoji.";
+              this.showErrorModal = true;
+            }else if(error.response && error.response.data ===  "Lozinke se ne poklapaju."){
+              this.successMessage= "Lozinke se ne poklapaju.";
+              this.showErrorModal = true;
+            }else{
+              console.log(error);
+            }
           });
 
+    },
+    closeErrorModal() {
+      this.showErrorModal = false; // Zatvaranje grešnog modalnog prozora
     },
   },
 };
