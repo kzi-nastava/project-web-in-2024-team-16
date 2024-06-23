@@ -168,7 +168,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px; /* Promenjeno na margin-bottom */
+  margin-bottom: 10px; /* Promenjeno na margin-bottom */
 }
 
 .review-container {
@@ -202,17 +202,17 @@ export default {
 }
 
 .review-button.update {
-  background-color: #4caf50; /* Zelena boja za Ažuriraj */
+  background-color: #4141da; /* Zelena boja za Ažuriraj */
   color: white; /* Bela boja teksta */
 }
 
 .review-button.delete {
-  background-color: #f44336; /* Crvena boja za Obriši */
+  background-color: #773577; /* Crvena boja za Obriši */
   color: white; /* Bela boja teksta */
 }
 
 .review-button.save {
-  background-color: #007bff;
+  background-color: #ffb4f4;
   color: white;
   margin-top: 0;
   margin-left: 50px;
