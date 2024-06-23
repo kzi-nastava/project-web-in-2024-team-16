@@ -27,8 +27,33 @@
       <span>Stranica {{ currentPage }}</span>
       <button @click="nextPage" :disabled="currentPage * itemsPerPage >= reviews.length">Sledeća</button>
     </div>
-    <div class="test">
+    <div class="naslov2">
       <h1>Pregled svih prijava</h1>
+    </div>
+    <div class="review-container">
+      <div v-for="report in paginatedReports()" :key="report.id" class="review-card">
+        <p>Prijavu podneo: {{report.podnosiocPrijave.ime}} {{report.podnosiocPrijave.prezime}} "{{report.podnosiocPrijave.korisnickoIme}}"</p>
+        <p>Prijavu primio: {{report.prijavljeniKorisnik.ime}} {{report.prijavljeniKorisnik.prezime}} "{{report.prijavljeniKorisnik.korisnickoIme}}"</p>
+        <p>Razlog prijave: {{ report.razlogPrijave }}</p>
+        <p>Status: {{ report.statusPrijave }}</p>
+        <p>Datum podnošenja prijave: {{ formatDate(report.datumPodnosenjaPrijave) }}</p>
+        <div class="button-container">
+          <button class="review-button update" @click="toggleUpdateForm(review.id)">Ažuriraj</button>
+          <button class="review-button delete" @click="deleteReview(review.id)">Obriši</button>
+        </div>
+<!--        <div v-if="review.showUpdateForm" class="update-form">-->
+<!--          <label for="newRating">Nova ocena:</label><br>-->
+<!--          <input type="number" v-model="review.newRating" min="1" max="5"><br>-->
+<!--          <label for="newComment">Novi komentar:</label><br>-->
+<!--          <textarea v-model="review.newComment"></textarea>-->
+<!--          <button class="review-button save" @click="saveReview(review.id)">Sačuvaj</button>-->
+<!--        </div>-->
+      </div>
+    </div>
+    <div class="pagination">
+      <button @click="prevPageReport" :disabled="currentPageReport === 1">Prethodna</button>
+      <span>Stranica {{ currentPageReport }}</span>
+      <button @click="nextPageReport" :disabled="currentPageReport * itemsPerPageReport >= reports.length">Sledeća</button>
     </div>
   </div>
 
@@ -44,10 +69,14 @@ export default {
       reviews: [],
       currentPage: 1, // Trenutna stranica
       itemsPerPage: 4, // Broj kartica po stranici
+      reports: [],
+      currentPageReport: 1, // Trenutna stranica
+      itemsPerPageReport: 4, // Broj kartica po stranici
     };
   },
   mounted() {
     this.fetchReviews();
+    this.fetchReports();
   },
   methods: {
     fetchReviews() {
@@ -58,6 +87,16 @@ export default {
           })
           .catch(error => {
             console.error('Greška pri dobavljanju podataka o recenzijama:', error);
+          });
+    },
+    fetchReports(){
+      axios
+          .get('http://localhost:8080/api/report/allReports', {withCredentials: true})
+          .then(response => {
+            this.reports = response.data;
+          })
+          .catch(error => {
+            console.error('Greška pri dobavljanju podataka o prijavama:', error);
           });
     },
     formatDate(dateString) {
@@ -84,16 +123,31 @@ export default {
       const end = start + this.itemsPerPage;
       return this.reviews.slice(start, end);
     },
+    paginatedReports() {
+      const start = (this.currentPageReport - 1) * this.itemsPerPageReport;
+      const end = start + this.itemsPerPageReport;
+      return this.reports.slice(start, end);
+    },
     // Prelazak na sledeću stranicu
     nextPage() {
       if (this.currentPage * this.itemsPerPage < this.reviews.length) {
         this.currentPage++;
       }
     },
+    nextPageReport() {
+      if (this.currentPageReport * this.itemsPerPageReport < this.reports.length) {
+        this.currentPageReport++;
+      }
+    },
     // Prelazak na prethodnu stranicu
     prevPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
+      }
+    },
+    prevPageReport() {
+      if (this.currentPageReport > 1) {
+        this.currentPageReport--;
       }
     },
     toggleUpdateForm(reviewId) {
@@ -142,24 +196,6 @@ export default {
 
       console.log('ID recenzije za čuvanje:', reviewId);
     }
-    // updateReview(){
-    //   console.log('Trenutni podaci o recenziji pre slanja:', this.reviews);
-    //   axios
-    //       .put(`http://localhost:8080/api/user/updateReview/${this.reviews.id}`, this.reviews, {
-    //         withCredentials: true,
-    //         headers: {
-    //           'Content-Type': 'application/json'
-    //         }
-    //       })
-    //       .then(response => {
-    //         this.reviews = response.data;
-    //         this.loading = false;
-    //       })
-    //       .catch(error => {
-    //         console.error('Greška pri dobavljanju podataka korisnika:', error);
-    //         this.loading = false;
-    //       });
-    // }
   }
 }
 
@@ -172,6 +208,14 @@ export default {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px; /* Promenjeno na margin-bottom */
+}
+
+.naslov2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 50px;
+  margin-bottom: 10px;
 }
 
 .review-container {
@@ -232,6 +276,7 @@ export default {
   align-items: center;
   margin-top: 20px;
   margin-right: 50px;
+  margin-bottom: 30px;
 }
 
 .pagination button {
@@ -247,12 +292,5 @@ export default {
   font-size: 18px;
 }
 
-.test {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 50px;
-  margin-bottom: 10px;
-}
 
 </style>

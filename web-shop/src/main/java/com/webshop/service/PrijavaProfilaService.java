@@ -265,10 +265,10 @@ public class PrijavaProfilaService {
             podnosilacDto.setKorisnickoIme(podnosilac.getKorisnickoIme());
 
             PrijavaKorisnikDTO prijavljenDto = new PrijavaKorisnikDTO();
-            prijavljenDto.setIme(podnosilac.getIme());
-            prijavljenDto.setPrezime(podnosilac.getPrezime());
-            prijavljenDto.setMejl(podnosilac.getMejl());
-            prijavljenDto.setKorisnickoIme(podnosilac.getKorisnickoIme());
+            prijavljenDto.setIme(prijavljen.getIme());
+            prijavljenDto.setPrezime(prijavljen.getPrezime());
+            prijavljenDto.setMejl(prijavljen.getMejl());
+            prijavljenDto.setKorisnickoIme(prijavljen.getKorisnickoIme());
 
             dto.setPodnosiocPrijave(podnosilacDto);
             dto.setPrijavljeniKorisnik(prijavljenDto);
