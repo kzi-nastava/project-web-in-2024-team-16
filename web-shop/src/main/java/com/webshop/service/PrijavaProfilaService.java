@@ -207,6 +207,7 @@ public class PrijavaProfilaService {
         }
     }
 
+    @Transactional
     public void odbijPrijavu(Long prijavaId, String razlogOdbijanja) throws IOException {
 
         Optional<PrijavaProfila> prijava = prijavaProfilaRepository.findById(prijavaId);
@@ -215,10 +216,16 @@ public class PrijavaProfilaService {
             throw new NoReportException("Tražena prijava ne postoji");
         }
       //  PrijavaProfila izmenjenaPrijava= new PrijavaProfila();
-        prijava.get().setStatusPrijave(Status.ODBIJENA);
-       prijava.get().setRazlogOdbijanja(razlogOdbijanja);
-        prijavaProfilaRepository.save(prijava.get());
-        Korisnik korisnik=prijava.get().getPodnosiocPrijave();
+//        prijava.get().setStatusPrijave(Status.ODBIJENA);
+//        prijava.get().setRazlogOdbijanja(razlogOdbijanja);
+//        prijavaProfilaRepository.save(prijava.get());
+//        Korisnik korisnik=prijava.get().getPodnosiocPrijave();
+//        sendReportRejected(korisnik, razlogOdbijanja);
+        PrijavaProfila prijavaProfila = prijava.get();
+        prijavaProfila.setStatusPrijave(Status.ODBIJENA);
+        prijavaProfila.setRazlogOdbijanja(razlogOdbijanja);
+        prijavaProfilaRepository.save(prijavaProfila);
+        Korisnik korisnik = prijavaProfila.getPodnosiocPrijave();
         sendReportRejected(korisnik, razlogOdbijanja);
 
     }

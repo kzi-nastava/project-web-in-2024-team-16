@@ -39,15 +39,13 @@
         <p>Datum podnošenja prijave: {{ formatDate(report.datumPodnosenjaPrijave) }}</p>
         <div class="button-container">
           <button class="review-button update" @click="accept(report.id)">Prihvati</button>
-          <button class="review-button delete" @click="deleteReview(report.id)">Odbij</button>
+          <button class="review-button delete" @click="toggleRejectionForm(report.id)">Odbij</button>
         </div>
-<!--        <div v-if="review.showUpdateForm" class="update-form">-->
-<!--          <label for="newRating">Nova ocena:</label><br>-->
-<!--          <input type="number" v-model="review.newRating" min="1" max="5"><br>-->
-<!--          <label for="newComment">Novi komentar:</label><br>-->
-<!--          <textarea v-model="review.newComment"></textarea>-->
-<!--          <button class="review-button save" @click="saveReview(review.id)">Sačuvaj</button>-->
-<!--        </div>-->
+        <div v-if="report.showRejectionForm" class="rejection-form">
+          <label for="rejectionReason">Razlog odbijanja:</label><br>
+          <textarea v-model="report.razlogOdbijanja"></textarea>
+          <button class="review-button save" @click="reject(report.id)">Potvrdi</button>
+        </div>
       </div>
     </div>
     <div class="pagination">
@@ -163,6 +161,18 @@ export default {
         return review;
       });
     },
+    toggleRejectionForm(reportId) {
+      this.reports = this.reports.map(report => {
+        if (report.id === reportId) {
+          report.showRejectionForm = !report.showRejectionForm;
+          // Postavljanje trenutnih vrednosti kao podrazumevane vrednosti
+          if (report.showRejectionForm) {
+            report.rejectionReason = '';
+          }
+        }
+        return report;
+      });
+    },
     accept(reportId) {
       axios.post(`http://localhost:8080/api/report/adminAcceptReport/${reportId}`, {}, {
         withCredentials: true,
@@ -179,7 +189,32 @@ export default {
           })
           .catch(error => {
             console.error('Greška pri prihvatanju prijave:', error);
-            alert('Greška pri prihvatanju prijave: ' + error.response.data.message);
+            alert('Prijava je vec obradjena!');
+          });
+    },
+    reject(reportId) {
+      const reportToReject = this.reports.find(report => report.id === reportId);
+      const rejectionData = {
+        razlogOdbijanja: reportToReject.rejectionReason
+      };
+
+      axios
+          .post(`http://localhost:8080/api/report/adminRejectionReport/${reportId}`, rejectionData, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(response => {
+            console.log('Prijava odbijena:', response);
+            // Ažurirajte status prijave u lokalnoj listi
+            this.reports = this.reports.map(report =>
+                report.id === reportId ? { ...report, statusPrijave: 'ODBIJENA', showRejectionForm: false } : report
+            );
+          })
+          .catch(error => {
+            console.error('Greška pri odbijanju prijave:', error);
+            alert('Prijava je vec obradjena!');
           });
     },
     saveReview(reviewId) {
