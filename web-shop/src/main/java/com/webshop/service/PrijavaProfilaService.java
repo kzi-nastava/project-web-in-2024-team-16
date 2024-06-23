@@ -7,25 +7,22 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
-import com.webshop.DTO.PrijavaKorisnikDTO;
-import com.webshop.DTO.PrijavaProfilaDTO;
-import com.webshop.DTO.PrijavaRequestDTO;
+import com.webshop.DTO.*;
 import com.webshop.error.NoCustomerException;
 import com.webshop.error.NoReportException;
 import com.webshop.error.NoSellerException;
 import com.webshop.error.UserNotFoundException;
-import com.webshop.model.Korisnik;
-import com.webshop.model.PrijavaProfila;
-import com.webshop.model.Status;
-import com.webshop.model.Uloga;
+import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.PrijavaProfilaRepository;
 import com.webshop.repository.ProizvodRepository;
+import com.webshop.repository.RecenzijaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -243,5 +240,41 @@ public class PrijavaProfilaService {
 
         sendBlockEmail(prijavljeniKorisnik);
         sendReportAccept(korisnik, prijavljeniKorisnik);
+    }
+
+    public List<PrijavaProfilaDTO> vratiPrijaveAdministrator(Long administratorId){
+        Korisnik admin = korisnikRepository.findById(administratorId).get();
+        List<PrijavaProfila> svePrijave = prijavaProfilaRepository.findAll();
+
+        List<PrijavaProfilaDTO> prijave = new ArrayList<>();
+        for(PrijavaProfila prijava : svePrijave){
+            PrijavaProfilaDTO dto = new PrijavaProfilaDTO();
+
+            dto.setRazlogPrijave(prijava.getRazlogPrijave());
+            dto.setStatusPrijave(prijava.getStatusPrijave());
+            dto.setDatumPodnosenjaPrijave(prijava.getDatumPodnosenjaPrijave());
+            dto.setId(prijava.getId());
+
+            Korisnik podnosilac = prijava.getPodnosiocPrijave();
+            Korisnik prijavljen = prijava.getPrijavljeniKorisnik();
+
+            PrijavaKorisnikDTO podnosilacDto = new PrijavaKorisnikDTO();
+            podnosilacDto.setIme(podnosilac.getIme());
+            podnosilacDto.setPrezime(podnosilac.getPrezime());
+            podnosilacDto.setMejl(podnosilac.getMejl());
+            podnosilacDto.setKorisnickoIme(podnosilac.getKorisnickoIme());
+
+            PrijavaKorisnikDTO prijavljenDto = new PrijavaKorisnikDTO();
+            prijavljenDto.setIme(podnosilac.getIme());
+            prijavljenDto.setPrezime(podnosilac.getPrezime());
+            prijavljenDto.setMejl(podnosilac.getMejl());
+            prijavljenDto.setKorisnickoIme(podnosilac.getKorisnickoIme());
+
+            dto.setPodnosiocPrijave(podnosilacDto);
+            dto.setPrijavljeniKorisnik(prijavljenDto);
+
+            prijave.add(dto);
+        }
+        return prijave;
     }
 }
