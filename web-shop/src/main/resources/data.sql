@@ -48,7 +48,7 @@ INSERT INTO Prodavac(id, prosecna_ocena) VALUES(6000, 4.4);
 
 
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,5000, 2000, 'PAPUCE',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,7000, 2000, 'PAPUCE',
                                                                   'Za po kuci', 'https://cdn.pokloni.com/files/26033/Lama-Papuce-Braon-3.jpg', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (300, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'KNJIGA ALGEBRA',
@@ -56,8 +56,8 @@ INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_o
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (4000, false, false, true, '2020-11-28 09:56:24', 3000, 5000, 3000, 'BUŠILICA',
                                                                   'bosch', 'https://www.agromarket.rs/files/watermark/files/images/slike_proizvoda/thumbs_w/056361_w_800_800px.jpg', 'FIKSNA');
-INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 7000, 2000, 'POLICA ZA OBUĆU',
+INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
+                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 2000, 'POLICA ZA OBUĆU',
                                                                   'Polica je metalna. Kupljena je u emmezeeti. Visokog kvalitetea i veoma ocuvana. Sklopiva je i ne zauzima puno mesta. Idealna za male hodnike. Koriscena godinu dana.', 'https://c.cdnmp.net/920979014/p/l/3/polica-za-obucu-loft-3-nivoa~4293.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 6000, 'IPHONE 8',

@@ -725,6 +725,7 @@ public class ProizvodService {
             proizvodDTO.setSlikaProizvoda(proizvod.getSlikaProizvoda());
             proizvodDTO.setOpis(proizvod.getOpis());
             proizvodDTO.setId(proizvod.getId());
+
             Prodavac p=proizvod.getProdavac();
             ProdavacProfilDTO prodavacProfilDTO=new ProdavacProfilDTO();
             prodavacProfilDTO.setId(p.getId());
@@ -747,9 +748,35 @@ public class ProizvodService {
                 // Dodajte ostala potrebna polja
                 proizvodiNaProdajuDTO.add(prodDTO);
             }
-            prodavacProfilDTO.setProizvodiNaProdaju(proizvodiNaProdajuDTO);
 
             proizvodDTO.setProdavac(prodavacProfilDTO);
+
+
+            Kupac k = proizvod.getKupac();
+            if (k != null) {
+                KupacProfilDTO kupacProfilDTO = new KupacProfilDTO();
+                kupacProfilDTO.setId(k.getId());
+                kupacProfilDTO.setIme(k.getIme());
+                kupacProfilDTO.setPrezime(k.getPrezime());
+                kupacProfilDTO.setKorisnickoIme(k.getKorisnickoIme());
+                kupacProfilDTO.setDatumRodjenja(k.getDatumRodjenja());
+                kupacProfilDTO.setSlika(k.getSlika());
+                kupacProfilDTO.setOpisKorisnika(k.getOpisKorisnika());
+                kupacProfilDTO.setProsecnaOcena(k.getProsecnaOcena());
+
+                // Set kupljenih proizvoda
+                Set<ProizvodiNaProdajuDTO> kupljeniProizvodiDTO = new HashSet<>();
+                for (Proizvod kupljenProizvod : k.getKupljeniProizvodi()) {
+                    ProizvodiNaProdajuDTO kproizvodDTO = new ProizvodiNaProdajuDTO();
+                    kproizvodDTO.setNaziv(kupljenProizvod.getNaziv());
+                    kproizvodDTO.setCena(kupljenProizvod.getCena());
+                    // Dodajte ostala polja po potrebi
+                    kupljeniProizvodiDTO.add(kproizvodDTO);
+                }
+                kupacProfilDTO.setKupljeniProizvodi(kupljeniProizvodiDTO);
+
+                proizvodDTO.setKupac(kupacProfilDTO);
+            }
             Set< Kategorija> kategorije=proizvod.getKategorija();
             Set<KategorijaDTO> kategorijeDTO=new HashSet<>();
             for(Kategorija kategorija: kategorije){

@@ -32,4 +32,6 @@ public class SviProizvodiDTO {
     private TipProdaje tipProdaje;
 
     private ProdavacProfilDTO prodavac;
+
+    private KupacProfilDTO kupac;
 }

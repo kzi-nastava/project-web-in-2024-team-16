@@ -96,8 +96,22 @@
           <p>Cena: {{ selectedProduct.cena }}</p>
           <p>Opis: {{ selectedProduct.opis }}</p>
           <p>Tip prodaje: {{ selectedProduct.tipProdaje }}</p>
+          <div v-if="currentUser.uloga==='KUPAC' && selectedProduct.prodavac">
+            <!-- Ostatak vašeg HTML-a -->
+            <p @click="goToSellerProfile(selectedProduct.prodavac.id)"  class="seller-customer-name">Prodavac: {{ selectedProduct.prodavac.korisnickoIme }}</p>
+            <!-- Ostatak HTML-a -->
+          </div>
+          <div v-if="currentUser.uloga==='PRODAVAC' && selectedProduct.kupac">
+            <!-- Ostatak vašeg HTML-a -->
+            <p @click="goToCustomerProfile(selectedProduct.kupac.id)"  class="seller-cusotmer-name">Kupac: {{ selectedProduct.kupac.korisnickoIme }}</p>
+            <!-- Ostatak HTML-a -->
+          </div>
           <!-- Dodajte ostale informacije koje želite prikazati -->
-          <button v-if="selectedProduct.prodavac.uloga === 'PRODAVAC'" @click="editProduct">Ažuriraj proizvod</button>
+          <button v-if="currentUser.uloga === 'PRODAVAC'" @click="editProduct" class="button-accept">Ažuriraj proizvod</button>
+          <button v-if="currentUser.uloga === 'PRODAVAC' && selectedProduct.tipProdaje === 'AUKCIJA'"
+                  @click="endAuction(selectedProduct.id)" class="button-accept" >
+            Završi aukciju
+          </button>
         </div>
       </div>
     </div>
@@ -136,6 +150,13 @@
         </div>
       </div>
     </div>
+    <div v-if="showSuccessModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeSuccessModal">&times;</span>
+        <p>{{ successMessage }}</p>
+        <button @click="closeSuccessModal" class="button-accept">Zatvori</button>
+      </div>
+    </div>
 
   </div>
 </template>
@@ -169,7 +190,8 @@ export default {
       selectedProduct: null,
       showModal: false,
       showEditModal: false,
-      userUSER:null
+      userUSER:null,
+      showSuccessModal: false,
     };
   },
   mounted() {
@@ -316,6 +338,9 @@ export default {
     closeEditModal() {
       this.showEditModal = false;
     },
+    closeSuccessModal() {
+      this.showSuccessModal = false;
+    },
     updateProduct() {
       /*const user = JSON.parse(localStorage.getItem('user'));
       console.log("TRENUTNI KORISNIK",user);
@@ -331,21 +356,67 @@ export default {
             }
           })
           .then(response => {
-            alert('Proizvod uspešno ažuriran.');
+            this.successMessage = "Proizvod je uspešno ažuriran.";
+            this.showSuccessModal = true;
             this.closeEditModal();
             this.fetchProducts();
           })
           .catch(error => {
             if (error.response && error.response.data === "Proizvod je prodat.") {
-              alert('Proizvod je prodat.');
+              this.successMessage = "Prodat proizvod ne može da se menja.";
+              this.showSuccessModal = true;
             } else if (error.response && error.response.data === "Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.") {
-              alert('Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.');
+              this.successMessage = "Proizvod se ne može izmeniti jer postoje aktivne ponude u aukciji.";
+              this.showSuccessModal = true;
             } else {
-              console.error('Greška pri ažuriranju proizvoda:', error);
-              alert('Greška pri ažuriranju proizvoda.');
+              this.successMessage = "Došlo je do greške.";
+              this.showSuccessModal = true;
             }
           });
-    }
+    },
+    endAuction(id) {
+      axios.put(`http://localhost:8080/api/product/endAuction/${id}`, {}, { withCredentials: true })
+          .then(response => {
+            console.log('Aukcija je uspešno završena:', response.data);
+            this.successMessage = "Aukcija je uspešno završena.";
+            this.showSuccessModal = true;
+          })
+          .catch(error => {
+            if (error.response && error.response.data === "Prodavac nema traženi proizvod na prodaju.") {
+              this.successMessage = "Prodavac nema traženi proizvod na prodaju.";
+              this.showSuccessModal = true;
+            }else if(error.response && error.response.data === "Ne postoje ponude."){
+              this.successMessage = "Ne postoje ponude.";
+              this.showSuccessModal = true;
+            }else if(error.response && error.response.data === "Aukcija nije aktivna ili nema ponuda."){
+              this.successMessage = "Aukcija nije aktivna ili nema ponuda.";
+              this.showSuccessModal = true;
+            }
+            else {
+              console.error('Greška pri završavanju aukcije:', error);
+              this.successMessage = "Greška pri završavanju aukcije:";
+              this.showSuccessModal = true;
+            }
+          });
+    },
+    goToSellerProfile(prodavacId) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        this.$router.push(`/sellerProfile/${prodavacId}`);
+      } else {
+        this.successMessage="Morate biti prijavljeni da bi ste mogli da vidite profil prodavca."
+        this.showLoginModal = true;
+      }
+    },
+    goToCustomerProfile(kupacId) {
+      const user = JSON.parse(localStorage.getItem('user'));
+      if (user) {
+        this.$router.push(`/customerProfile/${kupacId}`);
+      } else {
+        this.successMessage="Morate biti prijavljeni da bi ste mogli da vidite profil kupca."
+        this.showLoginModal = true;
+      }
+    },
   }
 };
 </script>
@@ -481,6 +552,8 @@ export default {
 
 .product-list li:last-child {
   border-bottom: none;
+
+
 }
 
 .product-list li:hover {
@@ -500,6 +573,7 @@ export default {
   overflow: auto;
   background-color: rgba(255, 255, 255, 0.26);
   color: rgb(119, 53, 119);
+
 }
 
 .modal-content {
@@ -509,6 +583,7 @@ export default {
   width: 50%;
   max-width: 600px;
   box-shadow: 0 5px 15px rgba(47, 128, 102, 0.76);
+  text-align: center;
 }
 
 .close {
@@ -525,7 +600,7 @@ export default {
   cursor: pointer;
 }
 .product-image {
-  max-width: 100%;
+  max-width: 50%;
   height: auto;
   margin-bottom: 20px;
 }
@@ -587,6 +662,25 @@ export default {
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
   z-index: 900; /* Lower than modal content, but higher than page content */
+}
+
+.button-accept {
+  background-color: rgba(47, 128, 102, 0.76); /* Zelena boja */
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px; /* Radijus 50% širine dugmeta */
+  cursor: pointer;
+  font-size: 16px;
+  margin-right: 10px; /* Dodaj marginu sa desne strane */
+}
+
+.button-accept:hover {
+  background-color: #488871; /* Tamnija nijansa zelene boje pri hoveru */
+}
+
+.button-accept:focus {
+  outline: none; /* Uklanja outline prilikom fokusa */
 }
 
 </style>

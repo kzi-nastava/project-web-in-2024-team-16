@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <HelloWorld @search="executeSearch" />
-    <img id="headerimg" src="/kutija.JPG">
+    <img id="headerimg" src="/kutija2.JPG">
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
      <!-- <button v-on:click="registration">Napravi nalog</button>

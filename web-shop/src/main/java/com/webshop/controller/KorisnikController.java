@@ -417,6 +417,8 @@ public class KorisnikController {
         if (korisnik == null) {
             throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
 
+        }if(korisnik.getUloga()==Uloga.PRODAVAC){
+            throw new UserNotFoundException("Samo kupci mogu da daju ponude.");
         }
         Optional<Proizvod> proizvod=proizvodService.findById(id);
         Korisnik prodavac=proizvod.get().getProdavac();
