@@ -11,7 +11,7 @@
 <!--      <router-link :to="'/profileView/' + korisnik.id" class="btn btn-primary">Vaš profil</router-link>-->
     </div>
     <!-- <h1>Dobrodošli na Početnu Stranicu CAO CAO</h1>
-     <p>Ovo je primer jednostavne početne stranice.</p>-->
+     <p>Ovo je primer jednostavne početne stranice.</p> -->
 
     <!-- Prikaz proizvoda -->
     <div class="product-container">
