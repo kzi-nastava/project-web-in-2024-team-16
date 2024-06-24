@@ -60,8 +60,9 @@ export default {
   border: 1px solid #ffffff;
   border-radius: 5px;
   background-color: #ffffff; /* Light gray background */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-shadow: 0 2px 5px rgba(47, 128, 102, 0.76); /* Subtle shadow */
    align-items: center;
+   margin-top: 100px;
 }
 
 .login-form label {
@@ -74,10 +75,10 @@ export default {
 .login-form input[type="password"] {
   width: 90%;
   padding: 10px;
-  border: 1px solid #ffffff;
+  border: 1px solid #f8cdf8;
   border-radius: 3px;
   margin-bottom: 10px;
-  background-color: #d8d8f6;
+  background-color: rgba(224, 184, 224, 0.93);
 }
 
 .login-form input[type="text"]:focus,

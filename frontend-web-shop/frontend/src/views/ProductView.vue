@@ -9,9 +9,9 @@
     <img :src="product.slikaProizvoda" alt="Product Image">
     </div>
     <div class="product-info">
-      <hr>
+      <hr color="#79d3b2">
       <h1>{{ product.naziv }}</h1>
-      <hr >
+      <hr color="#79d3b2" >
       <br>
       <br>
       <p>Opis proizvoda: {{ product.opis }}</p>

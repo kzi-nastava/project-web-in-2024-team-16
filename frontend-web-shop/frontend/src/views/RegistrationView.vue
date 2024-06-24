@@ -110,10 +110,12 @@ export default {
   max-width: 800px; /* Ograničava širinu formulara */
   margin: 50px auto;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(47, 128, 102, 0.76);
   border-radius: 5px;
-  background-color: #f0f0f0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(47, 128, 102, 0.76);
+  margin-top: 100px;
+
 }
 
 .column {
@@ -138,7 +140,7 @@ export default {
   width: 100%; /* Popunjava celu širinu kolone */
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #e0b8e0;
   border-radius: 3px;
   box-sizing: border-box;
   //background-color: #d8d8f6;

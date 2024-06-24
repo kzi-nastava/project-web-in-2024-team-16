@@ -16,6 +16,15 @@
     </div>
     <NewProductModal :visible="showModal" @close="showModal = false" />
 
+    <div class="category-images">
+      <img src="/knjige.JPG" alt="Knjige" @click="filterByCategory('Knjige')">
+      <img src="/obuca.JPG" alt="Obuća" @click="filterByCategory('Obuća')">
+      <img src="/telefoni.JPG" alt="Telefoni" @click="filterByCategory('telefoni')">
+      <img src="/alat2.JPG" alt="Alat" @click="filterByCategory('Alat')">
+      <!-- Dodajte slike za druge kategorije kako je potrebno -->
+    </div>
+
+
     <div class="filters-container">
 
     <div class="filter-type-container">
@@ -66,12 +75,7 @@
             <img :src="product.slikaProizvoda" class="card-img-top" alt="Product Image">
             <div class="card-body">
               <h5 class="card-title">{{ product.naziv }}</h5>
-              <!--<h5 class="card-title">ID: {{ product.id }}</h5>-->
-              <!-- <p class="card-text">{{ product.opis }}</p>-->
                <p class="card-text">Cena: {{ product.cena }} RSD</p>
-               <!--  <p class="card-text">Tip prodaje: {{ product.tipProdaje }}</p>-->
-              <!--  <p class="card-text">Kategorije: {{ product.kategorije.join(', ') }}</p>-->
-              <!--  <a href="#" class="btn btn-primary">Vidi više...</a>-->
               <router-link :to="'/product/' + product.id" class="btn btn-primary">Vidi više...</router-link>
               </div>
             </div>
@@ -378,7 +382,7 @@
     align-items: center;
     /*width: 20%;  Širina kategorija na levoj strani */
     margin-top: 20px;
-    margin-left: 60px;
+    margin-left: 100px;
     padding: 40px; /* Dodajemo padding za uokvirivanje */
     /*border: 1px solid #2f8066;  Dodajemo ivicu
     border-radius: 8px;  Zaobljujemo ivicu */
@@ -401,10 +405,11 @@
     padding: 8px 16px; /* Prilagodite padding po potrebi */
     color: #fff; /* Promenjena boja teksta na belu */
     text-decoration: none;
+    border-radius: 5px;
   }
 
   .category-link:hover {
-    background-color: rgb(72, 162, 131);
+    background-color: #79d3b2;
     cursor: pointer;
   }
   .product-container {
@@ -471,12 +476,20 @@
     margin-bottom: 20px; /* Prilagodite vrednost margine po želji */
   }
   .pagination button {
-    margin-right: 5px; /* Prilagodite ovu vrednost prema potrebi */
+    margin-right: 210px; /* Prilagodite ovu vrednost prema potrebi */
     width: 200px;
     border-radius: 30px;
-    height: 10px;
+    height: 30px;
     font-size: 15px;
     text-align: center;
 
+  }
+  .pagination button:hover {
+    background-color: #79d3b2; /* Promenite boju pozadine pri hoveru */
+    color: white; /* Promenite boju teksta pri hoveru */
+  }
+  .category-images {
+    margin-bottom: 20px; /* Margina na dnu kontejnera */
+    margin-top: 20px; /* Margina na vrhu kontejnera */
   }
   </style>
