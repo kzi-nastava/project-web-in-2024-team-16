@@ -17,7 +17,6 @@
       <p><strong>Ime:</strong> {{ prodavac.ime }} {{ prodavac.prezime }}</p>
       <p><strong>Telefon:</strong> {{ prodavac.telefon }}</p>
       <p><strong>Opis:</strong> {{ prodavac.opisKorisnika }}</p>
-      <!-- Dodajte ostale osnovne informacije o prodavcu koje želite prikazati -->
     </div>
 
     <!-- Proizvodi koje prodavac prodaje -->
@@ -37,7 +36,6 @@
         <li v-for="recenzija in prodavac.dobijeneRecenzije" :key="recenzija.id">
           <p><strong>Ocena:</strong> {{ recenzija.ocena }}</p>
           <p><strong>Komentar:</strong> {{ recenzija.komentar }}</p>
-          <!-- Dodajte ostale informacije iz recenzija koje želite prikazati -->
         </li>
       </ul>
       <p v-else>Nema recenzija za ovog prodavca.</p>
@@ -162,7 +160,6 @@ export default {
 
       axios.post('http://localhost:8080/api/user/rateSeller/'+ prodavacId + '?ocena=' + this.ocenaKupca +'&komentar=' + this.komentarKupca, {}, {withCredentials: true})
           .then(response => {
-           // this.prodavac = response.data.prodavac;
             console.log('Ocena uspešno poslata:', response.data);
             this.closeRateSellerModal();
           })
@@ -172,7 +169,6 @@ export default {
               this.successMessage= "Ne možete oceniti prodavca od kog niste kupili proizvod.";
               this.showErrorModal = true;
             } else {
-              // U slučaju ostalih grešaka, implementirajte odgovarajuću logiku
               console.error('Nepoznata greška:', error);
             }
           });

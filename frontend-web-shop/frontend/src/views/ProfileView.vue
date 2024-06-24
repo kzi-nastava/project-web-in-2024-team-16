@@ -62,11 +62,9 @@
     <div v-if="currentUser.uloga === 'KUPAC'" class="product-section">
       <h2>Kupljeni proizvodi</h2>
       <ul>
-        <li v-for="proizvod in kupljeniProizvodi" :key="proizvod.id"  @click="prikaziDetaljeProizvoda(proizvod.id)">
+        <li v-for="proizvod in kupljeniProizvodi" :key="proizvod.id"  @click="prikaziDetaljeProizvoda(proizvod.id)" class="ime-proizvoda">
           <div>
             <p>Naziv: {{ proizvod.naziv }}</p>
-
-            <!-- Dodajte ostale informacije o proizvodu kako je potrebno -->
           </div>
         </li>
       </ul>
@@ -75,17 +73,14 @@
     <div v-else-if="currentUser.uloga === 'PRODAVAC'" class="product-section">
       <h2>Proizvodi na prodaju</h2>
       <ul>
-        <li v-for="proizvod in proizvodiNaProdaju" :key="proizvod.id" @click="prikaziDetaljeProizvoda(proizvod.id)">
+        <li v-for="proizvod in proizvodiNaProdaju" :key="proizvod.id" @click="prikaziDetaljeProizvoda(proizvod.id)" class="ime-proizvoda">
           <div>
             <p class="product-name-user-name">Naziv: {{ proizvod.naziv }}</p>
-
-            <!-- Dodajte ostale informacije o proizvodu kako je potrebno -->
           </div>
         </li>
       </ul>
     </div>
-    <!-- Dodajte ovo za prikaz detalja proizvoda -->
-    <!-- Modal za detalje proizvoda -->
+
     <div v-if="showModal" class="modal" @click.self="closeModal">
       <div class="modal-content">
         <span class="close" @click="closeModal">&times;</span>
@@ -97,16 +92,11 @@
           <p>Opis: {{ selectedProduct.opis }}</p>
           <p>Tip prodaje: {{ selectedProduct.tipProdaje }}</p>
           <div v-if="currentUser.uloga==='KUPAC' && selectedProduct.prodavac">
-            <!-- Ostatak vašeg HTML-a -->
             <p @click="goToSellerProfile(selectedProduct.prodavac.id)"  class="product-name-user-name">Prodavac: {{ selectedProduct.prodavac.korisnickoIme }}</p>
-            <!-- Ostatak HTML-a -->
           </div>
           <div v-if="currentUser.uloga==='PRODAVAC' && selectedProduct.kupac">
-            <!-- Ostatak vašeg HTML-a -->
             <p @click="goToCustomerProfile(selectedProduct.kupac.id)"  class="product-name-user-name">Kupac: {{ selectedProduct.kupac.korisnickoIme }}</p>
-            <!-- Ostatak HTML-a -->
           </div>
-          <!-- Dodajte ostale informacije koje želite prikazati -->
           <button v-if="currentUser.uloga === 'PRODAVAC' && selectedProduct.kupac===null" @click="editProduct" class="button-accept">Ažuriraj proizvod</button>
           <button v-if="currentUser.uloga === 'PRODAVAC' && selectedProduct.tipProdaje === 'AUKCIJA'"
                   @click="endAuction(selectedProduct.id)" class="button-accept" >
@@ -115,7 +105,6 @@
         </div>
       </div>
     </div>
-    <!-- Modal za ažuriranje proizvoda -->
     <div v-if="showEditModal" class="modal" @click.self="closeEditModal">
       <div class="modal-content">
         <span class="close" @click="closeEditModal">&times;</span>
@@ -245,7 +234,7 @@ export default {
 
     recenzije(){
       this.showReviews = !this.showReviews;
-      console.log('Toggle Reviews:', this.showReviews); // Dodajte konzolni izlaz za praćenje stanja
+      console.log('Toggle Reviews:', this.showReviews);
       if (this.showReviews && this.reviews.length === 0) {
         this.fetchReviews();
       }
@@ -282,10 +271,6 @@ export default {
           });
     },
     fetchProducts() {
-      /*const userId = localStorage.getItem("userId");
-      const userRole = localStorage.getItem("userRole");
-      console.log(userId);
-      console.log("ULOGA",userRole);*/
       console.log("NJANJA");
       const user = JSON.parse(localStorage.getItem('user'));
       console.log(user);
@@ -307,7 +292,7 @@ export default {
             if (userRole   === 'KUPAC') {
               this.kupljeniProizvodi = response.data;
             } else if (userRole === 'PRODAVAC') {
-              this.proizvodiNaProdaju = response.data; // Update proizvodiNaProdaju here
+              this.proizvodiNaProdaju = response.data; // Update proizvodiNaProdaju
             }
           })
           .catch(error => {
@@ -318,9 +303,7 @@ export default {
       console.log("OVO JE PROIZVOD",id);
       axios.get(`http://localhost:8080/api/product/${id}`, { withCredentials: true })
           .then(response => {
-            // Ovde možete upravljati prikazom detalja proizvoda, na primer, čuvanjem u data objektu ili prikazom u modalu
             console.log('Detalji proizvoda:', response.data);
-            // Primer kako biste mogli da prikažete detalje u modalu ili nekom drugom delu komponente
             this.showModal = true;
             this.selectedProduct = response.data;
           })
@@ -343,10 +326,6 @@ export default {
       this.showSuccessModal = false;
     },
     updateProduct() {
-      /*const user = JSON.parse(localStorage.getItem('user'));
-      console.log("TRENUTNI KORISNIK",user);
-      const userUSER = JSON.parse(localStorage.getItem('userUSER'));
-      console.log("USER USER",userUSER); */
       const id = this.selectedProduct.id;
 
       axios
@@ -687,6 +666,10 @@ export default {
   outline: none; /* Uklanja outline prilikom fokusa */
 }
 .product-name-user-name:hover {
+  cursor: pointer;
+}
+
+.ime-proizvoda {
   cursor: pointer;
 }
 

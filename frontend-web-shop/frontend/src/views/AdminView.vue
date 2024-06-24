@@ -3,6 +3,10 @@
   <div>
     <div class="naslov"><h1>Pregled svih recenzija</h1></div>
 
+    <div>
+      <button class="logout-dugme" @click="logout">Odjavite se</button>
+    </div>
+
     <div class="review-container">
       <div v-for="review in paginatedReviews()" :key="review.id" class="review-card">
         <p>Recenziju podneo: {{review.recenzijuPodneo.ime}} {{review.recenzijuPodneo.prezime}} "{{review.recenzijuPodneo.korisnickoIme}}"</p>
@@ -199,7 +203,7 @@ export default {
             console.log('Prijava prihvaćena:', response.data);
             // Ažurirajte status prijave na lokalnoj listi
             this.reports = this.reports.map(report =>
-                report.id === reportId ? { ...report, statusPrijave: 'PRIHVACENA' } : report
+                report.id === reportId ? {...report, statusPrijave: 'PRIHVACENA'} : report
             );
           })
           .catch(error => {
@@ -225,7 +229,7 @@ export default {
             console.log('Prijava odbijena:', response);
             // Ažurirajte status prijave u lokalnoj listi
             this.reports = this.reports.map(report =>
-                report.id === reportId ? { ...report, statusPrijave: 'ODBIJENA', showRejectionForm: false } : report
+                report.id === reportId ? {...report, statusPrijave: 'ODBIJENA', showRejectionForm: false} : report
             );
           })
           .catch(error => {
@@ -253,7 +257,12 @@ export default {
           .then(response => {
             // Osvježite listu recenzija sa ažuriranim podacima
             this.reviews = this.reviews.map(review =>
-                review.id === reviewId ? { ...review, ocena: reviewToUpdate.newRating, komentar: reviewToUpdate.newComment, showUpdateForm: false } : review
+                review.id === reviewId ? {
+                  ...review,
+                  ocena: reviewToUpdate.newRating,
+                  komentar: reviewToUpdate.newComment,
+                  showUpdateForm: false
+                } : review
             );
             console.log('Recenzija ažurirana:', response.data);
           })
@@ -263,7 +272,11 @@ export default {
           });
 
       console.log('ID recenzije za čuvanje:', reviewId);
-    }
+    },
+    logout() {
+      localStorage.removeItem('user');
+      this.$router.push("/");
+    },
   }
 }
 
@@ -360,6 +373,12 @@ export default {
 
 .pagination span {
   font-size: 18px;
+}
+
+.logout-dugme {
+  background-color: #488871;
+  margin-left: 50px;
+  margin-top: -60px;
 }
 
 

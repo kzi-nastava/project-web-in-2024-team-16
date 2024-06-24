@@ -29,10 +29,10 @@
 
     <div class="categories-title"><h2>Pretražite neke od kategorija:</h2></div>
     <div class="category-images">
-      <img src="/knjige.JPG" alt="Knjige" @click="filterByCategory('Knjige')" title="Knjige">
-      <img src="/obuca.JPG" alt="Obuća" @click="filterByCategory('Obuća')" title="Obuća">
-      <img src="/telefoni.JPG" alt="Telefoni" @click="filterByCategory('Telefoni')"  title="Telefoni">
-      <img src="/alat2.JPG" alt="Alat" @click="filterByCategory('Alat')"  title="Alat">
+      <img src="/KNJIZA.jpg" alt="Knjige" @click="filterByCategory('Knjige')" title="Knjige">
+      <img src="/OBUCAjpg.jpg" alt="Obuća" @click="filterByCategory('Obuća')" title="Obuća">
+      <img src="/TELEFON.jpg" alt="Telefoni" @click="filterByCategory('Telefoni')"  title="Telefoni">
+      <img src="/lata.jpg" alt="Alat" @click="filterByCategory('Alat')"  title="Alat">
     </div>
 
 
@@ -152,8 +152,7 @@
         this.$router.push("/registration");
       },
       addNewCategory(id, naziv) {
-
-        axios.post(`http://localhost:8080/api/category/newCategory/${id}`, { naziv } ,{ withCredentials: true })
+        axios.post(`http://localhost:8080/api/category/newCategory/${id}`, { naziv: naziv }, { withCredentials: true })
             .then(response => {
               this.newCategoryId = '';
               this.newCategoryName = '';
@@ -282,6 +281,9 @@
         })
             .then(response => {
               this.products = response.data;
+                  if (this.products.length === 0) {
+                    alert(`Trenutno nema proizvoda u kategoriji`);
+                  }
             })
             .catch(error => {
               console.error("Greska pri filtriranju proizvoda po kategoriji:", error);
