@@ -15,23 +15,21 @@ INSERT INTO Korisnik (id,ime, prezime, korisnicko_ime, mejl, telefon, lozinka, d
     VALUES (7000,'Sasa', 'Vuksanovic', 'cale', 'salajicm3@gmail.com', '062359487', 'cale123', '1986-03-28 02:21:22', 'https://mmediamreza.com/_pu/0/73540538.png', 'proveren', 'KUPAC', false);
 
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (4, 'zadovoljan', '2021-02-10 19:54:03',7000, 2000);
+VALUES (4, 'zadovoljan', '2021-02-10 19:54:03',7000, 2000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (5, 'sve preporuke', '2022-03-21 21:39:47',1000, 2000);
+VALUES (5, 'sve preporuke', '2022-03-21 21:39:47',1000, 2000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (1, 'proizvod stigao u losem stanju', '2022-04-03 17:20:06',1000, 7000);
+VALUES (1, 'proizvod stigao u losem stanju', '2022-04-03 17:20:06',1000, 7000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (4, '10/10', '2022-03-22 13:35:24',1000, 5000);
+VALUES (4, '10/10', '2022-03-22 13:35:24',1000, 5000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (2, 'nema pojma', '2021-06-12 19:32:05',2000, 6000);
+VALUES (2, 'nema pojma', '2021-06-12 19:32:05',2000, 1000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (4, 'miki maus', '2020-01-08 20:25:56',7000, 6000);
+VALUES (4, 'miki maus', '2020-01-08 20:25:56',7000, 1000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (5, 't reks', '2020-01-08 20:25:56',1000, 2000);
+VALUES (5, 't reks', '2020-01-08 20:25:56',2000, 7000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (1, 'akva park', '2020-01-08 20:25:56',2000, 5000);
-INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-VALUES (4, 'Poslovan covek', '2020-01-08 20:25:56',2000, 3000);
+VALUES (1, 'akva park', '2020-01-08 20:25:56',2000, 5000);
 
 INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
     VALUES ('ne postuje dogovor', 'Nije konkretno navedeno sta nije bilo u redu.',NULL,'2023-02-10 18:25:48', 'ODBIJENA', 1000, 3000);
@@ -50,7 +48,7 @@ INSERT INTO Prodavac(id, prosecna_ocena) VALUES(6000, 0);
 
 
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,7000, 2000, 'PAPUCE',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (2200, true, false, false, '2020-06-12 22:03:48', 1000 ,5000, 2000, 'PAPUCE',
                                                                   'Za po kuci', 'https://cdn.pokloni.com/files/26033/Lama-Papuce-Braon-3.jpg', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (300, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'KNJIGA ALGEBRA',
@@ -58,17 +56,17 @@ INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_o
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (4000, false, false, true, '2020-11-28 09:56:24', 3000, 5000, 3000, 'BUŠILICA',
                                                                   'bosch', 'https://www.agromarket.rs/files/watermark/files/images/slike_proizvoda/thumbs_w/056361_w_800_800px.jpg', 'FIKSNA');
-INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, false, true, false, '2018-03-30 20:13:44', 4000, 2000, 'POLICA ZA OBUĆU',
+INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
+                      opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 7000, 2000, 'POLICA ZA OBUĆU',
                                                                   'Polica je metalna. Kupljena je u emmezeeti. Visokog kvalitetea i veoma ocuvana. Sklopiva je i ne zauzima puno mesta. Idealna za male hodnike. Koriscena godinu dana.', 'https://c.cdnmp.net/920979014/p/l/3/polica-za-obucu-loft-3-nivoa~4293.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, true, false, true, '2019-01-14 16:11:06', 5000, 1000, 6000, 'IPHONE 8',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 6000, 'IPHONE 8',
                                                                   'U odličnom stanju', 'https://cdn.alloallo.media/catalog/product/apple/iphone/iphone-8/iphone-8-gold.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (15000, false, true, false, '2020-06-12 22:03:48', 6000, 5000, 2000, 'NIKE AIR FORCE',
                                                                   'bele, 43 broj', 'https://img.ep-cdn.com/i/500/500/he/hexkpwjaluorsqtimnbv/nike-wmns-air-force-1-shadow-cene.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (90000, true, false, true, '2019-01-14 16:11:06', 7000, 1000, 3000, 'SAMSUNG A50',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (90000, false, false, true, '2019-01-14 16:11:06', 7000, 1000, 3000, 'SAMSUNG A50',
                                                                   'samsung A50 crni', 'https://www.tehnomedia.rs/image/59217.jpg?tip=webp&tip_slike=1', 'FIKSNA');
 
 
