@@ -54,7 +54,7 @@ INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_o
                       opis, slika_proizvoda, tip_prodaje) VALUES (300, false, false, true, '2019-08-21 19:20:36', 2000, 3000, 'KNJIGA ALGEBRA',
                                                                   'FTN, prva godina', 'https://imgv2-1-f.scribdassets.com/img/document/429015388/original/a715bda6de/1716624483?v=1', 'AUKCIJA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (4000, false, false, true, '2020-11-28 09:56:24', 3000, 5000, 3000, 'BUŠILICA',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (4000, true, false, true, '2020-11-28 09:56:24', 3000, 5000, 3000, 'BUŠILICA',
                                                                   'bosch', 'https://www.agromarket.rs/files/watermark/files/images/slike_proizvoda/thumbs_w/056361_w_800_800px.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (40000, true, true, false, '2018-03-30 20:13:44', 4000, 7000, 2000, 'POLICA ZA OBUĆU',
@@ -63,7 +63,7 @@ INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_o
                       opis, slika_proizvoda, tip_prodaje) VALUES (80000, false, false, true, '2019-01-14 16:11:06', 5000, 1000, 6000, 'IPHONE 8',
                                                                   'U odličnom stanju', 'https://cdn.alloallo.media/catalog/product/apple/iphone/iphone-8/iphone-8-gold.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
-                      opis, slika_proizvoda, tip_prodaje) VALUES (15000, false, true, false, '2020-06-12 22:03:48', 6000, 5000, 2000, 'NIKE AIR FORCE',
+                      opis, slika_proizvoda, tip_prodaje) VALUES (15000, true, true, false, '2020-06-12 22:03:48', 6000, 5000, 2000, 'NIKE AIR FORCE',
                                                                   'bele, 43 broj', 'https://img.ep-cdn.com/i/500/500/he/hexkpwjaluorsqtimnbv/nike-wmns-air-force-1-shadow-cene.jpg', 'FIKSNA');
 INSERT INTO Proizvod (cena, prodat, recenzija_kupac, recenzija_prodavac, datum_objavljivanja, id, kupac_id, prodavac_id, naziv,
                       opis, slika_proizvoda, tip_prodaje) VALUES (90000, false, false, true, '2019-01-14 16:11:06', 7000, 1000, 3000, 'SAMSUNG A50',
