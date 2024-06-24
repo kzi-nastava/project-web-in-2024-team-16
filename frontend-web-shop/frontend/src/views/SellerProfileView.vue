@@ -32,7 +32,7 @@
 
     <!-- Recenzije sa prosečnom ocenom -->
     <div class="reviews">
-      <h2>Recenzije prodavca (prosečna ocena: {{ prodavac.prosecnaOcena.toFixed(1) }})</h2>
+      <h2>Recenzije prodavca (prosečna ocena: {{ prodavac.prosecnaOcena }})</h2>
       <ul v-if="prodavac.dobijeneRecenzije.length > 0">
         <li v-for="recenzija in prodavac.dobijeneRecenzije" :key="recenzija.id">
           <p><strong>Ocena:</strong> {{ recenzija.ocena }}</p>
@@ -88,7 +88,7 @@ export default {
         slika: '', // Dodato polje za sliku
         proizvodiNaProdaju: [],
         dobijeneRecenzije: [],
-        prosecnaOcena: 0,
+        prosecnaOcena: null
       },
       user: null,
       isBuyer: false,
