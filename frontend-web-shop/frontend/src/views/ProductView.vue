@@ -111,7 +111,7 @@ export default {
         if (this.product.tipProdaje === 'FIKSNA') {
 
           axios.post(`http://localhost:8080/api/user/shopNowFixedPrice/${this.product.id}`, {}, {
-            withCredentials: true // Ovo omogućava slanje kolačića sesije
+            withCredentials: true
           })
               .then(response => {
                 console.log(this.product.id);
