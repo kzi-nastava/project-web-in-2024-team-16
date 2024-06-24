@@ -380,6 +380,7 @@ public class KorisnikService {
         Kupac kupac = kupacRepository.findById(kupacId).get();
 
         return kupac.getOcene().values().stream().mapToInt(Integer::intValue).average().orElse(kupac.getProsecnaOcena());
+
     }
 
     public List<RecenzijaPrikazDTO> vratiRecenzijeKupac(Long kupacId){

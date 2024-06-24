@@ -5,22 +5,18 @@
     </div>
     <h1 style="text-align: center;">Profil kupca</h1>
 
-    <!-- Slika prodavca -->
     <div class="seller-image">
       <img v-if="kupac.slika" :src="kupac.slika" alt="Slika profila kupca">
       <p v-else>Profilna slika nije dostupna.</p>
     </div>
 
-    <!-- Osnovne informacije o prodavcu -->
     <div class="basic-info">
       <p class="username">{{ kupac.korisnickoIme }}</p>
       <p><strong>Ime:</strong> {{ kupac.ime }} {{ kupac.prezime }}</p>
       <p><strong>Telefon:</strong> {{ kupac.telefon }}</p>
       <p><strong>Opis:</strong> {{ kupac.opisKorisnika }}</p>
-      <!-- Dodajte ostale osnovne informacije o prodavcu koje želite prikazati -->
     </div>
 
-    <!-- Proizvodi koje prodavac prodaje -->
     <div class="products">
       <h2>Kupljeni proizvodi</h2>
       <ul>
@@ -30,22 +26,19 @@
       </ul>
     </div>
 
-    <!-- Recenzije sa prosečnom ocenom -->
     <div class="reviews">
-      <h2>Recenzije kupca (prosečna ocena: {{ kupac.prosecnaOcena.toFixed(1) }})</h2>
+      <h2>Recenzije kupca (prosečna ocena: {{ kupac.prosecnaOcena }})</h2>
       <ul v-if="kupac.dobijeneRecenzije.length > 0">
         <li v-for="recenzija in kupac.dobijeneRecenzije" :key="recenzija.id">
           <p><strong>Ocena:</strong> {{ recenzija.ocena }}</p>
           <p><strong>Komentar:</strong> {{ recenzija.komentar }}</p>
-          <!-- Dodajte ostale informacije iz recenzija koje želite prikazati -->
         </li>
       </ul>
       <p v-else>Nema recenzija za ovog kupca.</p>
     </div>
-    <!-- Dugme za ostavljanje ocene -->
+
     <button v-if="checkUserType" @click="showRateCustomerModal = true" class="rate-button">Ostavi ocenu</button>
 
-    <!-- Modalni dijalog za ocenjivanje prodavca -->
     <div v-if="showRateCustomerModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeRateCustomerModal">&times;</span>
@@ -59,8 +52,9 @@
         </form>
       </div>
     </div>
+
     <button v-if="checkUserType" @click="showComplaintModal = true" class="submit-button">Prijavi kupca</button>
-    <!-- Modalni dijalog za prijavu prodavca -->
+
     <div v-if="showComplaintModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeComplaintModal">&times;</span>
@@ -72,7 +66,7 @@
         </form>
       </div>
     </div>
-    <!-- Modalni prozor za grešku -->
+
     <div v-if="showErrorModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeErrorModal">&times;</span>
@@ -115,7 +109,9 @@ export default {
     };
   },
   mounted() {
+
     const kupacId = this.$route.params.id;
+
     axios.get(`http://localhost:8080/api/user/profileView/${kupacId}`, { withCredentials: true })
         .then(response => {
           this.kupac = response.data;
@@ -123,31 +119,47 @@ export default {
         .catch(error => {
           console.error('Greška pri dobijanju profila prodavca:', error);
         });
+    this.fetchAverageRating(kupacId);
 
   },
   methods: {
+
     checkUserType() {
+
       this.user = JSON.parse(localStorage.getItem('user'));
+
       if (this.user && this.user.uloga === 'PRODAVAC') {
         this.isSeller = true;
       }
     },
     closeRateCustomerModal() {
+
       this.showRateCustomerModal = false;
       this.ocenaProdavca = 1;
       this.komentarProdavca = '';
     },
     closeErrorModal() {
+
       this.showErrorModal = false; // Zatvaranje grešnog modalnog prozora
     },
     closeComplaintModal() {
+
       this.showComplaintModal = false;
       this.prijavaText = '';
+    },
+    fetchAverageRating(kupacId) {
+
+      axios.get(`http://localhost:8080/api/user/averageRatingBuyer/${kupacId}`, { withCredentials: true })
+          .then(response => {
+            this.kupac.prosecnaOcena = response.data.toFixed(1);
+          })
+          .catch(error => {
+            console.error('Greška pri dobijanju prosečne ocene prodavca:', error);
+          });
     },
     submitRating() {
 
       const kupacId = this.$route.params.id;
-      console.log(kupacId);
 
       axios.post('http://localhost:8080/api/user/rateBuyer/'+ kupacId + '?ocena=' + this.ocenaProdavca +'&komentar=' + this.komentarProdavca, {}, {withCredentials: true})
           .then(response => {
@@ -159,16 +171,17 @@ export default {
               this.successMessage= "Prodavac može da oceni kupca samo ako je prodao proizvod tom kupcu.";
               this.showErrorModal = true;
             } else {
-              // U slučaju ostalih grešaka, implementirajte odgovarajuću logiku
               console.error('Nepoznata greška:', error);
             }
           });
     },
     submitComplaint() {
+
       const kupacId = this.$route.params.id;
       const prijavaRequestDTO = {
         razlogPrijave: this.prijavaText
       };
+
       axios.post(`http://localhost:8080/api/report/sellerRequest/${kupacId}`, prijavaRequestDTO, { withCredentials: true })
           .then(response => {
             console.log('Prijava uspešno poslata:', response.data);

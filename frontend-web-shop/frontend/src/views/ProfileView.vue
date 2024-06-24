@@ -48,7 +48,7 @@
         <button @click="recenzije">Recenzije</button>
         <div v-if="showReviews">
           <div v-for="review in reviews" :key="review.id" class="review">
-            <h3>{{ currentUser.uloga === 'PRODAVAC' ? 'Recenzije koje sam dao/dala:' : 'Recenzije koje sam dao/dala:' }}</h3>
+            <h3>{{ currentUser.uloga === 'PRODAVAC' ? 'Recenzije:' : 'Recenzije:' }}</h3>
             <p>Ime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.ime : review.prodavacKojemSamDaoRecenziju.ime }}</p>
             <p>Prezime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.prezime : review.prodavacKojemSamDaoRecenziju.prezime }}</p>
             <p>Korisničko ime: {{ currentUser.uloga === 'PRODAVAC' ? review.kupacKojemSamDaoRecenziju.korisnickoIme : review.prodavacKojemSamDaoRecenziju.korisnickoIme }}</p>
@@ -77,7 +77,7 @@
       <ul>
         <li v-for="proizvod in proizvodiNaProdaju" :key="proizvod.id" @click="prikaziDetaljeProizvoda(proizvod.id)">
           <div>
-            <p>Naziv: {{ proizvod.naziv }}</p>
+            <p class="product-name-user-name">Naziv: {{ proizvod.naziv }}</p>
 
             <!-- Dodajte ostale informacije o proizvodu kako je potrebno -->
           </div>
@@ -98,12 +98,12 @@
           <p>Tip prodaje: {{ selectedProduct.tipProdaje }}</p>
           <div v-if="currentUser.uloga==='KUPAC' && selectedProduct.prodavac">
             <!-- Ostatak vašeg HTML-a -->
-            <p @click="goToSellerProfile(selectedProduct.prodavac.id)"  class="seller-customer-name">Prodavac: {{ selectedProduct.prodavac.korisnickoIme }}</p>
+            <p @click="goToSellerProfile(selectedProduct.prodavac.id)"  class="product-name-user-name">Prodavac: {{ selectedProduct.prodavac.korisnickoIme }}</p>
             <!-- Ostatak HTML-a -->
           </div>
           <div v-if="currentUser.uloga==='PRODAVAC' && selectedProduct.kupac">
             <!-- Ostatak vašeg HTML-a -->
-            <p @click="goToCustomerProfile(selectedProduct.kupac.id)"  class="seller-cusotmer-name">Kupac: {{ selectedProduct.kupac.korisnickoIme }}</p>
+            <p @click="goToCustomerProfile(selectedProduct.kupac.id)"  class="product-name-user-name">Kupac: {{ selectedProduct.kupac.korisnickoIme }}</p>
             <!-- Ostatak HTML-a -->
           </div>
           <!-- Dodajte ostale informacije koje želite prikazati -->
@@ -685,6 +685,9 @@ export default {
 
 .button-accept:focus {
   outline: none; /* Uklanja outline prilikom fokusa */
+}
+.product-name-user-name:hover {
+  cursor: pointer;
 }
 
 </style>

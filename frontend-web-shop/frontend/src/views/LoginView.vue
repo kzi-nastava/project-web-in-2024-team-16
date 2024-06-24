@@ -17,8 +17,7 @@ export default {
   components: {HelloWorld},
   data: function () {
     return {
-      korisnik: {},//ovo dobijam prilikom prijave, posto to posle prosledjujem pomocu url mora da bude isto kao polja u
-      //login dto klasi
+      korisnik: {},
     };
   },
   methods: {
@@ -28,7 +27,6 @@ export default {
             withCredentials: true,//zbog sesije
           })
           .then((res) => {
-            console.log(res);//javlja da je dobro i stavlja me na home stranicu
             console.log("Prijavljen korisnik:", this.korisnik.korisnickoIme);
             localStorage.setItem("user", JSON.stringify(res.data.id));
             localStorage.setItem("userUSER", JSON.stringify(res.data));
@@ -59,8 +57,8 @@ export default {
   padding: 20px;
   border: 1px solid #ffffff;
   border-radius: 5px;
-  background-color: #ffffff; /* Light gray background */
-  box-shadow: 0 2px 5px rgba(47, 128, 102, 0.76); /* Subtle shadow */
+  background-color: #ffffff;
+  box-shadow: 0 2px 5px rgba(47, 128, 102, 0.76);
    align-items: center;
    margin-top: 100px;
 }
@@ -84,11 +82,11 @@ export default {
 .login-form input[type="text"]:focus,
 .login-form input[type="password"]:focus {
   outline: none;
-  border: 1px solid rgba(47, 128, 102, 0.76); /* menja boju pri pritisku za unos */
+  border: 1px solid rgba(47, 128, 102, 0.76);
 }
 
 .login-form button {
-  background-color: rgba(47, 128, 102, 0.76); /* Green button color */
+  background-color: rgba(47, 128, 102, 0.76);
   color: white;
   padding: 12px 20px;
   border: none;
@@ -98,7 +96,7 @@ export default {
 }
 
 .login-form button:hover {
-  background-color: rgb(72, 136, 113); /* menja boju pri stavljanju misa na prijavu */
+  background-color: rgb(72, 136, 113);
 }
 </style>
 

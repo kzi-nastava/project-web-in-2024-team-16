@@ -17,12 +17,8 @@
       <p>Opis proizvoda: {{ product.opis }}</p>
       <p>Tip prodaje: {{ product.tipProdaje}}</p>
       <div v-if="product && product.prodavac">
-        <!-- Ostatak vašeg HTML-a -->
         <p @click="goToSellerProfile(product.prodavac.id)"  class="seller-name">Prodavac: {{ product.prodavac.korisnickoIme }}</p>
-        <!-- Ostatak HTML-a -->
       </div>
-     <!-- <p>Kategorije: {{ product.kategorije}}</p>-->
-    <!--<p>Cena: {{ product.cena }} RSD</p>-->
       <p v-if="product.tipProdaje !== 'AUKCIJA'">Cena: {{ product.cena }} RSD</p>
       <div v-if="product.tipProdaje === 'AUKCIJA'">
         <hr>
@@ -32,7 +28,6 @@
       <div class="buy-button-container">
         <button class="my-custom-button"  @click="buyProduct">Kupi proizvod</button>
       </div>
-    <!-- Dodajte ostale detalje proizvoda koje želite prikazati -->
     </div>
   </div>
     <div v-if="showLoginModal" class="modal">
@@ -42,7 +37,7 @@
         <button @click="redirectToLogin">Prijavi se</button>
       </div>
     </div>
-    <!-- Modalni dijalog za uspešnu kupovinu -->
+
     <div v-if="showSuccessModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeSuccessModal">&times;</span>
@@ -50,7 +45,7 @@
         <button @click="closeSuccessModal">Zatvori</button>
       </div>
     </div>
-    <!-- Modalni dijalog za već kupljen proizvod -->
+
     <div v-if="showAlreadyPurchasedModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeAlreadyPurchasedModal">&times;</span>
@@ -58,7 +53,7 @@
         <button @click="closeAlreadyPurchasedModal">Zatvori</button>
       </div>
     </div>
-    <!-- Modalni dijalog za prenisku ponudu -->
+
     <div v-if="showSuccessModal" class="modal">
       <div class="modal-content">
         <span class="close" @click="closeLowBidModal">&times;</span>
@@ -77,19 +72,20 @@ export default {
   data() {
     return {
       product: {
-        prodavac: {} // Inicijalizovanje kao prazan objekat
+        prodavac: {}
       },
       showLoginModal: false,
       showSuccessModal: false,
       showAlreadyPurchasedModal: false,
       showLowBidModal: false,
       novaPonuda: 1,
-      successMessage: '' // Inicijalizacija praznog objekta za prikaz proizvoda
+      successMessage: ''
     };
   },
   mounted:function() {
-    // Učitavanje detalja proizvoda na osnovu ID-a iz URL parametra
+
     const productId = this.$route.params.id;
+
     axios.get("http://localhost:8080/api/product/" + productId)
         .then(response => {
           this.product = response.data;
@@ -100,9 +96,11 @@ export default {
   },
   methods: {
     closeProductDetails() {
+
       this.$router.push('/');
     },
     buyProduct() {
+
       const user = JSON.parse(localStorage.getItem('user'));
       if (!user) {
         this.successMessage="Morate biti prijavljeni da bi ste kupili proizvod.";
@@ -111,6 +109,7 @@ export default {
         console.log("Korisnik je ulogovan. Nastavlja se sa kupovinom...");
 
         if (this.product.tipProdaje === 'FIKSNA') {
+
           axios.post(`http://localhost:8080/api/user/shopNowFixedPrice/${this.product.id}`, {}, {
             withCredentials: true // Ovo omogućava slanje kolačića sesije
           })
@@ -121,11 +120,18 @@ export default {
                 this.showSuccessModal = true;
               })
               .catch(error => {
-                console.error('Greška pri kupovini proizvoda:', error);
-                  this.showAlreadyPurchasedModal = true;
+                if(error.response.data ==="Samo kupac može da kupuje."){
+                  this.successMessage = "Samo kupac može da kupuje.";
+                  this.showSuccessModal = true;
+                }else {
 
+                  console.error('Greška pri kupovini proizvoda:', error);
+                  this.successMessage = "Greška pri kupovini proizvoda.";
+                  this.showSuccessModal = true;
+                }
               });
         }else if (this.product.tipProdaje === 'AUKCIJA') {
+
           axios.post(`http://localhost:8080/api/user/shopNowAuction`, {}, {
             params: {
               id: this.product.id,
@@ -142,14 +148,12 @@ export default {
               .catch(error => {
                 console.error('Greška pri postavljanju ponude:', error);
                 console.log('Error response:', error.response);
-                // Provera specifičnih poruka greške
                 if (error.response && typeof error.response.data === 'string') {
                   if (error.response.data === 'Proizvod je već prodat.') {
                     this.showAlreadyPurchasedModal = true;
                   } else if (error.response.data.startsWith('Ponuda koju ste poslali se nije uvažila jer je drugi korisnik poslao veću: ')) {
                     this.successMessage =error.response.data;
                     this.showSuccessModal = true;
-                   // this.showLowBidModal = true;
                   } else if(error.response.data ==="Samo kupci mogu da daju ponude."){
                     this.successMessage = "Samo kupci mogu da daju ponude.";
                     this.showSuccessModal = true;
@@ -163,21 +167,27 @@ export default {
       }
     },
     closeLoginModal() {
+
       this.showLoginModal = false;
     },
     redirectToLogin() {
+
       this.$router.push('/login');
     },
     closeSuccessModal() {
+
       this.showSuccessModal = false;
     },
     closeAlreadyPurchasedModal() {
+
       this.showAlreadyPurchasedModal = false;
     },
     closeLowBidModal() {
+
       this.showLowBidModal = false;
     },
     goToSellerProfile(prodavacId) {
+
       const user = JSON.parse(localStorage.getItem('user'));
       if (user) {
         this.$router.push(`/sellerProfile/${prodavacId}`);

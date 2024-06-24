@@ -7,13 +7,8 @@
       <h1>Sve za Vas na jednom mestu!</h1>
       <button v-on:click="registration">Registracija</button>
       <button @click="profile(korisnik.id)">Ažuriraj autora</button>
-<!--      <router-link v-if="korisnik.id" :to="'/profile/' + korisnik.id" class="btn btn-primary">Vaš profil</router-link>-->
-<!--      <router-link :to="'/profileView/' + korisnik.id" class="btn btn-primary">Vaš profil</router-link>-->
     </div>
-    <!-- <h1>Dobrodošli na Početnu Stranicu CAO CAO</h1>
-     <p>Ovo je primer jednostavne početne stranice.</p> -->
 
-    <!-- Prikaz proizvoda -->
     <div class="product-container">
       <div class="row">
         <div class="col-6" v-for="product in products" :key="product.id" :product="product">
@@ -21,11 +16,7 @@
             <img :src="product.slikaProizvoda" class="card-img-top" alt="Product Image">
             <div class="card-body">
               <h5 class="card-title">{{ product.naziv }}</h5>
-              <!--<h5 class="card-title">ID: {{ product.id }}</h5>-->
-              <!-- <p class="card-text">{{ product.opis }}</p>-->
               <p class="card-text">Cena: {{ product.cena }} RSD</p>
-              <!--  <p class="card-text">Tip prodaje: {{ product.tipProdaje }}</p>-->
-              <!--  <p class="card-text">Kategorije: {{ product.kategorije.join(', ') }}</p>-->
               <a href="#" class="btn btn-primary">Vidi više...</a>
             </div>
           </div>

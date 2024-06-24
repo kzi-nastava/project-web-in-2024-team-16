@@ -2,6 +2,7 @@
 
   <div>
     <div class="naslov"><h1>Pregled svih recenzija</h1></div>
+
     <div class="review-container">
       <div v-for="review in paginatedReviews()" :key="review.id" class="review-card">
         <p>Recenziju podneo: {{review.recenzijuPodneo.ime}} {{review.recenzijuPodneo.prezime}} "{{review.recenzijuPodneo.korisnickoIme}}"</p>
@@ -22,14 +23,17 @@
         </div>
       </div>
     </div>
+
     <div class="pagination">
       <button @click="prevPage" :disabled="currentPage === 1">Prethodna</button>
       <span>Stranica {{ currentPage }}</span>
       <button @click="nextPage" :disabled="currentPage * itemsPerPage >= reviews.length">Sledeća</button>
     </div>
+
     <div class="naslov2">
       <h1>Pregled svih prijava</h1>
     </div>
+
     <div class="review-container">
       <div v-for="report in paginatedReports()" :key="report.id" class="review-card">
         <p>Prijavu podneo: {{report.podnosiocPrijave.ime}} {{report.podnosiocPrijave.prezime}} "{{report.podnosiocPrijave.korisnickoIme}}"</p>
@@ -48,6 +52,7 @@
         </div>
       </div>
     </div>
+
     <div class="pagination">
       <button @click="prevPageReport" :disabled="currentPageReport === 1">Prethodna</button>
       <span>Stranica {{ currentPageReport }}</span>
@@ -73,11 +78,13 @@ export default {
     };
   },
   mounted() {
+
     this.fetchReviews();
     this.fetchReports();
   },
   methods: {
     fetchReviews() {
+
       axios
           .get('http://localhost:8080/api/user/reviews/admin', {withCredentials: true})
           .then(response => {
@@ -88,6 +95,7 @@ export default {
           });
     },
     fetchReports(){
+
       axios
           .get('http://localhost:8080/api/report/allReports', {withCredentials: true})
           .then(response => {
@@ -98,16 +106,17 @@ export default {
           });
     },
     formatDate(dateString) {
+
       const options = { year: 'numeric', month: 'long', day: 'numeric' };
+
       return new Date(dateString).toLocaleDateString(undefined, options);
     },
     deleteReview(reviewId) {
-      console.log('ID recenzije za brisanje:', reviewId);
+
       axios
           .delete(`http://localhost:8080/api/user/deleteReview/${reviewId}`, { withCredentials: true })
           .then(response => {
             console.log('Recenzija obrisana:', response);
-            // Uklonite obrisanu recenziju iz lokalne liste
             this.reviews = this.reviews.filter(review => review.id !== reviewId);
           })
           .catch(error => {
@@ -115,44 +124,49 @@ export default {
             alert('Greška pri brisanju recenzije: ' + error.response.data.message);
           });
     },
-    // Vraća recenzije za trenutnu stranicu
     paginatedReviews() {
+
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
+
       return this.reviews.slice(start, end);
     },
     paginatedReports() {
+
       const start = (this.currentPageReport - 1) * this.itemsPerPageReport;
       const end = start + this.itemsPerPageReport;
+
       return this.reports.slice(start, end);
     },
-    // Prelazak na sledeću stranicu
     nextPage() {
+
       if (this.currentPage * this.itemsPerPage < this.reviews.length) {
         this.currentPage++;
       }
     },
     nextPageReport() {
+
       if (this.currentPageReport * this.itemsPerPageReport < this.reports.length) {
         this.currentPageReport++;
       }
     },
-    // Prelazak na prethodnu stranicu
     prevPage() {
+
       if (this.currentPage > 1) {
         this.currentPage--;
       }
     },
     prevPageReport() {
+
       if (this.currentPageReport > 1) {
         this.currentPageReport--;
       }
     },
     toggleUpdateForm(reviewId) {
+
       this.reviews = this.reviews.map(review => {
         if (review.id === reviewId) {
           review.showUpdateForm = !review.showUpdateForm;
-          // Postavljanje trenutnih vrednosti kao podrazumevane vrednosti
           if (review.showUpdateForm) {
             review.newRating = review.ocena;
             review.newComment = review.komentar;
@@ -162,10 +176,10 @@ export default {
       });
     },
     toggleRejectionForm(reportId) {
+
       this.reports = this.reports.map(report => {
         if (report.id === reportId) {
           report.showRejectionForm = !report.showRejectionForm;
-          // Postavljanje trenutnih vrednosti kao podrazumevane vrednosti
           if (report.showRejectionForm) {
             report.rejectionReason = '';
           }
@@ -174,6 +188,7 @@ export default {
       });
     },
     accept(reportId) {
+
       axios.post(`http://localhost:8080/api/report/adminAcceptReport/${reportId}`, {}, {
         withCredentials: true,
         headers: {
@@ -193,6 +208,7 @@ export default {
           });
     },
     reject(reportId) {
+
       const reportToReject = this.reports.find(report => report.id === reportId);
       const rejectionData = {
         razlogOdbijanja: reportToReject.rejectionReason
@@ -218,17 +234,15 @@ export default {
           });
     },
     saveReview(reviewId) {
-      // Pronađite recenziju koju želite da ažurirate
+
       const reviewToUpdate = this.reviews.find(review => review.id === reviewId);
 
-      // Pripremite podatke za slanje
       const updateData = {
         id: reviewId,
         ocena: reviewToUpdate.newRating,
         komentar: reviewToUpdate.newComment
       };
 
-      // Pošaljite axios PUT zahtev sa potrebnim podacima
       axios
           .put(`http://localhost:8080/api/user/updateReview/${reviewId}`, updateData, {
             withCredentials: true,
@@ -262,6 +276,7 @@ export default {
   justify-content: center;
   align-items: center;
   margin-bottom: 10px; /* Promenjeno na margin-bottom */
+  color: #c963c9;
 }
 
 .naslov2 {
@@ -270,6 +285,7 @@ export default {
   align-items: center;
   margin-top: 50px;
   margin-bottom: 10px;
+  color: #c963c9;
 }
 
 .review-container {
@@ -303,12 +319,12 @@ export default {
 }
 
 .review-button.update {
-  background-color: #4141da; /* Zelena boja za Ažuriraj */
+  background-color: #44449d; /* Zelena boja za Ažuriraj */
   color: white; /* Bela boja teksta */
 }
 
 .review-button.delete {
-  background-color: #773577; /* Crvena boja za Obriši */
+  background-color: #c963c9; /* Crvena boja za Obriši */
   color: white; /* Bela boja teksta */
 }
 

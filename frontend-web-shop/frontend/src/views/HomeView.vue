@@ -1,27 +1,38 @@
 <template>
   <div class="home">
     <HelloWorld @search="executeSearch" />
+
     <img id="headerimg" src="/kutija2.JPG">
+
     <div id="headercont">
       <h1>Sve za Vas na jednom mestu!</h1>
-     <!-- <button v-on:click="registration">Napravi nalog</button>
-      <button v-on:click="login">Prijavite se</button>-->
       <button v-if="!isLoggedIn" @click="registration">Napravite nalog</button>
       <button v-if="!isLoggedIn" @click="login">Prijavite se</button>
       <button v-if="isLoggedIn" @click="goToProfile">Moj profil</button>
       <button v-if="isLoggedIn" @click="logout">Odjavite se</button>
     </div>
+
     <div id="post-new-product">
       <button v-if="isLoggedIn && userRole === 'PRODAVAC'" @click="postNewProduct">Postavite oglas</button>
     </div>
+
     <NewProductModal :visible="showModal" @close="showModal = false" />
 
+    <div class="add-category-container">
+      <button v-if="isLoggedIn && userRole === 'PRODAVAC'" @click="showCategoryInput = true" class="new-category-button">Dodaj novu kategoriju</button>
+      <div v-if="showCategoryInput">
+        <input type="text" v-model="newCategoryId" placeholder="Unesite ID kategorije">
+        <input type="text" v-model="newCategoryName" placeholder="Unesite naziv kategorije">
+        <button @click="addNewCategory(newCategoryId, newCategoryName)" class="new-category-button">Potvrdi</button>
+      </div>
+    </div>
+
+    <div class="categories-title"><h2>Pretražite neke od kategorija:</h2></div>
     <div class="category-images">
-      <img src="/knjige.JPG" alt="Knjige" @click="filterByCategory('Knjige')">
-      <img src="/obuca.JPG" alt="Obuća" @click="filterByCategory('Obuća')">
-      <img src="/telefoni.JPG" alt="Telefoni" @click="filterByCategory('telefoni')">
-      <img src="/alat2.JPG" alt="Alat" @click="filterByCategory('Alat')">
-      <!-- Dodajte slike za druge kategorije kako je potrebno -->
+      <img src="/knjige.JPG" alt="Knjige" @click="filterByCategory('Knjige')" title="Knjige">
+      <img src="/obuca.JPG" alt="Obuća" @click="filterByCategory('Obuća')" title="Obuća">
+      <img src="/telefoni.JPG" alt="Telefoni" @click="filterByCategory('Telefoni')"  title="Telefoni">
+      <img src="/alat2.JPG" alt="Alat" @click="filterByCategory('Alat')"  title="Alat">
     </div>
 
 
@@ -53,21 +64,18 @@
     </div>
 
       <div class="category-product-container">
-      <!-- Kategorije -->
-    <div class="categories">
-      <h2>Kategorije</h2>
-      <br>
-      <ul class="category-list">
-        <li  class="category-link" @click="fetchProducts">Svi proizvodi</li>
+       <div class="categories">
+       <h2>Kategorije</h2>
         <br>
-        <li v-for="category in categories" :key="category.id">
-         <!-- <a href="#" class="category-link"  @click="filterByCategory(category.id)>{{ category.nazivKategorije }}</a>-->
+        <ul class="category-list">
+          <li  class="category-link" @click="fetchProducts">Svi proizvodi</li>
+          <br>
+          <li v-for="category in categories" :key="category.id">
           <span class="category-link" @click="filterByCategory(category.nazivKategorije)">{{ category.nazivKategorije }}</span>
         </li>
       </ul>
     </div>
 
-    <!-- Prikaz proizvoda -->
     <div class="product-container">
       <div class="row">
         <div class="col-6" v-for="product in products" :key="product.id" :product="product">
@@ -91,7 +99,6 @@
   </template>
 
   <script>
-  // Uvoz HelloWorld komponente
   import HelloWorld from "@/components/HelloWorld.vue";
   import NewProductModal from "@/components/NewProductModal.vue";
   import axios from "axios";
@@ -114,7 +121,10 @@
         priceTo: 0,
         priceFrom: 0,
         userRole: "",
-        showModal: false
+        showModal: false,
+        showCategoryInput: false,
+        newCategoryName: '',
+        newCategoryId:1,
       };
     },
     computed: {//ako nista nije napisano ispisi sve proizvode
@@ -123,21 +133,38 @@
       }
     },
     methods: {
+
       login: function () {
+
         this.$router.push("/login");
       },
       logout() {
-        // Logika za odjavu (brisanje localStorage i preusmeravanje)
+
         localStorage.removeItem('user');
         this.isLoggedIn = false;
       },
       goToProfile() {
+
         this.$router.push("/profile");
       },
       registration: function (){
+
         this.$router.push("/registration");
       },
+      addNewCategory(id, naziv) {
+
+        axios.post(`http://localhost:8080/api/category/newCategory/${id}`, { naziv } ,{ withCredentials: true })
+            .then(response => {
+              this.newCategoryId = '';
+              this.newCategoryName = '';
+              this.showCategoryInput = false;
+            })
+            .catch(error => {
+              console.error('Greška prilikom dodavanja nove kategorije:', error);
+            });
+      },
       fetchProducts() {
+
         axios.get("http://localhost:8080/api/product/pages", {
           params: {
             page: this.currentPage,
@@ -153,16 +180,19 @@
             });
       },
       previousPage() {
+
         if (this.currentPage > 0) {
           this.currentPage--;
           this.fetchProducts();
         }
       },
       nextPage() {
+
         this.currentPage++;
         this.fetchProducts();
       },
       fetchCategories() {
+
         axios.get("http://localhost:8080/api/category/categories")
             .then(response => {
               console.log(response.data);
@@ -173,6 +203,7 @@
             });
       },
       filterByPrice() {
+
         if (this.priceFrom !== null && this.priceTo !== null) {
           axios
               .get("http://localhost:8080/api/product/filterByPrice", {
@@ -192,6 +223,7 @@
         }
       },
       filterByType(type) {
+
         axios.get("http://localhost:8080/api/product/filterByType", {
           params: {type: type}
         })
@@ -203,8 +235,11 @@
             });
       },
       executeSearch(searchCriteria) {
+
         const { name, description } = searchCriteria;
+
         if(description==''){
+
           axios.get("http://localhost:8080/api/product/search?name=" + name)
               .then(response => {
                 this.products = response.data;
@@ -215,6 +250,7 @@
               });
         }
         else if(name==''){
+
           axios.get("http://localhost:8080/api/product/search?description=" + description)
               .then(response => {
                 this.products = response.data;
@@ -240,6 +276,7 @@
         }
       },
       filterByCategory(categoryName) {
+
         axios.get("http://localhost:8080/api/product/filterByCategory", {
           params: {category: categoryName}
         })
@@ -250,17 +287,18 @@
               console.error("Greska pri filtriranju proizvoda po kategoriji:", error);
             });
       },
-     /* postNewProduct() {
-        this.$router.push("/newProduct");
-      },*/
       postNewProduct() {
+
         this.showModal = true; // Prikazivanje modala kada se klikne na "Postavite oglas"
       }
       },
       mounted() {
+
         this.fetchProducts();
         this.fetchCategories();
+
         const user = JSON.parse(localStorage.getItem('user'));
+
         if (user) {
           this.isLoggedIn = true;
           const userRole = localStorage.getItem("userRole");
@@ -282,17 +320,16 @@
 
     text-align: center;
     font-family: "Bodoni MT";
-    width: 100%; /* Make sure the home div is 100% wide */
-    margin: 0; /* Remove any default margin */
-    padding: 0; /* Remove any default padding */
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
   #headerimg{
-    width: 100%;  /* Fills 100% of the container width */
+    width: 100%;
     height: 60vh;
     margin: 0;
     padding: 0;
 
-    /* z-index: 1;*/
   }
   #headercont {
     font-family: Arial;
@@ -304,51 +341,50 @@
     z-index: 1;
     color: rgba(47, 128, 102, 0.76);
   }
-  #headercont button { /*podesavanje da dugad budu jedno ispod drugog*/
-    display: flex; /* Uključite fleksbox za dugmeta */
-    flex-direction: column; /* Postavite smer fleksboxa vertikalno */
-    align-items: center; /* Centrirajte dugmeta horizontalno */
-    margin: 10px 0; /* Dodajte razmak između dugmeta */
+  #headercont button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px 0;
     width: 100%;
     border-radius: 30px;
   }
   button{
     color: white;
     background-color: rgba(47, 128, 102, 0.76);
-    padding: 15px 25px;/*da bude oko teksta toliko praznog*/
-    border-radius: 5px;/*zaobli ivice*/
+    padding: 15px 25px;
+    border-radius: 5px;
     border: 1px solid gray;
     cursor: pointer;
   }
   button:hover {
-    background-color: rgb(72, 136, 113); /* menja boju pri stavljanju misa na prijavu */
+    background-color: rgb(72, 136, 113);
   }
   #post-new-product {
-    display: flex; /* Koristi fleksibilni prikaz */
-    justify-content: center; /* Centriraj sadržaj po horizontalnoj osi */
-    align-items: center; /* Centriraj sadržaj po vertikalnoj osi */
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   #post-new-product button {
-    display: block; /* Podešava dugme da bude blok element */
-    width: 200px; /* Širina dugmeta */
-    padding: 10px; /* Unutrašnji padding */
-    border: none; /* Uklanja ivice */
-    border-radius: 50px; /* Zaobljeni rubovi */
-    background-color: rgba(47, 128, 102, 0.76); /* Boja pozadine */
-    color: white; /* Boja teksta */
-    font-size: 16px; /* Veličina fonta */
-    cursor: pointer; /* Promena kursora na pokazivač */
-    margin-top: 10px; /* Margin na vrhu */
+    display: block;
+    width: 200px;
+    padding: 10px;
+    border: none;
+    border-radius: 50px;
+    background-color: rgba(47, 128, 102, 0.76);
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
   }
   #post-new-product button:hover {
-    background-color: #488871; /* Promena boje pozadine prilikom prelaska mišem */
+    background-color: #488871;
   }
   .filter-type-container {
-    float: left; /* Postavlja kontejner na levu stranu */
-   /* background-color: rgba(93, 187, 155, 0.88);   Zelena pozadina */
-    padding: 10px;/*  Razmak unutar kontejnera */
-    color: white; /* Boja teksta */
-    font-family: Arial, sans-serif; /* Font */
+    float: left;
+    padding: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
     margin-left: 60px;
     width: 500px;
     height: 120px;
@@ -364,7 +400,7 @@
     color: #966396; /* Zelena boja teksta */
   }
   .filter-price-container input {
-    margin-right: 10px; /* Dodavanje desne margine između input polja */
+    margin-right: 10px;
   }
   .filter-price-container button {
     width: 200px;
@@ -380,15 +416,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    /*width: 20%;  Širina kategorija na levoj strani */
     margin-top: 20px;
     margin-left: 100px;
     padding: 40px; /* Dodajemo padding za uokvirivanje */
-    /*border: 1px solid #2f8066;  Dodajemo ivicu
-    border-radius: 8px;  Zaobljujemo ivicu */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Dodajemo senku */
-    background-color: rgba(47, 128, 102, 0.76); /* Boja pozadine */
-    /*width: fit-content; rilagođava širinu sadržaju unutar */
+    background-color: rgba(47, 128, 102, 0.76);
     width: 200px;
     height: fit-content;
     color: white;
@@ -418,22 +450,17 @@
     flex-wrap: wrap;
     justify-content: center;
     margin-top: 20px;
-    width: 100%; /* Postavljanje širine na 100% */
+    width: 100%;
 
   }
   .row {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: 60%;/*udaljenost slika*/
+    width: 60%;
   }
   .col-6 {
-   /* flex: 0 0 48%;*/
-   /*flex: 0 0 calc(50% - 20px);  Smanjivanje širine kartice i postavljanje lufta od 20 piksela između kartica
-    margin: 3px;
-    margin-bottom: 20px;*/
     flex: 0 0 calc(30% - 10px); /* Smanjenje širine kartice i postavljanje lufta od 10 piksela između kartica */
-    /*margin: 10px;  Smanjenje margine na 5 piksela */
     margin: 0 5px;
     margin-bottom: 10px;
 
@@ -441,9 +468,8 @@
 
   }
   .card {
-   /* width: 100%;*/
-    width: 200px; /* Primer: postavljanje širine na 200px */
-    height: 300px; /* Primer: postavljanje visine na 300px */
+    width: 200px;
+    height: 300px;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -454,29 +480,29 @@
   .card-img-top {
     width: 80%;
    /* height: 200px;*/
-    height: 70%; /* Promenjeno na auto */
+    height: 70%;
     object-fit: cover;
 
 
   }
   .card-body {
     padding: 10px;
-    font-size: 12px; /* Primer: postavljanje veličine fonta na 14 piksela */
+    font-size: 12px;
     overflow-wrap: break-word; /* Tekst će se prelomiti ako prelazi dimenzije kartice */
   }
   .card-body a.btn-primary {
-    color: #44449d; /* Promenite boju teksta na belu */
-    text-decoration: none;/*da ne bude podvuceno*/
+    color: #44449d;
+    text-decoration: none;
   }
 
   .card-body a.btn-primary:hover {
-    background-color: lavender; /* Promenite boju pozadine na svetliju ljubičastu kad je link u hover stanju */
+    background-color: lavender;
   }
   .pagination {
-    margin-bottom: 20px; /* Prilagodite vrednost margine po želji */
+    margin-bottom: 20px;
   }
   .pagination button {
-    margin-right: 210px; /* Prilagodite ovu vrednost prema potrebi */
+    margin-right: 210px;
     width: 200px;
     border-radius: 30px;
     height: 30px;
@@ -485,11 +511,36 @@
 
   }
   .pagination button:hover {
-    background-color: #79d3b2; /* Promenite boju pozadine pri hoveru */
-    color: white; /* Promenite boju teksta pri hoveru */
+    background-color: #79d3b2;
+    color: white;
   }
   .category-images {
-    margin-bottom: 20px; /* Margina na dnu kontejnera */
-    margin-top: 20px; /* Margina na vrhu kontejnera */
+    margin-bottom: 20px;
+    margin-top: 20px;
+    cursor: pointer;
+
+  }
+
+  .category-images img:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  .categories-title{
+    color: rgba(47, 128, 102, 0.76);
+  }
+  .add-category-container {
+    margin: 20px 0;
+
+  }
+
+  .new-category-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: rgba(47, 128, 102, 0.76);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 10px;
   }
   </style>
