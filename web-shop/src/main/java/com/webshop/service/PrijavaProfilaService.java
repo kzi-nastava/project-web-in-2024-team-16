@@ -7,25 +7,22 @@ import com.sendgrid.SendGrid;
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
 import com.sendgrid.helpers.mail.objects.Email;
-import com.webshop.DTO.PrijavaKorisnikDTO;
-import com.webshop.DTO.PrijavaProfilaDTO;
-import com.webshop.DTO.PrijavaRequestDTO;
+import com.webshop.DTO.*;
 import com.webshop.error.NoCustomerException;
 import com.webshop.error.NoReportException;
 import com.webshop.error.NoSellerException;
 import com.webshop.error.UserNotFoundException;
-import com.webshop.model.Korisnik;
-import com.webshop.model.PrijavaProfila;
-import com.webshop.model.Status;
-import com.webshop.model.Uloga;
+import com.webshop.model.*;
 import com.webshop.repository.KorisnikRepository;
 import com.webshop.repository.PrijavaProfilaRepository;
 import com.webshop.repository.ProizvodRepository;
+import com.webshop.repository.RecenzijaRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -210,6 +207,7 @@ public class PrijavaProfilaService {
         }
     }
 
+    @Transactional
     public void odbijPrijavu(Long prijavaId, String razlogOdbijanja) throws IOException {
 
         Optional<PrijavaProfila> prijava = prijavaProfilaRepository.findById(prijavaId);
@@ -218,14 +216,21 @@ public class PrijavaProfilaService {
             throw new NoReportException("Tražena prijava ne postoji");
         }
       //  PrijavaProfila izmenjenaPrijava= new PrijavaProfila();
-        prijava.get().setStatusPrijave(Status.ODBIJENA);
-       prijava.get().setRazlogOdbijanja(razlogOdbijanja);
-        prijavaProfilaRepository.save(prijava.get());
-        Korisnik korisnik=prijava.get().getPodnosiocPrijave();
+//        prijava.get().setStatusPrijave(Status.ODBIJENA);
+//        prijava.get().setRazlogOdbijanja(razlogOdbijanja);
+//        prijavaProfilaRepository.save(prijava.get());
+//        Korisnik korisnik=prijava.get().getPodnosiocPrijave();
+//        sendReportRejected(korisnik, razlogOdbijanja);
+        PrijavaProfila prijavaProfila = prijava.get();
+        prijavaProfila.setStatusPrijave(Status.ODBIJENA);
+        prijavaProfila.setRazlogOdbijanja(razlogOdbijanja);
+        prijavaProfilaRepository.save(prijavaProfila);
+        Korisnik korisnik = prijavaProfila.getPodnosiocPrijave();
         sendReportRejected(korisnik, razlogOdbijanja);
 
     }
 
+    @Transactional
     public void prihvatiPrijavu(Long prijavaId, String razlogPrihvatanja) throws IOException {
 
         Optional<PrijavaProfila> prijava = prijavaProfilaRepository.findById(prijavaId);
@@ -243,5 +248,41 @@ public class PrijavaProfilaService {
 
         sendBlockEmail(prijavljeniKorisnik);
         sendReportAccept(korisnik, prijavljeniKorisnik);
+    }
+
+    public List<PrijavaProfilaDTO> vratiPrijaveAdministrator(Long administratorId){
+        Korisnik admin = korisnikRepository.findById(administratorId).get();
+        List<PrijavaProfila> svePrijave = prijavaProfilaRepository.findAll();
+
+        List<PrijavaProfilaDTO> prijave = new ArrayList<>();
+        for(PrijavaProfila prijava : svePrijave){
+            PrijavaProfilaDTO dto = new PrijavaProfilaDTO();
+
+            dto.setRazlogPrijave(prijava.getRazlogPrijave());
+            dto.setStatusPrijave(prijava.getStatusPrijave());
+            dto.setDatumPodnosenjaPrijave(prijava.getDatumPodnosenjaPrijave());
+            dto.setId(prijava.getId());
+
+            Korisnik podnosilac = prijava.getPodnosiocPrijave();
+            Korisnik prijavljen = prijava.getPrijavljeniKorisnik();
+
+            PrijavaKorisnikDTO podnosilacDto = new PrijavaKorisnikDTO();
+            podnosilacDto.setIme(podnosilac.getIme());
+            podnosilacDto.setPrezime(podnosilac.getPrezime());
+            podnosilacDto.setMejl(podnosilac.getMejl());
+            podnosilacDto.setKorisnickoIme(podnosilac.getKorisnickoIme());
+
+            PrijavaKorisnikDTO prijavljenDto = new PrijavaKorisnikDTO();
+            prijavljenDto.setIme(prijavljen.getIme());
+            prijavljenDto.setPrezime(prijavljen.getPrezime());
+            prijavljenDto.setMejl(prijavljen.getMejl());
+            prijavljenDto.setKorisnickoIme(prijavljen.getKorisnickoIme());
+
+            dto.setPodnosiocPrijave(podnosilacDto);
+            dto.setPrijavljeniKorisnik(prijavljenDto);
+
+            prijave.add(dto);
+        }
+        return prijave;
     }
 }

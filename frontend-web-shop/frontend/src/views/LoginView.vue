@@ -33,7 +33,11 @@ export default {
             localStorage.setItem("user", JSON.stringify(res.data.id));
             localStorage.setItem("userUSER", JSON.stringify(res.data));
             localStorage.setItem("userRole", res.data.uloga); // Čuvanje uloge korisnik
-            this.$router.push("/");
+            if(res.data.uloga === 'ADMINISTRATOR'){
+              this.$router.push('/admin');
+            }else{
+              this.$router.push("/");
+            }
             this.$emit("userLoggedIn");
           })
           .catch((err) => {
