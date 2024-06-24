@@ -23,13 +23,15 @@ INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_re
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
     VALUES (4, '10/10', '2022-03-22 13:35:24',1000, 5000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-VALUES (2, 'nema pojma', '2021-06-12 19:32:05',2000, 6000);
+    VALUES (2, 'nema pojma', '2021-06-12 19:32:05',2000, 6000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-VALUES (4, 'miki maus', '2020-01-08 20:25:56',7000, 6000);
+    VALUES (4, 'miki maus', '2020-01-08 20:25:56',7000, 6000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-VALUES (5, 't reks', '2020-01-08 20:25:56',2000, 2000);
+    VALUES (5, 't reks', '2020-01-08 20:25:56',2000, 2000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-VALUES (1, 'akva park', '2020-01-08 20:25:56',2000, 5000);
+    VALUES (1, 'akva park', '2020-01-08 20:25:56',2000, 5000);
+INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
+VALUES (4, 'Poslovan covek', '2020-01-08 20:25:56',2000, 3000);
 
 INSERT INTO prijava_profila(razlog_prijave,razlog_odbijanja, razlog_prihvatanja, datum_podnosenja_prijave, status_prijave, podnosioc_prijave_id, prijavljeni_korisnik_id)
     VALUES ('ne postuje dogovor', 'Nije konkretno navedeno sta nije bilo u redu.',NULL,'2023-02-10 18:25:48', 'ODBIJENA', 1000, 3000);

@@ -88,7 +88,7 @@ export default {
         slika: '', // Dodato polje za sliku
         proizvodiNaProdaju: [],
         dobijeneRecenzije: [],
-        prosecnaOcena: null
+        prosecnaOcena: 0
       },
       user: null,
       isBuyer: false,
@@ -108,15 +108,15 @@ export default {
         .catch(error => {
           console.error('Greška pri dobijanju profila prodavca:', error);
         });
-
-    axios.get(`http://localhost:8080/api/user/averageRatingSeller/${prodavacId}`, { withCredentials: true })
+    this.fetchAverageRating(prodavacId);
+   /* axios.get(`http://localhost:8080/api/user/averageRatingSeller/${prodavacId}`, { withCredentials: true })
         .then(response => {
           this.prodavac.prosecnaOcena = response.data.toFixed(1);
         })
         .catch(error => {
           console.error('Greška pri dobijanju profila prodavca:', error);
         });
-
+*/
     // fetch(`/averageRatingSeller/${prodavacId}`)
     //     .then(response => {
     //       if (!response.ok) {
@@ -151,6 +151,16 @@ export default {
     },
     closeErrorModal() {
       this.showErrorModal = false; // Zatvaranje grešnog modalnog prozora
+    },
+    fetchAverageRating(prodavacId) {
+
+      axios.get(`http://localhost:8080/api/user/averageRatingSeller/${prodavacId}`, { withCredentials: true })
+          .then(response => {
+            this.prodavac.prosecnaOcena = response.data.toFixed(1);
+          })
+          .catch(error => {
+            console.error('Greška pri dobijanju prosečne ocene prodavca:', error);
+          });
     },
     submitRating() {
 
