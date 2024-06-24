@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/category")
@@ -25,24 +26,24 @@ public class KategorijaController {
     private KategorijaService kategorijaService;
 
     @PostMapping("/newCategory/{id}")
-    public ResponseEntity<String> addNewCategory(@PathVariable Long id,@RequestBody String nazivKategorije, HttpSession session) throws CategoryExistsException, UserNotFoundException, NoSellerException {
+    public ResponseEntity<String> addNewCategory(@PathVariable Long id, @RequestBody Map<String, String> request, HttpSession session) throws CategoryExistsException, UserNotFoundException, NoSellerException {
+        String nazivKategorije = request.get("naziv");
 
-        Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
+        Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
-        if(korisnik==null){
+        if (korisnik == null) {
             throw new UserNotFoundException("Niste prijavljeni.");
         }
-        if(!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
+        if (!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
             throw new NoSellerException("Da bi ste dodali kategoriju, morate biti prodavac.");
         }
         if (kategorijaService.proveriPostojanjeKategorije(nazivKategorije)) {
-             throw new CategoryExistsException("Prosleđena kategorija već postoji.");
+            throw new CategoryExistsException("Prosleđena kategorija već postoji.");
         }
 
-            kategorijaService.dodajNovuKategoriju(nazivKategorije);
+        kategorijaService.dodajNovuKategoriju(nazivKategorije);
 
-            return ResponseEntity.ok().body("Nova kategorija uspešno dodata.");
-
+        return ResponseEntity.ok().body("Nova kategorija uspešno dodata.");
     }
   
     @GetMapping("/categories")

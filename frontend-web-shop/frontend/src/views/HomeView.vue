@@ -152,8 +152,7 @@
         this.$router.push("/registration");
       },
       addNewCategory(id, naziv) {
-
-        axios.post(`http://localhost:8080/api/category/newCategory/${id}`, { naziv } ,{ withCredentials: true })
+        axios.post(`http://localhost:8080/api/category/newCategory/${id}`, { naziv: naziv }, { withCredentials: true })
             .then(response => {
               this.newCategoryId = '';
               this.newCategoryName = '';
@@ -282,6 +281,9 @@
         })
             .then(response => {
               this.products = response.data;
+                  if (this.products.length === 0) {
+                    alert(`Trenutno nema proizvoda u kategoriji`);
+                  }
             })
             .catch(error => {
               console.error("Greska pri filtriranju proizvoda po kategoriji:", error);
