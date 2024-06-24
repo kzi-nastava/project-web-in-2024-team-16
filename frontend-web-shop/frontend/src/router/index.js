@@ -8,6 +8,7 @@ import HomePageView from "@/views/HomePageView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import SellerProfileView from "@/views/SellerProfileView.vue";
 import RecenzijeView from "@/views/RecenzijeView.vue";
+import AdminView from "@/views/AdminView.vue";
 
 
 
@@ -40,11 +41,11 @@ const routes = [
     name: 'profile',
     component: ProfileView
   },
-  // {
-  //   path: '/reviews',
-  //   name: 'reviews',
-  //   component: RecenzijeView
-  // },
+  {
+    path: '/admin',
+    name: 'admin',
+    component: AdminView
+  },
   // {
   //   path: '/profile/:id', // Definicija dinamičke rute za detalje proizvoda
   //   name: 'profile',

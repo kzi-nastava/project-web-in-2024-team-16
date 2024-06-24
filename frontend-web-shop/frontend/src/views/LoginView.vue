@@ -32,7 +32,11 @@ export default {
             console.log("Prijavljen korisnik:", this.korisnik.korisnickoIme);
             localStorage.setItem("user", JSON.stringify(res.data.id));
             localStorage.setItem("userRole", res.data.uloga); // Čuvanje uloge korisnik
-            this.$router.push("/");
+            if(res.data.uloga === 'ADMINISTRATOR'){
+              this.$router.push('/admin');
+            }else{
+              this.$router.push("/");
+            }
             this.$emit("userLoggedIn");
           })
           .catch((err) => {

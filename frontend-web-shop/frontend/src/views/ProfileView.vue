@@ -89,7 +89,6 @@ export default {
   mounted() {
     // Pozivamo metodu za dobavljanje trenutnog korisnika kada se komponenta montira
     this.fetchCurrentUser();
-    //this.fetchReviews();
   },
   methods: {
     fetchCurrentUser() {
@@ -105,9 +104,6 @@ export default {
           });
     },
     update(){
-      if(this.currentUser.staraLozinka != this.currentUser.novaLozinka){
-        alert('Lozinke se ne poklapaju');
-      }
       if(this.currentUser.staraLozinka == null){
         alert('Morate uneti trenutnu lozinku');
       }
@@ -131,29 +127,12 @@ export default {
             this.loading = false;
           });
     },
-    // recenzije() {
-    //   this.$router.push("http://localhost:8080/api/user/reviewedSellers/received");
-    // },
     recenzije(){
       this.showReviews = !this.showReviews;
       console.log('Toggle Reviews:', this.showReviews); // Dodajte konzolni izlaz za praćenje stanja
       if (this.showReviews && this.reviews.length === 0) {
         this.fetchReviews();
       }
-      // axios
-      //     .get('http://localhost:8080/api/user/reviewedSellers/received',  {
-      //       withCredentials: true,
-      //       headers: {
-      //         'Content-Type': 'application/json'
-      //       }
-      //     })
-      //     .then(response => {
-      //       this.currentUser = response.data;
-      //       console.log(this.reviews);
-      //     })
-      //     .catch(error => {
-      //       console.error('Greška pri dobavljanju podataka o recenzijama:', error);
-      //     });
     },
     formatDate(dateString) {
       const options = { year: 'numeric', month: 'long', day: 'numeric' };

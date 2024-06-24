@@ -32,7 +32,7 @@
 
     <!-- Recenzije sa prosečnom ocenom -->
     <div class="reviews">
-      <h2>Recenzije prodavca (prosečna ocena: {{ prodavac.prosecnaOcena.toFixed(1) }})</h2>
+      <h2>Recenzije prodavca (prosečna ocena: {{ prodavac.prosecnaOcena }})</h2>
       <ul v-if="prodavac.dobijeneRecenzije.length > 0">
         <li v-for="recenzija in prodavac.dobijeneRecenzije" :key="recenzija.id">
           <p><strong>Ocena:</strong> {{ recenzija.ocena }}</p>
@@ -108,6 +108,33 @@ export default {
         .catch(error => {
           console.error('Greška pri dobijanju profila prodavca:', error);
         });
+    this.fetchAverageRating(prodavacId);
+   /* axios.get(`http://localhost:8080/api/user/averageRatingSeller/${prodavacId}`, { withCredentials: true })
+        .then(response => {
+          this.prodavac.prosecnaOcena = response.data.toFixed(1);
+        })
+        .catch(error => {
+          console.error('Greška pri dobijanju profila prodavca:', error);
+        });
+*/
+    // fetch(`/averageRatingSeller/${prodavacId}`)
+    //     .then(response => {
+    //       if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //       }
+    //       return response.json();
+    //     })
+    //     .then(data => {
+    //       if (data === null || data === undefined) {
+    //         this.prodavac.prosecnaOcena = 'N/A';
+    //       } else {
+    //         this.prodavac.prosecnaOcena = data.toFixed(1);
+    //       }
+    //     })
+    //     .catch(error => {
+    //       console.error('Došlo je do greške prilikom dobijanja prosečne ocene:', error);
+    //       this.prodavac.prosecnaOcena = 'N/A';
+    //     });
 
   },
   methods: {
@@ -124,6 +151,16 @@ export default {
     },
     closeErrorModal() {
       this.showErrorModal = false; // Zatvaranje grešnog modalnog prozora
+    },
+    fetchAverageRating(prodavacId) {
+
+      axios.get(`http://localhost:8080/api/user/averageRatingSeller/${prodavacId}`, { withCredentials: true })
+          .then(response => {
+            this.prodavac.prosecnaOcena = response.data.toFixed(1);
+          })
+          .catch(error => {
+            console.error('Greška pri dobijanju prosečne ocene prodavca:', error);
+          });
     },
     submitRating() {
 

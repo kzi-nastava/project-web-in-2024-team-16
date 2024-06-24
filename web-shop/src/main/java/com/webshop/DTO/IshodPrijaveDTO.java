@@ -11,5 +11,5 @@ import lombok.Setter;
 @AllArgsConstructor
 public class IshodPrijaveDTO {
 
-    String razlog;
+    private String razlog;
 }

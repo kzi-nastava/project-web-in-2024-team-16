@@ -15,6 +15,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class PrijavaProfilaDTO {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String razlogPrijave;
 
     private Date datumPodnosenjaPrijave;
