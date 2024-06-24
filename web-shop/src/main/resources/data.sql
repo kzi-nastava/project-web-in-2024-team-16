@@ -27,7 +27,7 @@ INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_re
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
     VALUES (4, 'miki maus', '2020-01-08 20:25:56',7000, 6000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
-    VALUES (5, 't reks', '2020-01-08 20:25:56',2000, 2000);
+    VALUES (5, 't reks', '2020-01-08 20:25:56',1000, 2000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)
     VALUES (1, 'akva park', '2020-01-08 20:25:56',2000, 5000);
 INSERT INTO Recenzija (ocena, komentar, datum_recenzije, korisnik_koji_je_dao_recenziju_id, korisnik_koji_je_dobio_recenziju_id)

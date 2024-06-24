@@ -222,6 +222,9 @@ export default {
       if(this.currentUser.uloga == null){
         alert('Morate izabrati ulogu');
       }
+      if(this.currentUser.novaLozinka == null){
+        alert('Ponovo unesite staru lozinku ili unesite novu!');
+      }
       console.log('Trenutni podaci o korisniku pre slanja:', this.currentUser);
       axios
           .put(`http://localhost:8080/api/user/updateSeller/${this.currentUser.id}`, this.currentUser, {
