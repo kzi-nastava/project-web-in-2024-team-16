@@ -212,18 +212,17 @@ public class ProizvodController {
         return ResponseEntity.ok().body("Proizvod uspešno postavljen na prodaju.");
     }
 */
-    @PostMapping("/addForSale")
-    public ResponseEntity<String> SetProductForSell(@RequestBody ProizvodiZaProdajuDTO proizvodDTO, HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
+@PostMapping("/addForSale")
+public ResponseEntity<String> SetProductForSell(@RequestBody ProizvodiZaProdajuDTO proizvodDTO, HttpSession session) throws UserNotFoundException, NoSellerException, CategoryExistsException {
 
-    Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
-    if(korisnik==null){
-
+    Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
+    if (korisnik == null) {
         throw new UserNotFoundException("Morate biti prijavljeni");
     }
-    if(!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
-
+    if (!korisnik.getUloga().equals(Uloga.PRODAVAC)) {
         throw new NoSellerException("Samo prodavac može da postavi proizvod na prodaju.");
     }
+
     Set<Kategorija> kategorijeSet = new HashSet<>();
     for (Kategorija kategorijaDTO : proizvodDTO.getKategorije()) {
         Kategorija kategorija = kategorijaRepository.findByNazivKategorije(kategorijaDTO.getNazivKategorije());
@@ -233,10 +232,12 @@ public class ProizvodController {
         kategorijeSet.add(kategorija);
     }
 
+    proizvodDTO.setKategorije(kategorijeSet); // Postavite set kategorija u DTO pre poziva servisa
+
     proizvodService.dodajProizvod(proizvodDTO, korisnik);
 
     return ResponseEntity.ok().body("Proizvod uspešno postavljen na prodaju.");
-    }
+}
 
     @GetMapping("/pages")
     public List<ProizvodDTO> getProizvodi(

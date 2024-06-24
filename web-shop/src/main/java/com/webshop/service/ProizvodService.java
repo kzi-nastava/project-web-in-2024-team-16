@@ -421,7 +421,7 @@ public class ProizvodService {
 
     public void dodajProizvod(ProizvodiZaProdajuDTO proizvodDTO, Korisnik korisnik) throws CategoryExistsException {
 
-        Proizvod proizvod=new Proizvod();
+        Proizvod proizvod = new Proizvod();
 
         proizvod.setKupac(null);
         proizvod.setNaziv(proizvodDTO.getNaziv());
@@ -431,14 +431,16 @@ public class ProizvodService {
         proizvod.setCena(proizvodDTO.getCena());
         proizvod.setProdat(false);
 
-        Optional<Prodavac> prodavac=prodavacRepository.findById(korisnik.getId());
-        proizvod.setProdavac(prodavac.get());
+        Optional<Prodavac> prodavac = prodavacRepository.findById(korisnik.getId());
+        if (prodavac.isPresent()) {
+            proizvod.setProdavac(prodavac.get());
+        }
 
-        proizvod.setKategorija(proizvodDTO.getKategorije());
+        proizvod.setKategorija(new HashSet<>(proizvodDTO.getKategorije())); // Osigurajte da je set postavljen
+
         proizvod.setDatumObjavljivanja(new Date());
 
-        proizvod=proizvodRepository.save(proizvod);
-
+        proizvod = proizvodRepository.save(proizvod);
     }
 
     public ProizvodiNaProdajuDTO kupiProizvodFiksnaCena(Proizvod proizvod, Korisnik korisnik) throws IOException {

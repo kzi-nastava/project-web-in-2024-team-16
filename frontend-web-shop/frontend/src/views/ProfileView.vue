@@ -216,11 +216,14 @@ export default {
           });
     },
     update(){
-      if(this.currentUser.staraLozinka == null){
+      if(this.currentUser.staraLozinka == null && this.currentUser.novaLozinka == null){
         alert('Morate uneti trenutnu lozinku');
-      }
-      if(this.currentUser.uloga == null){
+      } else if(this.currentUser.staraLozinka == null){
+        alert('Morate uneti trenutnu lozinku');
+      }else if(this.currentUser.uloga == null){
         alert('Morate izabrati ulogu');
+      }else if(this.currentUser.novaLozinka == null){
+        alert('Ponovo unesite staru lozinku ili unesite novu!');
       }
       console.log('Trenutni podaci o korisniku pre slanja:', this.currentUser);
       axios
