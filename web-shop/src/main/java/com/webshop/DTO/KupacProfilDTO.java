@@ -20,6 +20,8 @@ import java.util.*;
 @AllArgsConstructor
 public class KupacProfilDTO {
 
+    private Long id;
+
     private String ime;
 
     private String prezime;

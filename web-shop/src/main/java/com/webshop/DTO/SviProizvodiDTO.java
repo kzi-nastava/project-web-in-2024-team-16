@@ -16,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SviProizvodiDTO {
+
     private Long id;
 
     private String naziv;
@@ -31,4 +32,6 @@ public class SviProizvodiDTO {
     private TipProdaje tipProdaje;
 
     private ProdavacProfilDTO prodavac;
+
+    private KupacProfilDTO kupac;
 }

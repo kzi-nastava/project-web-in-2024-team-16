@@ -150,8 +150,8 @@ export default {
                     this.successMessage =error.response.data;
                     this.showSuccessModal = true;
                    // this.showLowBidModal = true;
-                  } else {
-                    this.successMessage = "Došlo je do greške pri postavljanju ponude.";
+                  } else if(error.response.data ==="Samo kupci mogu da daju ponude."){
+                    this.successMessage = "Samo kupci mogu da daju ponude.";
                     this.showSuccessModal = true;
                   }
                 } else {

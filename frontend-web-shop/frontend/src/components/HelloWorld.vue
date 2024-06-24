@@ -1,14 +1,13 @@
 <template>
   <nav class="navbar">
     <div class="search-container">
-      <span class="search-label" style="display: block; margin-bottom: 5px;">Za pretraživanje koristiti sledeće pravilo : po nazivu (naziv), po opisu (;opis), po nazivu i opisu (naziv;opis)</span>
-      <input v-model="searchQuery" type="text" placeholder="Pretraga..."><!--ono sto korisnik posalje, sada je string-->
+      <input v-model="searchQuery" type="text" placeholder="Pretraga..."  title="Za pretraživanje koristiti sledeće pravilo: po nazivu (naziv), po opisu (;opis), po nazivu i opisu (naziv;opis)"  class="search-input"><!--ono sto korisnik posalje, sada je string-->
       <!--<button type="submit" class="search-button">
         <img src="@/assets/pretraga.webp" alt="Pretraga">
       </button>-->
       <button type="submit" class="search-button"  @click="onSearch">
-       Pretraži
-        <!--<img src="@/assets/pretraga.webp" alt="Pretraga">-->
+       <!--Pretraži-->
+        <img src="/pretraga.webp" alt="Pretraga">
       </button>
     </div>
     <div class="brand">
@@ -49,14 +48,22 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .navbar {
-  display: flex;
+ display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 50px; /*udaljenost searcha i jomija u odnosu na velicinu navigacije*/
-  background-color: white;
+  background-color: rgba(176, 234, 211, 0.5);
   color: black;
-  width: 70%; /* da ne ide preko celog ekrana*/
+  /*width: 70%;  da ne ide preko celog ekrana*/
   margin: 0 auto;
+  transition: top 0.3s; /* Dodaj smooth tranziciju za glatko spuštanje */
+
+  max-width: 95%; /* Maksimalna širina, da ne ide preko celog ekrana */
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000; /* Postavi visok z-index da bi bio iznad ostalih sadržaja */
+  transition: top 0.3s; /* Dodaj smooth tranziciju za glatko spuštanje */
 }
 input[type="text"] {
   padding: 6px;
@@ -76,7 +83,7 @@ input[type="text"] {
 button {
   padding: 6px 12px;
   border-radius: 200px;
-  background-color: rgba(47, 128, 102, 0.76);
+  background-color:#f0f0f0;
   color: #000000;
   border: none;
   cursor: pointer;
@@ -106,5 +113,36 @@ button img {
 }
 .letter:nth-child(4) {
   color: #488871; /* Boja slova I */
+}
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px; /* prilagodite po potrebi */
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 40px 10px 10px; /* dodajte padding za desni deo gde će biti ikona */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box; /* da padding ne utiče na ukupnu širinu */
+  padding: 10px 40px 10px 10px; /* dodajte padding za desni deo gde će biti ikona */
+}
+
+.search-button {
+  position: absolute;
+  right: 10px; /* prilagodite po potrebi */
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.search-icon {
+  width: 20px; /* prilagodite po potrebi */
+  height: 20px; /* prilagodite po potrebi */
+  right: 10px; /* prilagodite po potrebi */
 }
 </style>

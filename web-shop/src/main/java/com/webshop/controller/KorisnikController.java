@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/user")
@@ -56,10 +54,10 @@ public class KorisnikController {
             return new ResponseEntity<>("Korisnik ne postoji.", HttpStatus.NOT_FOUND);
 
         session.setAttribute("korisnik", loginovaniKorisnik);
-
         // Dodajte ID korisnika u odgovor
         return ResponseEntity.ok().body(Map.of(
                 "message", "Prijava uspešna.",
+                "korisnik", loginovaniKorisnik,
                 "id", loginovaniKorisnik.getId(),
                 "uloga", loginovaniKorisnik.getUloga()
         ));
@@ -422,6 +420,8 @@ public class KorisnikController {
         if (korisnik == null) {
             throw new UserNotFoundException("Samo ulogovani korisnici mogu da kupuju proizvode!");
 
+        }if(korisnik.getUloga()==Uloga.PRODAVAC){
+            throw new UserNotFoundException("Samo kupci mogu da daju ponude.");
         }
         Optional<Proizvod> proizvod=proizvodService.findById(id);
         Korisnik prodavac=proizvod.get().getProdavac();
@@ -444,12 +444,21 @@ public class KorisnikController {
         Korisnik korisnik = (Korisnik) session.getAttribute("korisnik");
 
         Optional<Korisnik> trenutniKorisnik = korisnikService.findById(korisnik.getId());
-
-        if (trenutniKorisnik == null) {
+        if (trenutniKorisnik.get() == null) {
             throw new UserNotFoundException("Samo ulogovani korisnici mogu da pristupe ovoj funkciji.");
-        }
+       }
 
-        return ResponseEntity.ok(trenutniKorisnik);
+        return ResponseEntity.ok(trenutniKorisnik.get());
+    }
+    @GetMapping("/products/{id}")
+    public Set<?> getProizvodiKorisnika(@PathVariable Long id) {
+        try {
+            return korisnikService.getProizvodiKorisnika(id);
+        } catch (UserNotFoundException e) {
+            // Handle exception if user not found
+            e.printStackTrace();
+            return null; // or return appropriate response
+        }
     }
 
 }

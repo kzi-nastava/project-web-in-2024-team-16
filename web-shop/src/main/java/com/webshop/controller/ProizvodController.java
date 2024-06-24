@@ -76,11 +76,12 @@ public class ProizvodController {
     public SviProizvodiDTO getEmployee(@PathVariable(name = "id") Long id, HttpSession session) throws ProductNotFoundException {
 
         Proizvod proizvod = (Proizvod) session.getAttribute("proizvod");
-        session.invalidate();
+     //   session.invalidate();
         SviProizvodiDTO nadjenProizvod=proizvodService.findProduct(id);
         if(nadjenProizvod==null){
             throw new ProductNotFoundException("Traženi proizvod ne postoji.");
         }
+        System.out.println("CAO"+nadjenProizvod.getId());
         return proizvodService.findProduct(id);
     }
     @GetMapping("/search")
@@ -154,6 +155,7 @@ public class ProizvodController {
         Korisnik korisnik= (Korisnik) session.getAttribute("korisnik");
 
         if(korisnik==null){
+            System.out.println("uslo u if");
             throw new UserNotFoundException("Morate biti prijavljeni.");
 
         }

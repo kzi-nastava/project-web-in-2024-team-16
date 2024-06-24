@@ -41,6 +41,13 @@
 
       <button v-on:click="registration">Registruj se</button>
     </div>
+    <div v-if="showErrorModal" class="modal">
+      <div class="modal-content">
+        <span class="close" @click="closeErrorModal">&times;</span>
+        <h2>Greška</h2>
+        <p>{{successMessage }}</p>
+      </div>
+    </div>
   </div>
 
 </template>
@@ -55,6 +62,8 @@ export default {
     return {
       korisnik: {},//ovo dobijam prilikom prijave, posto to posle prosledjujem pomocu url mora da bude isto kao polja u
       //login dto klasi
+      showErrorModal: false,
+      successMessage: ''
     };
   },
   methods: {
@@ -65,13 +74,26 @@ export default {
           })
           .then((res) => {
             console.log(res);//javlja da je dobro i stavlja me na home stranicu
-            this.$router.push("/home");
+            this.$router.push("/");
           })
-          .catch((err) => {
-            console.log(err);
-            alert("Došlo je do greške");
+          .catch((error) => {
+            if (error.response && error.response.data === "Korisnik sa ovim email-om već postoji.") {
+              this.successMessage= "Korisnik sa ovim email-om već postoji.";
+              this.showErrorModal = true;
+            }else if(error.response && error.response.data === "Korisnik sa ovim korisnickim imenom vec postoji."){
+              this.successMessage= "Korisnik sa ovim korisnickim imenom vec postoji.";
+              this.showErrorModal = true;
+            }else if(error.response && error.response.data ===  "Lozinke se ne poklapaju."){
+              this.successMessage= "Lozinke se ne poklapaju.";
+              this.showErrorModal = true;
+            }else{
+              console.log(error);
+            }
           });
 
+    },
+    closeErrorModal() {
+      this.showErrorModal = false; // Zatvaranje grešnog modalnog prozora
     },
   },
 };
@@ -136,6 +158,37 @@ export default {
 
 .registration-form button:hover {
   background-color: rgb(72, 136, 113);
+}.modal {
+   position: fixed;
+   top: 0;
+   left: 0;
+   width: 100%;
+   height: 100%;
+   background-color: rgba(0, 0, 0, 0.5);
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ }
+
+.modal-content {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 5px;
+  width: 90%;
+  max-width: 500px;
+  text-align: center;
+}
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 1.5em;
+  color: #aaa;
+}
+
+.modal-content .close:hover {
+  color: #000;
 }
 
 </style>

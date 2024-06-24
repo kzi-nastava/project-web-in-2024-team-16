@@ -8,7 +8,9 @@ import HomePageView from "@/views/HomePageView.vue";
 import ProfileView from "@/views/ProfileView.vue";
 import SellerProfileView from "@/views/SellerProfileView.vue";
 import RecenzijeView from "@/views/RecenzijeView.vue";
+import CustomerProfileView from "@/views/CustomerProfileView.vue";
 import AdminView from "@/views/AdminView.vue";
+
 
 
 
@@ -70,6 +72,12 @@ const routes = [
     path: '/sellerProfile/:id',
     name: 'sellerProfile',
     component: SellerProfileView,
+    props: true
+  },
+  {
+    path: '/customerProfile/:id',
+    name: 'customerProfile',
+    component: CustomerProfileView,
     props: true
   }
 
