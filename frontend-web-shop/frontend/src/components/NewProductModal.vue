@@ -55,12 +55,13 @@ export default {
         cena: 0,
         tipProdaje: 'FIKSNA'
       },
-      kategorijeInput: ''
+      kategorijeInput: '',
     };
   },
   methods: {
     closeModal() {
       this.$emit('close');
+      this.visible = false;
     },
     postProduct() {
       this.proizvodDTO.kategorije = this.kategorijeInput.split(',').map(kategorija => ({ nazivKategorije: kategorija.trim() }));

@@ -81,7 +81,7 @@ public class KorisnikService {
     public Korisnik prijava(String korisnickoIme, String lozinka) {
 
         Korisnik korisnik = korisnikRepository.getByKorisnickoIme(korisnickoIme);
-        if(korisnik == null || !korisnik.getLozinka().equals(lozinka))
+        if(korisnik==null || !korisnik.getLozinka().equals(lozinka))
             return null;
         return  korisnik;
 

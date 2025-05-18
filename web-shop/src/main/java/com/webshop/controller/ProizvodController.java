@@ -75,13 +75,13 @@ public class ProizvodController {
     @GetMapping("/{id}")
     public SviProizvodiDTO getEmployee(@PathVariable(name = "id") Long id, HttpSession session) throws ProductNotFoundException {
 
-        Proizvod proizvod = (Proizvod) session.getAttribute("proizvod");
+        //Proizvod proizvod = (Proizvod) session.getAttribute("proizvod");
      //   session.invalidate();
         SviProizvodiDTO nadjenProizvod=proizvodService.findProduct(id);
         if(nadjenProizvod==null){
             throw new ProductNotFoundException("Traženi proizvod ne postoji.");
         }
-        System.out.println("CAO"+nadjenProizvod.getId());
+       // System.out.println("CAO"+nadjenProizvod.getId());
         return proizvodService.findProduct(id);
     }
     @GetMapping("/search")
